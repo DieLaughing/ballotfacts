@@ -56,6 +56,13 @@
     </a></li>
     {% endfor %}
   </ul>
+  {% if r.others %}
+  <div class="also">
+    <p><strong>Also filed to run for this office</strong> (outside the party primaries):
+      {% for o in r.others %}{{ o.name.split(",")[1] | trim }} {{ o.name.split(",")[0] }} <span class="muted">({{ o.party }}, raised {{ o.raised | money }} this year)</span>{{ "; " if not loop.last }}{% endfor %}.</p>
+    <p class="muted">From their campaign filings with OCPF. Independent and third-party candidates don't run in primaries, so whether each made the ballot is for your official sample ballot to confirm.</p>
+  </div>
+  {% endif %}
   {% if r.split %}<p class="source">{{ place.town | replace(" town", "") | replace(" city", "") }} is split between {{ r.split | length }} districts for this office ({{ r.split | join(", ") }}), and we can't tell which is yours from your address yet. Your sample ballot shows the right one.</p>
   {% elif r.nominees | length == 1 %}<p class="source">Only one party nominated a candidate. Independents may also be on the ballot.</p>{% endif %}
 </section>

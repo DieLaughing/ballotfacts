@@ -16,7 +16,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import census, civic, config, factcheck, fec, ocpf, openstates, statedata
+from . import background, census, civic, config, factcheck, fec, ocpf, openstates, statedata
 from .cache import Cache
 from .states import BY_CODE
 
@@ -39,7 +39,9 @@ async def lifespan(app: FastAPI):
     app.state.http = httpx.AsyncClient(timeout=20, headers={"User-Agent": config.USER_AGENT},
                                        transport=httpx.AsyncHTTPTransport(local_address="0.0.0.0", retries=1))
     app.state.cache = Cache(config.DATA / "cache.db")
+    jobs = asyncio.create_task(background.run(app.state.http, app.state.cache))
     yield
+    jobs.cancel()
     await app.state.http.aclose()
 
 
@@ -157,6 +159,7 @@ async def _ballot(request: Request, place: census.Place, info, legislators, by_l
                 m = ocpf.match(rows, n["name"], r["office"], n.get("district") or r["district"] or "Statewide")
                 n["raised"] = m["raised"] if m else None
                 n["incumbent"] = bool(m and m["incumbent"])
+            r["others"] = ocpf.others(rows, r["office"], r["district"], [n["name"] for n in r["nominees"]])
     return page(request, "ballot.html", place=place, info=info, races=races, legislators=legislators,
                 state_races=state_races, state_source=state_source, by_link=by_link, back=place.key)
 
@@ -234,17 +237,19 @@ async def state_candidate(request: Request, state: str, contest_id: int, who: st
     checks = await _safe(factcheck.search(http, cache, *_names(d["me"]["name"])), [])
     money = sources = None
     outside: list[dict] = []
+    outside_fetched = ""
     if d["state"] == "MA":
         rows = await _safe(ocpf.candidates(http, cache), [])
         money = ocpf.match(rows, d["me"]["name"], d["contest"]["office"], d["contest"]["district"])
         if money:
             sources = await _safe(ocpf.sources(http, cache, money["cpf"]), None)
-            outside = (statedata.load("MA") or {}).get("outside", {}).get(str(money["cpf"]), [])
+            spending, outside_fetched = ocpf.outside(statedata.load("MA") or {})
+            outside = spending.get(str(money["cpf"]), [])
     site = statedata.website(d["state"], d["me"]["name"], d["contest"]["office"], d["contest"]["district"])
     return page(request, "state_candidate.html", d=d, checks=checks, back=back_link(request), site=site, state_name=BY_CODE.get(d["state"], d["state"]),
                 money=money, sources=sources, sources_total=sum(v for _, v in sources or []) or 1,
                 support=[o for o in outside if o["side"] == "S"], oppose=[o for o in outside if o["side"] == "O"],
-                outside_fetched=(statedata.load("MA") or {}).get("outside_fetched", ""))
+                outside_fetched=outside_fetched)
 
 
 def _names(name: str, committee_name: str = "") -> tuple[list[str], str]:

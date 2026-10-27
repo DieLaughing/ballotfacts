@@ -289,3 +289,6 @@ a[target="_blank"]:not(.btn):not(.ccard-go)::after { content: "\2009↗" / ""; f
 .why { margin-top: 8px; font-size: 14px; color: var(--muted); }
 .why summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
 .why p { margin: 4px 0 0; max-width: 760px; }
+.also { padding: 0 20px 14px; font-size: 15px; }
+.also p { margin: 0 0 6px; }
+.also .muted { font-size: 13px; }

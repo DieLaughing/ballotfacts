@@ -104,40 +104,30 @@ def questions(client: httpx.Client) -> list[dict]:
     return out
 
 
-def outside(client: httpx.Client) -> dict[str, list[dict]]:
-    """OCPF candidate id → groups that spent for or against them this year, largest first."""
-    api = "https://api.ocpf.us/"
-    reports = client.get(f"{api}miscreports/iepacs/reports/2026", params={"PageSize": 1000, "StartIndex": 1}).json()
-    totals: dict[tuple[int, int, bool], dict] = {}
-    for rep in reports:
-        if rep.get("amendedByReportId"):  # a later amendment replaces this report
-            continue
-        detail = client.get(f"{api}report/{rep['reportId']}").json()
-        for e in detail.get("expenditures") or []:
-            cand = e.get("relatedCpfId")
-            if not cand:
-                continue
-            amount = float(str(e.get("amount") or "0").replace("$", "").replace(",", "") or 0)
-            row = totals.setdefault((cand, rep["cpfId"], bool(e.get("isSupported"))),
-                                    {"group": rep["committeeName"], "group_cpf": rep["cpfId"],
-                                     "side": "S" if e.get("isSupported") else "O", "total": 0.0})
-            row["total"] += amount
-        time.sleep(0.3)
-    out: dict[str, list[dict]] = {}
-    for (cand, _, _), row in totals.items():
-        out.setdefault(str(cand), []).append(dict(row, total=round(row["total"], 2)))
-    for rows in out.values():
-        rows.sort(key=lambda r: -r["total"])
-    print(f"{len(reports)} IE reports, {len(out)} candidates with outside spending", file=sys.stderr)
+def outside() -> dict[str, list[dict]]:
+    """Independent expenditures per candidate, the same code the site runs daily (bf/ocpf.py)."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    import asyncio
+    from bf import ocpf
+
+    async def run() -> dict:
+        async with httpx.AsyncClient(timeout=30, headers=client_headers()) as c:
+            return await ocpf.independent_spending(c)
+
+    out = asyncio.run(run())
+    print(f"{len(out)} candidates with outside spending", file=sys.stderr)
     return out
 
 
+def client_headers() -> dict:
+    return {"User-Agent": "BallotFacts data fetch (+https://github.com/DieLaughing/ballotfacts)"}
+
+
 def main() -> None:
-    client = httpx.Client(timeout=30, follow_redirects=True,
-                          headers={"User-Agent": "BallotFacts data fetch (+https://github.com/DieLaughing/ballotfacts)"})
+    client = httpx.Client(timeout=30, follow_redirects=True, headers=client_headers())
     if sys.argv[1:] == ["outside"]:
         data = json.loads(OUT.read_text())
-        data["outside"] = outside(client)
+        data["outside"] = outside()
         data["outside_fetched"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
         OUT.write_text(json.dumps(data, indent=1))
         return
@@ -165,7 +155,7 @@ def main() -> None:
         "fetched": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
         "questions_source": BOOKLET,
         "questions": qs,
-        "outside": outside(client),
+        "outside": outside(),
         "outside_fetched": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
         "contests": found,
     }, indent=1))

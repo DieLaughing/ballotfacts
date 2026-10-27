@@ -274,3 +274,17 @@ async def candidate(client: httpx.AsyncClient, cache: Cache, cid: str) -> dict |
         }
 
     return await cache.fetch(key, TTL, load)
+
+
+async def seats(client: httpx.AsyncClient) -> list[tuple[str, str, str]]:
+    """Every (office, state, district) with a federal race this cycle."""
+    out = []
+    for office in ("senate", "house"):
+        page = 1
+        while True:
+            d = await _get(client, "elections/search/", cycle=config.CYCLE, office=office, per_page=100, page=page)
+            out += [(office, r["state"], r["district"] if office == "house" else "") for r in d["results"]]
+            if page >= d["pagination"]["pages"]:
+                break
+            page += 1
+    return out

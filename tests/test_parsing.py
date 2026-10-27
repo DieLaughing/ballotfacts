@@ -85,3 +85,14 @@ def test_hand_checked_website_lookup():
     from bf.statedata import website
     assert website("MA", "Jack Peter Richardson", "State Representative", "3rd Barnstable")["url"] == "https://jackprichardson.com/"
     assert website("MA", "Jack Peter Richardson", "State Representative", "2nd Barnstable") is None
+
+
+def test_ocpf_others_skips_major_parties_and_nominees():
+    from bf.ocpf import others
+    rows = [{"name": "James, Andrea", "office": "Governor", "party": "None", "raised": 1},
+            {"name": "Healey, Maura T.", "office": "Governor", "party": "Democratic", "raised": 1},
+            {"name": "Whipps, Susannah M.", "office": "2nd Franklin", "party": "Unenrolled", "raised": 1}]
+    gov = others(rows, "Governor", "", ["Maura Healey"])
+    assert [o["name"] for o in gov] == ["James, Andrea"] and gov[0]["party"] == "No party listed"
+    assert [o["name"] for o in others(rows, "State Representative", "2nd Franklin", [])] == ["Whipps, Susannah M."]
+    assert others(rows, "Sheriff", "Barnstable County", []) == []
