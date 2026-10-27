@@ -5,13 +5,14 @@
 <p class="eyebrow">{{ c.office }}{% if c.district != "Statewide" %}, {{ c.district }}{% endif %} · {{ state_name }}</p>
 <div class="page-head">
   <h1>{{ name }}</h1>
-  <p class="sub">{{ c.party }}{% if d.me.won %} · <span class="tag">Nominee</span>{% endif %}{% if "(Write-In)" in d.me.name %} · won the primary as a write-in{% endif %}</p>
+  <p class="sub">{{ c.party }}{% if money and money.incumbent %} · <span class="tag">Incumbent</span>{% endif %}{% if d.me.won %} · <span class="tag">Nominee</span>{% endif %}{% if "(Write-In)" in d.me.name %} · won the primary as a write-in{% endif %}</p>
 </div>
 
 <nav aria-label="On this page" class="jumps">
   <a href="#seat">On the ballot</a>
   <a href="#primary">Primary results</a>
   <a href="#money">Money</a>
+  <a href="#outside">Outside spending</a>
   <a href="#checks">Fact checks · {{ checks | length }}</a>
 </nav>
 
@@ -24,7 +25,7 @@
       <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if c.candidates | length == 1 %}Unopposed{% else %}Won, {{ d.me.pct }}%{% endif %}</strong></span>
     </div></li>
     {% for r in d.rivals %}
-    <li><a class="ccard compact" href="/{{ d.state | lower }}/c/{{ r.contest }}/{{ r.slug }}">
+    <li><a class="ccard compact" href="/{{ d.state | lower }}/c/{{ r.contest }}/{{ r.slug }}{{ back | backq }}">
       <span class="ccard-who"><strong>{{ r.name | replace(" (Write-In)", "") }}</strong><span class="muted">{{ r.party }}</span></span>
       <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if r.unopposed %}Unopposed{% else %}Won, {{ r.pct }}%{% endif %}</strong></span>
       <span class="ccard-go">See their page
@@ -48,7 +49,41 @@
 
 <section id="money" class="block" aria-labelledby="h-money">
   <h2 id="h-money">Money</h2>
-  <p class="muted">Massachusetts state and county candidates report their fundraising to the Office of Campaign and Political Finance (OCPF), not the FEC. We haven't connected that data yet. <a href="https://www.ocpf.us/" target="_blank" rel="noopener">Search {{ name }} on OCPF</a></p>
+  {% if money %}
+  <p class="sub">From the campaign's reports to the Massachusetts Office of Campaign and Political Finance (OCPF), this year{% if money.through %}, through {{ money.through }}{% endif %}. <a href="https://www.ocpf.us/Filers?q={{ money.cpf }}" target="_blank" rel="noopener">OCPF record</a></p>
+  <div class="tiles swipe-sm">
+    <div class="tile"><span>Raised this year</span><strong>{{ money.raised | money }}</strong></div>
+    <div class="tile"><span>Spent this year</span><strong>{{ money.spent | money }}</strong></div>
+    <div class="tile"><span>Cash on hand</span><strong>{{ money.cash | money }}</strong></div>
+  </div>
+  {% if sources and sources_total > 1 %}
+  <h3>Where the campaign's money came from</h3>
+  <ul class="bars">
+    {% for label, amount in sources if amount > 0 %}
+    <li><span class="bar-label">{{ label }}</span><progress max="{{ sources_total }}" value="{{ amount }}" aria-hidden="true"></progress><span class="num">{{ amount | money }} <span class="muted">· {{ (100 * amount / sources_total) | round | int }}%</span></span></li>
+    {% endfor %}
+  </ul>
+  <p class="source">Massachusetts limits gifts from one person to $1,000 a year, so these categories say more than a top-donor list.</p>
+  {% endif %}
+
+  <h3 id="outside">Outside spending</h3>
+  <p class="sub">Independent expenditure PACs (Massachusetts's version of Super PACs) can raise unlimited money and spend it for or against candidates, but can't coordinate with campaigns. From their OCPF reports{% if outside_fetched %}, checked {{ outside_fetched[:10] | date }}{% endif %}.</p>
+  {% if support or oppose %}
+  <div class="two">
+    {% for title, rows in [("To support " ~ name, support), ("To oppose " ~ name, oppose)] %}
+    <div class="list-box">
+      <h3 class="list-head">{{ title }}</h3>
+      {% for o in rows %}<div class="row"><a href="https://www.ocpf.us/Filers?q={{ o.group_cpf }}" target="_blank" rel="noopener">{{ o.group | trim }}</a><strong>{{ o.total | money }}</strong></div>
+      {% else %}<div class="row muted">None reported</div>{% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="muted">No independent spending reported for or against {{ name }} this year.</p>
+  {% endif %}
+  {% else %}
+  <p class="muted">We couldn't match {{ name }} to an OCPF campaign account for this year. <a href="https://www.ocpf.us/" target="_blank" rel="noopener">Search OCPF</a></p>
+  {% endif %}
 </section>
 
 {% set who = name %}{% include "_checks.html" %}

@@ -269,3 +269,10 @@ a[target="_blank"]:not(.btn):not(.ccard-go)::after { content: "\2009↗" / ""; f
 .glink { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 700; text-decoration: none; }
 .small { font-size: 13px; }
 .row-more .grow:first-of-type { border-top: 1px solid var(--line); }
+.backbar { border-bottom: 1px solid var(--line); }
+.backbar a { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; font-weight: 700; text-decoration: none; }
+.lookup-again { display: block; }
+.lookup-again h3 { margin: 0; font-size: 17px; }
+.lookup-again p { margin: 4px 0 12px; }
+.lookup-again input { flex: 1 1 260px; min-width: 0; min-height: 48px; padding: 0 14px; font: inherit; color: var(--ink); background: var(--bg); border: 2px solid var(--ink); border-radius: 10px; }
+.lookup-again button { min-height: 48px; padding: 0 20px; border: 0; border-radius: 10px; background: var(--accent); color: var(--on-accent); font: inherit; font-weight: 700; cursor: pointer; }

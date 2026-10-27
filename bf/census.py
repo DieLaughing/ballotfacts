@@ -5,6 +5,7 @@ The address is sent to the Census Bureau once and then forgotten: nothing here s
 from __future__ import annotations
 
 from dataclasses import dataclass
+from urllib.parse import urlencode
 
 import httpx
 
@@ -29,6 +30,21 @@ class Place:
     @property
     def district_label(self) -> str:
         return "At-large" if self.district == "00" else f"District {int(self.district)}"
+
+    @property
+    def key(self) -> str:
+        """A link to this ballot that names districts and the town, never the street address.
+        Everyone in the same districts shares it, so it can be cached and passed around."""
+        q = {"town": self.town, "county": self.county, "up": self.state_upper, "lo": self.state_lower}
+        return f"/ballot/{self.state}/{self.district}?" + urlencode({k: v for k, v in q.items() if v})
+
+    @classmethod
+    def from_key(cls, state: str, district: str, q: dict) -> "Place":
+        from .states import BY_CODE
+        town = q.get("town", "")
+        label = ", ".join(x for x in (town.removesuffix(" town").removesuffix(" city"), state) if x)
+        return cls(matched=label, state=state, state_name=BY_CODE[state], district=district, county=q.get("county", ""),
+                   town=town, state_upper=q.get("up", ""), state_lower=q.get("lo", ""), lat=0.0, lng=0.0)
 
 
 def _first(geos: dict, needle: str) -> dict:

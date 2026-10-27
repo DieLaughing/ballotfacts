@@ -21,7 +21,7 @@
   <h2 id="h-funds">Who funds it</h2>
   <p class="sub">The biggest contributors among its 100 largest contributions this cycle, as reported to the FEC. Linked names are other FEC committees; open them to see who funds those. Nonprofits that aren't FEC committees don't have to disclose their donors.</p>
   <div class="list-box">
-    {% for d in g.donors %}<div class="row"><span>{% if d.group %}<a href="/group/{{ d.group }}">{{ d.name }}</a>{% else %}{{ d.name }}{% endif %}<span class="muted small">{% if d.where %} · {{ d.where }}{% endif %}{% if d.employer %} · {{ d.employer }}{% endif %}{% if d.gifts > 1 %} · {{ d.gifts }} contributions{% endif %}{% if d.conduit %} · a payment platform passing along many people's donations{% endif %}</span></span><strong>{{ d.amount | money }}</strong></div>
+    {% for d in g.donors %}<div class="row"><span>{% if d.group %}<a href="/group/{{ d.group }}{{ back | backq }}">{{ d.name }}</a>{% else %}{{ d.name }}{% endif %}<span class="muted small">{% if d.where %} · {{ d.where }}{% endif %}{% if d.employer %} · {{ d.employer }}{% endif %}{% if d.gifts > 1 %} · {{ d.gifts }} contributions{% endif %}{% if d.conduit %} · a payment platform passing along many people's donations{% endif %}</span></span><strong>{{ d.amount | money }}</strong></div>
     {% else %}<div class="row muted">No contributions reported this cycle</div>{% endfor %}
   </div>
 </section>
@@ -31,7 +31,7 @@
   <p class="sub">Its largest independent spending for or against federal candidates this cycle, added up by candidate.</p>
   {% if g.spends %}
   <div class="list-box">
-    {% for x in g.spends %}<div class="row"><span><a href="/candidate/{{ x.cid }}">{{ x.name }}</a> <span class="muted small">· {{ "for" if x.side == "S" else "against" }} · {{ x.office }}{% if x.state %}, {{ x.state }}{% endif %}{% if x.district and x.district != "00" %}-{{ x.district }}{% endif %}</span></span><strong>{{ x.total | money }}</strong></div>{% endfor %}
+    {% for x in g.spends %}<div class="row"><span><a href="/candidate/{{ x.cid }}{{ back | backq }}">{{ x.name }}</a> <span class="muted small">· {{ "for" if x.side == "S" else "against" }} · {{ x.office }}{% if x.state %}, {{ x.state }}{% endif %}{% if x.district and x.district != "00" %}-{{ x.district }}{% endif %}</span></span><strong>{{ x.total | money }}</strong></div>{% endfor %}
   </div>
   {% else %}<p class="muted">No independent spending on candidates reported this cycle.</p>{% endif %}
   <p class="source">Source: FEC. Totals update about daily.</p>

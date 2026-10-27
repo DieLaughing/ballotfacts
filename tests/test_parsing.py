@@ -64,3 +64,12 @@ def test_split_city_offices_are_merged():
 def test_tidy_keeps_acronyms():
     assert fec.tidy("A16Z CAPITAL MANAGEMENT LLC.") == "A16Z Capital Management LLC."
     assert fec.tidy("WINRED") == "Winred"
+
+
+def test_ocpf_match():
+    from bf.ocpf import match
+    rows = [{"name": "Richardson, Jack", "office": "3rd Barnstable"}, {"name": "Richardson, John", "office": "5th Essex"},
+            {"name": "Healey, Maura T.", "office": "Governor"}]
+    assert match(rows, "Jack Peter Richardson", "State Representative", "3rd Barnstable")["office"] == "3rd Barnstable"
+    assert match(rows, "Maura Healey", "Governor", "Statewide")["office"] == "Governor"
+    assert match(rows, "Nobody Here", "Governor", "Statewide") is None

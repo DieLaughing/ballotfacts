@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% set active = 'home' %}
+{% set active = 'home' %}{% set on_ballot = true %}
 {% block title %}Your ballot · Ballot Facts{% endblock %}
 {% block main %}
 <div class="page-head">
   <p class="eyebrow">General election · Nov 3</p>
   <h1>Your ballot</h1>
-  <p class="sub">{{ place.matched }} · {{ place.county }} · Congressional {{ place.district_label }}{% if place.state_upper %} · {{ place.state_upper }}{% endif %}{% if place.state_lower %} · {{ place.state_lower }}{% endif %} · <a href="/">Change address</a></p>
+  <p class="sub">{{ place.matched }}{% if place.county %} · {{ place.county }}{% endif %} · Congressional {{ place.district_label }}{% if place.state_upper %} · {{ place.state_upper }}{% endif %}{% if place.state_lower %} · {{ place.state_lower }}{% endif %} · <a href="/">Change address</a></p>
 </div>
 
 <nav aria-label="On this page" class="jumps">
@@ -46,10 +46,11 @@
   </div>
   <ul class="swipe" aria-label="Nominees{% if r.nominees | length > 1 %}, swipe for more{% endif %}">
     {% for n in r.nominees %}
-    <li><a class="ccard compact" href="/{{ place.state | lower }}/c/{{ n.contest }}/{{ n.slug }}">
-      <span class="ccard-who"><strong>{{ n.name | replace(" (Write-In)", "") }}</strong><span class="muted">{{ n.party }}{% if n.district %} · {{ n.district }} district{% endif %}{% if "(Write-In)" in n.name %} · won as a write-in{% endif %}</span></span>
+    <li><a class="ccard compact" href="/{{ place.state | lower }}/c/{{ n.contest }}/{{ n.slug }}{{ back | backq }}">
+      <span class="ccard-who"><strong>{{ n.name | replace(" (Write-In)", "") }}</strong><span class="muted">{{ n.party }}{% if n.incumbent %} · <span class="tag">Incumbent</span>{% endif %}{% if n.district %} · {{ n.district }} district{% endif %}{% if "(Write-In)" in n.name %} · won as a write-in{% endif %}</span></span>
       <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if n.unopposed %}Unopposed{% else %}Won, {{ n.pct }}%{% endif %}</strong></span>
-      <span class="ccard-go">Primary results &amp; fact checks
+      {% if n.raised is not none %}<span class="ccard-big"><span class="muted">Raised this year</span><strong>{{ n.raised | money }}</strong></span>{% endif %}
+      <span class="ccard-go">Money, results &amp; fact checks
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
     </a></li>
     {% endfor %}
@@ -78,6 +79,17 @@
 <p class="source">Source: <a href="{{ state_source.questions_source }}" target="_blank" rel="noopener">Information for Voters booklet</a>, which also has the full text, fiscal impact and arguments for and against.</p>
 {% endif %}
 
+{% if by_link %}
+<h2 class="section" id="vote">Where to vote</h2>
+<form method="post" action="/ballot" class="callout lookup-again">
+  <div>
+    <h3>Polling places depend on your street address</h3>
+    <p>This page only knows your districts and town. Enter your address to see your nearest polling places, early voting and drop boxes. It isn't stored.</p>
+    <label for="addr2" class="visually-hidden">Your home address</label>
+    <div class="lookup-row"><input id="addr2" name="address" type="text" autocomplete="street-address" required minlength="6" maxlength="200" placeholder="123 Main St, Your Town, ST"><button type="submit">Show</button></div>
+  </div>
+</form>
+{% endif %}
 {% if info and (info.polling or info.early or info.dropoff) %}
 <h2 class="section" id="vote">Where to vote</h2>
 <ul class="swipe sites" aria-label="Voting options, swipe for more">

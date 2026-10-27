@@ -26,6 +26,7 @@ Only public data is cached (races, money, fact checks), in a small SQLite file.
 | Polling places, official links | [Voting Information Project](https://www.votinginfoproject.org/) via [Google Civic Information API](https://developers.google.com/civic-information) |
 | Fact checks | [Google Fact Check Tools](https://toolbox.google.com/factcheck/apis) (ClaimReview) |
 | State legislators | [Open States](https://open.pluralpolicy.com/) |
+| Massachusetts campaign money, independent expenditures | [OCPF](https://www.ocpf.us/) API (`api.ocpf.us`); IE PAC spending collected by `tools/fetch_ma.py outside` |
 | Massachusetts state & county races, ballot questions | [ElectionStats](https://electionstats.state.ma.us/) primary results + the state's Information for Voters booklet, collected by `tools/fetch_ma.py` into `bf/data/ma-2026.json` |
 
 **Who's "running":** the FEC doesn't mark nominees, but only general-election campaigns file the pre-general report. Candidates whose latest report reaches its closing date are listed first; everyone else who registered for the seat is listed separately. Candidates raising under $5,000 don't file at all, so the official sample ballot is the full list.
@@ -33,6 +34,10 @@ Only public data is cached (races, money, fact checks), in a small SQLite file.
 ## Adding a state
 
 State and county races come from one JSON file per state in `bf/data/`, built by a script in `tools/` from that state's **official** election sources (no third-party aggregators, nothing behind bot protection). `tools/fetch_ma.py` is the template: it records each primary contest with its candidates, winners (the November nominees) and the towns it covers, and `bf/statedata.py` matches an address to them. A new state needs its own fetch script that writes the same shape. Pull requests welcome.
+
+## Links without addresses
+
+A ballot looked up by address is never stored or linked. Pages opened from it carry a `?from=` link to `/ballot/<state>/<district>?town=…&up=…&lo=…`, which rebuilds the same ballot from districts and town only (everyone in those districts shares it). Only polling places need the street address again.
 
 ## Run it
 

@@ -11,6 +11,11 @@ It makes about 500 requests, one every half second. ElectionStats' robots.txt al
 The statewide ballot questions come from the state's official Information for Voters booklet
 (PDF): each question's title and the "what your vote will do" statements written jointly by the
 Attorney General and the Secretary of the Commonwealth. Needs `pdftotext` (poppler).
+
+Independent expenditures (Massachusetts's Super PAC spending) come from OCPF's IEPAC reports,
+added up per candidate and per group, for or against. To refresh only those (about 140 requests):
+
+    python tools/fetch_ma.py outside
 """
 from __future__ import annotations
 
@@ -99,9 +104,43 @@ def questions(client: httpx.Client) -> list[dict]:
     return out
 
 
+def outside(client: httpx.Client) -> dict[str, list[dict]]:
+    """OCPF candidate id → groups that spent for or against them this year, largest first."""
+    api = "https://api.ocpf.us/"
+    reports = client.get(f"{api}miscreports/iepacs/reports/2026", params={"PageSize": 1000, "StartIndex": 1}).json()
+    totals: dict[tuple[int, int, bool], dict] = {}
+    for rep in reports:
+        if rep.get("amendedByReportId"):  # a later amendment replaces this report
+            continue
+        detail = client.get(f"{api}report/{rep['reportId']}").json()
+        for e in detail.get("expenditures") or []:
+            cand = e.get("relatedCpfId")
+            if not cand:
+                continue
+            amount = float(str(e.get("amount") or "0").replace("$", "").replace(",", "") or 0)
+            row = totals.setdefault((cand, rep["cpfId"], bool(e.get("isSupported"))),
+                                    {"group": rep["committeeName"], "group_cpf": rep["cpfId"],
+                                     "side": "S" if e.get("isSupported") else "O", "total": 0.0})
+            row["total"] += amount
+        time.sleep(0.3)
+    out: dict[str, list[dict]] = {}
+    for (cand, _, _), row in totals.items():
+        out.setdefault(str(cand), []).append(dict(row, total=round(row["total"], 2)))
+    for rows in out.values():
+        rows.sort(key=lambda r: -r["total"])
+    print(f"{len(reports)} IE reports, {len(out)} candidates with outside spending", file=sys.stderr)
+    return out
+
+
 def main() -> None:
     client = httpx.Client(timeout=30, follow_redirects=True,
                           headers={"User-Agent": "BallotFacts data fetch (+https://github.com/DieLaughing/ballotfacts)"})
+    if sys.argv[1:] == ["outside"]:
+        data = json.loads(OUT.read_text())
+        data["outside"] = outside(client)
+        data["outside_fetched"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+        OUT.write_text(json.dumps(data, indent=1))
+        return
     found = contests(client)
     print(f"{len(found)} contests", file=sys.stderr)
     for n, c in enumerate(found, 1):
@@ -126,6 +165,8 @@ def main() -> None:
         "fetched": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
         "questions_source": BOOKLET,
         "questions": qs,
+        "outside": outside(client),
+        "outside_fetched": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
         "contests": found,
     }, indent=1))
     print(f"wrote {OUT}", file=sys.stderr)

@@ -7,7 +7,7 @@
   {% if race.running %}
   <ul class="swipe" aria-label="Candidates{% if race.running | length > 1 %}, swipe for more{% endif %}">
     {% for c in race.running %}
-    <li><a class="ccard" href="/candidate/{{ c.id }}">
+    <li><a class="ccard" href="/candidate/{{ c.id }}{{ back | backq }}">
       <span class="ccard-who">
         <strong>{{ c.name }}</strong>
         <span class="muted">{{ c.party }}{% if c.incumbent %} · <span class="tag">Incumbent</span>{% endif %}</span>
@@ -32,7 +32,7 @@
     <summary>{{ race.others | length }} more registered with the FEC for this seat</summary>
     <p class="muted">Includes people who lost their primary, dropped out, or never raised enough to report. Some may still be on your ballot, especially independents and smaller parties.</p>
     <ul>
-      {% for c in race.others %}<li><a href="/candidate/{{ c.id }}">{{ c.name }}</a> <span class="muted">{{ c.party }}{% if c.through %} · last report through {{ c.through | date }}{% endif %}</span></li>{% endfor %}
+      {% for c in race.others %}<li><a href="/candidate/{{ c.id }}{{ back | backq }}">{{ c.name }}</a> <span class="muted">{{ c.party }}{% if c.through %} · last report through {{ c.through | date }}{% endif %}</span></li>{% endfor %}
     </ul>
   </details>
   {% endif %}

@@ -39,3 +39,22 @@ async def legislators(client: httpx.AsyncClient, cache: Cache, place_key: str, l
         return parse(r.json())
 
     return await cache.fetch(f"openstates:{place_key}", TTL, load)
+
+
+async def by_district(client: httpx.AsyncClient, cache: Cache, state: str, upper: str, lower: str) -> list[dict]:
+    """Same answer without coordinates: look each seat up by its district name."""
+    if not config.OPENSTATES_KEY:
+        return []
+
+    async def load() -> list[dict]:
+        out = []
+        for chamber, name in (("upper", upper), ("lower", lower)):
+            if not name:
+                continue
+            r = await client.get("https://v3.openstates.org/people", headers={"X-API-KEY": config.OPENSTATES_KEY}, params={
+                "jurisdiction": state.lower(), "org_classification": chamber, "district": name.removesuffix(" District")})
+            r.raise_for_status()
+            out += parse({"results": [dict(p, jurisdiction={"classification": "state"}) for p in r.json().get("results", [])]})
+        return out
+
+    return await cache.fetch(f"openstates:{state}:{upper}:{lower}", TTL, load)
