@@ -78,7 +78,7 @@
 <div class="questions">
   {% for q in state_source.questions %}{% set m = qmoney.get(q.number | string) %}
   <details class="question">
-    <summary><span class="qnum">{{ q.number }}</span><span class="qtitle">{{ q.title }}{% if m %}<span class="qsub">Yes side {{ m.yes_total | money }} · No side {{ m.no_total | money }}</span>{% endif %}</span></summary>
+    <summary><span class="qnum">{{ q.number }}</span><span class="qtitle">{{ q.title }}{% if m %}<span class="qsub">Yes side {{ m.yes_total | money }} · No side {{ m.no_total | money }}{% if m.yes_shared >= 0.1 * m.yes_total and m.yes_shared or m.no_shared >= 0.1 * m.no_total and m.no_shared %} · includes committees also working on other questions{% endif %}</span>{% endif %}</span></summary>
     <div class="qbody">
       <p><strong>Yes:</strong> {{ q.yes | replace("A YES VOTE ", "") }}</p>
       <p><strong>No:</strong> {{ q.no | replace("A NO VOTE ", "") }}</p>
