@@ -138,7 +138,7 @@ async def _outside_by_candidate(client: httpx.AsyncClient, office: str, state: s
             continue
         side = totals.setdefault(r["candidate_id"], {"S": 0, "O": 0, "groups": []})
         side[r["support_oppose_indicator"]] = side.get(r["support_oppose_indicator"], 0) + r["total"]
-        side["groups"].append({"name": tidy(r.get("committee_name") or "Unregistered group or person"),
+        side["groups"].append({"name": tidy(r["committee_name"]) if r.get("committee_name") else "Unregistered group or person",
                                "id": r.get("committee_id") or "", "side": r["support_oppose_indicator"], "total": r["total"]})
     for side in totals.values():
         side["groups"].sort(key=lambda g: -g["total"])
