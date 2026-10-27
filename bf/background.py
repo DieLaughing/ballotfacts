@@ -7,6 +7,8 @@
 - Every day: re-add up Massachusetts independent expenditures and ballot-question committee money
   from OCPF, and fetch
   any candidate photos we don't have yet (bf/photos.py).
+- Every round: add any new House roll-call votes from the House Clerk (bf/congress.py); the first
+  run downloads the whole Congress so far, one vote a second (about 12 minutes).
 
 Both run inside the web app, a few requests a second at most, and log one line when they finish.
 """
@@ -18,7 +20,7 @@ import time
 
 import httpx
 
-from . import config, fec, ocpf, photos, precincts
+from . import config, congress, fec, ocpf, photos, precincts
 from .cache import Cache
 from .states import BY_CODE
 
@@ -54,6 +56,8 @@ async def run(client: httpx.AsyncClient, cache: Cache) -> None:
                 log.warning("refreshed Massachusetts ballot question money")
             if photos.age_hours() > OUTSIDE_EVERY_HOURS:
                 await photos.refresh(client, cache, await ocpf.candidates(client, cache))
+            if added := await congress.refresh_votes(client):
+                log.warning("added %d House votes", added)
             if config.WARM:
                 await warm_races(client, cache)  # takes ~3 hours, then the loop comes round again
         except Exception as e:  # never let a bad day at a data source stop the loop

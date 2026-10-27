@@ -1,0 +1,64 @@
+<section id="record" aria-labelledby="h-record" class="block">
+  <h2 id="h-record">In Congress</h2>
+  <p class="sub">What {{ c.name }} has done in the current Congress (2025–26), from the official records.</p>
+
+  {% if votes %}
+  <h3>How they voted in the House</h3>
+  <div class="tiles swipe-sm">
+    <div class="tile"><span>Votes cast</span><strong>{{ votes.total - votes.missed }}</strong></div>
+    <div class="tile"><span>Votes missed</span><strong>{{ votes.missed_pct }}%</strong></div>
+  </div>
+  <p class="source">{{ votes.missed }} of {{ votes.total }} roll-call votes through {{ votes.through | date }}. The Speaker of the House traditionally doesn't vote, and members on leave show as missed.</p>
+
+  {% macro vote_row(v) %}
+  <div class="vrow">
+    <div>
+      <p class="vtitle">{% if v.link %}<a href="{{ v.link }}" target="_blank" rel="noopener">{{ v.legis }}</a> · {% elif v.legis %}{{ v.legis }} · {% endif %}{{ v.desc or v.question }}</p>
+      <p class="muted small">{{ v.date | date }} · {{ v.question }} · {{ v.result }}</p>
+    </div>
+    <span class="rating">{{ v.cast }}</span>
+  </div>
+  {% endmacro %}
+
+  <h3>Final votes on bills and resolutions · {{ votes.final | length }}</h3>
+  <div class="list-box">
+    {% for v in votes.final[:10] %}{{ vote_row(v) }}{% else %}<div class="row muted">None yet</div>{% endfor %}
+    {% if votes.final | length > 10 %}
+    <details class="row-more"><summary>{{ [votes.final | length - 10, 50] | min }} more</summary>
+      {% for v in votes.final[10:60] %}{{ vote_row(v) }}{% endfor %}
+    </details>
+    {% endif %}
+  </div>
+  <h3>Other votes · {{ votes.other | length }}</h3>
+  <div class="list-box">
+    <details class="row-more"><summary>Rules for debate, amendments, motions and quorum calls{% if votes.other | length > 40 %} (latest 40){% endif %}</summary>
+      {% for v in votes.other[:40] %}{{ vote_row(v) }}{% endfor %}
+    </details>
+  </div>
+  <p class="source">Every recorded vote, none picked by hand; "Final votes" are the ones whose official question is passing a bill or resolution, agreeing to the other chamber's version, or overriding a veto. From the <a href="https://clerk.house.gov/Members/{{ bioguide }}" target="_blank" rel="noopener">House Clerk's vote records</a>, which list every vote.</p>
+  {% elif c.office == "S" %}
+  <p class="muted">Senate votes aren't shown yet: the Senate's site doesn't allow automated downloads. See the <a href="https://www.senate.gov/legislative/votes_new.htm" target="_blank" rel="noopener">Senate's roll-call votes</a>.</p>
+  {% endif %}
+
+  {% if bills and bills.bills %}
+  <h3>Bills they introduced · {{ bills.bills | length }}{% if bills.laws %}, {{ bills.laws }} became law{% endif %}</h3>
+  {% macro bill_row(b) %}
+  <div class="vrow">
+    <div>
+      <p class="vtitle"><a href="{{ b.link }}" target="_blank" rel="noopener">{{ b.number }}</a> · {{ b.title }}</p>
+      <p class="muted small clamp">Introduced {{ b.introduced | date }} · Latest: {{ b.latest }}</p>
+    </div>
+    {% if b.law %}<span class="rating">Law</span>{% endif %}
+  </div>
+  {% endmacro %}
+  <div class="list-box">
+    {% for b in bills.bills[:8] %}{{ bill_row(b) }}{% endfor %}
+    {% if bills.bills | length > 8 %}
+    <details class="row-more"><summary>{{ [bills.bills | length - 8, 50] | min }} more</summary>
+      {% for b in bills.bills[8:58] %}{{ bill_row(b) }}{% endfor %}
+    </details>
+    {% endif %}
+  </div>
+  <p class="source">Bills and resolutions where {{ c.name }} is the main sponsor, newest first. From Congress.gov (Library of Congress); <a href="https://bioguide.congress.gov/search/bio/{{ bioguide }}" target="_blank" rel="noopener">official biography</a>.</p>
+  {% endif %}
+</section>

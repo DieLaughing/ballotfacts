@@ -16,7 +16,7 @@ from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Res
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import background, census, civic, config, factcheck, fec, integrity, ocpf, offices, openstates, photos, precincts, statedata
+from . import background, census, civic, config, congress, factcheck, fec, integrity, ocpf, offices, openstates, photos, precincts, statedata
 from .cache import Cache
 from .states import BY_CODE
 
@@ -124,6 +124,10 @@ async def _safe(coro, default):
         status = getattr(getattr(e, "response", None), "status_code", "")
         log.warning("source failed: %s %s", type(e).__name__, status)
         return default
+
+
+async def _none():
+    return None
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -279,9 +283,11 @@ async def candidate(request: Request, cid: str):
     if not c:
         return page(request, "missing.html", 404)
     firsts, last = _names(c["name"], c.get("committee_name", ""))
-    checks, ii = await asyncio.gather(
+    bioguide = (await _safe(photos.congress_ids(http, cache), {})).get(cid, "")
+    checks, ii, bills = await asyncio.gather(
         _safe(factcheck.search(http, cache, firsts, last), []),
         _safe(integrity.profile(http, cache, firsts, last, BY_CODE.get(c["state"], "")), ""),
+        _safe(congress.sponsored(http, cache, bioguide), None) if bioguide else _none(),
     )
     if c["office"] == "S":
         race_title, race_path = f"U.S. Senate, {BY_CODE.get(c['state'], c['state'])}", f"/race/{c['state']}/senate"
@@ -290,7 +296,7 @@ async def candidate(request: Request, cid: str):
         race_title, race_path = f"U.S. House, {BY_CODE.get(c['state'], c['state'])} {seat}", f"/race/{c['state']}/house/{c['district'] or '00'}"
     raised_total = sum(v for _, v in c["sources"]) or 1
     return page(request, "candidate.html", c=c, checks=checks, back=back_link(request), integrity_url=ii, race_title=race_title, race_path=race_path,
-                raised_total=raised_total,
+                raised_total=raised_total, bioguide=bioguide, votes=congress.house_record(bioguide) if bioguide else None, bills=bills,
                 support=[o for o in c["outside"] if o["side"] == "S"], oppose=[o for o in c["outside"] if o["side"] == "O"])
 
 

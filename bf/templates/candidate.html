@@ -16,6 +16,7 @@
 <nav aria-label="On this page" class="jumps">
   <a href="#money">Money</a>
   <a href="#outside">Outside spending</a>
+  {% if bioguide %}<a href="#record">In Congress</a>{% endif %}
   <a href="#checks">Fact checks · {{ checks | length }}</a>
 </nav>
 
@@ -76,10 +77,17 @@
   {% endif %}
 </section>
 
+{% if bioguide %}{% include "_record.html" %}{% endif %}
+
 {% set who = c.name %}{% include "_checks.html" %}
 
 <section class="block">
   <h2>Where they stand</h2>
-  <p class="muted">Candidate positions are coming soon from Vote Smart. Until then, check the candidate's own campaign site.</p>
+  {% if c.website %}
+  <p>In their own words: <a href="{{ c.website }}" target="_blank" rel="noopener nofollow">{{ c.name }}'s campaign website</a>. Most campaigns have an issues or priorities page there.</p>
+  {% else %}
+  <p class="muted">This campaign didn't list a website with the FEC.</p>
+  {% endif %}
+  <p class="source">Ballot Facts doesn't summarize positions itself: shortening someone's words means choosing which ones matter. Side-by-side positions from Vote Smart's candidate surveys are planned.</p>
 </section>
 {% endblock %}

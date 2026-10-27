@@ -1,6 +1,6 @@
 from datetime import date
 
-from bf import census, civic, factcheck, fec
+from bf import census, civic, congress, factcheck, fec
 from bf.app import _names
 
 
@@ -135,3 +135,24 @@ def test_head_and_404(tmp_path, monkeypatch):
         r = client.get("/no-such-page")
         assert r.status_code == 404 and "Not found" in r.text and "Content-Security-Policy" in r.headers
         assert client.get("/about").headers["cache-control"] == "public, max-age=300"
+
+
+ROLL = b"""<?xml version="1.0" encoding="utf-8"?>
+<rollcall-vote><vote-metadata>
+  <rollcall-num>74</rollcall-num><legis-num>H R 4626</legis-num>
+  <vote-question>On Motion to Suspend the Rules and Pass, as Amended</vote-question>
+  <vote-result>Passed</vote-result><action-date>24-Feb-2026</action-date>
+  <vote-desc>Don't Mess With My Home Appliances Act</vote-desc>
+</vote-metadata><vote-data>
+  <recorded-vote><legislator name-id="A000370">Adams</legislator><vote>Yea</vote></recorded-vote>
+  <recorded-vote><legislator name-id="A000148">Auchincloss</legislator><vote>Not Voting</vote></recorded-vote>
+</vote-data></rollcall-vote>"""
+
+
+def test_house_roll_call():
+    vote, casts = congress.parse_roll(ROLL)
+    assert vote["date"] == "2026-02-24" and vote["final"] and vote["legis"] == "H R 4626"
+    assert casts == {"A000370": "Y", "A000148": "-"}
+    assert congress.bill_link("H R 4626") == "https://www.congress.gov/bill/119th-congress/house-bill/4626"
+    assert congress.bill_link("QUORUM") == "" and congress.bill_name("H J RES 213") == "H.J.Res. 213"
+    assert congress.parse_roll(b'<xml>Error sanitizing file "roll363.xml". Please try again.</xml>') is None
