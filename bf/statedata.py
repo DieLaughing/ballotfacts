@@ -1,0 +1,108 @@
+"""State and county races from per-state data files in bf/data/ (built by the scripts in tools/).
+
+Each file holds that state's 2026 primary contests. The winners are the party nominees on the
+November ballot. An address gets every statewide contest, plus each district contest that covers
+its town; legislative seats are matched by the district names the Census returns, because some
+towns are split between two districts.
+"""
+from __future__ import annotations
+
+import json
+import re
+from functools import cache
+from pathlib import Path
+
+from .census import Place
+
+DATA = Path(__file__).parent / "data"
+
+# Congress comes from the FEC, with money attached, so it's left out here.
+FEDERAL = {"U.S. Senate", "U.S. House"}
+# Ballot order, top to bottom; anything not listed goes after these, alphabetically.
+ORDER = ["Governor", "Lieutenant Governor", "Attorney General", "Secretary of the Commonwealth", "Treasurer",
+         "Auditor", "Governor's Council", "State Senate", "State Representative", "District Attorney", "Sheriff",
+         "Register of Probate", "Clerk of Courts", "Register of Deeds", "County Commissioner", "County Treasurer"]
+LEGISLATIVE = {"State Senate": "state_upper", "State Representative": "state_lower"}
+ORDINALS = {"first": "1st", "second": "2nd", "third": "3rd", "fourth": "4th", "fifth": "5th"}
+
+
+def norm(district: str) -> str:
+    """'First Plymouth & Norfolk' and 'Plymouth and Norfolk District' style names → one comparable form."""
+    d = district.lower().replace("&", "and").removesuffix(" district")
+    d = re.sub(r"[^a-z0-9 ]", " ", d)  # 'Barnstable-Dukes-Nantucket' = 'Barnstable, Dukes and Nantucket'
+    return " ".join(ORDINALS.get(w, w) for w in d.split() if w != "and")
+
+
+def town_of(place: Place) -> str:
+    """Census county-subdivision names: 'Falmouth town', 'Barnstable Town city' → 'falmouth', 'barnstable'."""
+    return re.sub(r"\s+(town|city|town city|plantation|township)$", "", place.town.lower()).strip()
+
+
+def _merge_split_towns(races: list[dict]) -> list[dict]:
+    """A big city can sit in several districts for one office (Boston has three Governor's Council
+    districts). Without precinct data we can't tell which is the voter's, so show them together,
+    each nominee labelled with their district, and say so."""
+    out: list[dict] = []
+    for r in races:
+        prev = out[-1] if out else None
+        if prev and prev["office"] == r["office"] and r["district"]:
+            if not prev.get("split"):
+                prev["split"] = [prev["district"]]
+                for n in prev["nominees"]:
+                    n["district"] = prev["district"]
+                prev["district"] = ""
+            prev["split"].append(r["district"])
+            prev["nominees"] += [dict(n, district=r["district"]) for n in r["nominees"]]
+            prev["contests"] += r["contests"]
+        else:
+            out.append(r)
+    return out
+
+
+@cache
+def load(state: str) -> dict | None:
+    path = DATA / f"{state.lower()}-2026.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text())
+    by_town: dict[str, list[dict]] = {}
+    for c in data["contests"]:
+        for t in c["towns"]:
+            by_town.setdefault(t.lower(), []).append(c)
+    data["by_town"] = by_town
+    return data
+
+
+def races(place: Place) -> tuple[list[dict], dict | None]:
+    """Races for an address, grouped as one card row per office, plus the data file's details
+    (source, fetch date) to show alongside. ([], None) for states without a data file yet."""
+    data = load(place.state)
+    if not data:
+        return [], None
+    picked = [c for c in data["contests"] if c["district"] == "Statewide"] + data["by_town"].get(town_of(place), [])
+    seats: dict[tuple[str, str], list[dict]] = {}
+    for c in picked:
+        if c["office"] in FEDERAL:
+            continue
+        mine = getattr(place, LEGISLATIVE[c["office"]], "") if c["office"] in LEGISLATIVE else ""
+        if mine and norm(mine) != norm(c["district"]):
+            continue  # the town is split; this is the other half's seat
+        seats.setdefault((c["office"], c["district"]), []).append(c)
+
+    out = []
+    for (office, district), primaries in seats.items():
+        nominees = [dict(x, party=p["party"], unopposed=len(p["candidates"]) == 1, contest=p["id"])
+                    for p in primaries for x in p["candidates"] if x["won"]]
+        if not nominees:
+            continue
+        out.append({
+            "office": office,
+            "district": "" if district == "Statewide" else district,
+            "nominees": sorted(nominees, key=lambda n: n["party"]),
+            "contests": [p["id"] for p in primaries],
+        })
+    rank = {o: i for i, o in enumerate(ORDER)}
+    out.sort(key=lambda r: (rank.get(r["office"], len(ORDER)), r["office"], r["district"]))
+    out = _merge_split_towns(out)
+    return out, {"source": data["source"], "fetched": data["fetched"], "about": data["about"],
+                 "questions": data.get("questions", []), "questions_source": data.get("questions_source", "")}

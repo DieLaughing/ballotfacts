@@ -15,7 +15,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import census, civic, config, factcheck, fec, openstates
+from . import census, civic, config, factcheck, fec, openstates, statedata
 from .cache import Cache
 from .states import BY_CODE
 
@@ -110,7 +110,9 @@ async def ballot(request: Request, address: str = Form("")):
         _safe(openstates.legislators(http, cache, place_key, place.lat, place.lng), []),
     )
     races = [r for r in (_race("senate", place.state, "", senate), _race("house", place.state, place.district, house)) if r]
-    resp = page(request, "ballot.html", place=place, info=info, races=races, legislators=legislators)
+    state_races, state_source = statedata.races(place)
+    resp = page(request, "ballot.html", place=place, info=info, races=races, legislators=legislators,
+                state_races=state_races, state_source=state_source)
     resp.headers["Cache-Control"] = "no-store"  # this page came from someone's address
     return resp
 

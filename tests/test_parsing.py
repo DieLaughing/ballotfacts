@@ -43,3 +43,19 @@ def test_census_at_large_and_tidy_address():
     p = census.parse(body)
     assert p.state == "VT" and p.district == "00" and p.district_label == "At-large"
     assert p.matched == "1 Main St, Burlington, VT 05401"
+
+
+def test_state_district_names_match_census():
+    from bf.statedata import norm
+    assert norm("Barnstable-Dukes-Nantucket District") == norm("Barnstable, Dukes and Nantucket")
+    assert norm("Plymouth and Barnstable District") == norm("Plymouth and Barnstable")
+    assert norm("First Plymouth & Norfolk") == norm("1st Plymouth and Norfolk District")
+    assert norm("3rd Barnstable District") != norm("2nd Barnstable")
+
+
+def test_split_city_offices_are_merged():
+    from bf.statedata import _merge_split_towns
+    races = [{"office": "Governor's Council", "district": d, "nominees": [{"name": n}], "contests": [i]}
+             for i, (d, n) in enumerate([("3rd", "A"), ("4th", "B")])] + [{"office": "Sheriff", "district": "Suffolk", "nominees": [], "contests": [9]}]
+    out = _merge_split_towns(races)
+    assert len(out) == 2 and out[0]["split"] == ["3rd", "4th"] and [n["district"] for n in out[0]["nominees"]] == ["3rd", "4th"]

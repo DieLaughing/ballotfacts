@@ -20,6 +20,7 @@ class Place:
     state_name: str
     district: str         # congressional district, "00" for at-large seats
     county: str
+    town: str             # county subdivision, e.g. "Falmouth town" (New England towns, townships elsewhere)
     state_upper: str      # state senate district name, "" where there is none (e.g. Nebraska has one chamber)
     state_lower: str
     lat: float
@@ -61,6 +62,7 @@ def parse(body: dict) -> Place | None:
         state_name=state[1],
         district=cd.get("GEOID", "")[-2:] or "00",
         county=_first(geos, "Counties").get("NAME", ""),
+        town=_first(geos, "County Subdivisions").get("NAME", ""),
         state_upper=_first(geos, "State Legislative Districts - Upper").get("NAME", ""),
         state_lower=_first(geos, "State Legislative Districts - Lower").get("NAME", ""),
         lat=float(m["coordinates"]["y"]),
