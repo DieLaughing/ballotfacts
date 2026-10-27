@@ -16,7 +16,7 @@ from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Res
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import background, census, civic, config, congress, factcheck, fec, integrity, ocpf, offices, openstates, photos, precincts, statedata
+from . import background, census, civic, config, congress, factcheck, fec, integrity, malegislature, ocpf, offices, openstates, photos, precincts, statedata
 from .cache import Cache
 from .states import BY_CODE
 
@@ -337,7 +337,13 @@ async def state_candidate(request: Request, state: str, contest_id: int, who: st
             spending, outside_fetched = ocpf.outside(statedata.load("MA") or {})
             outside = spending.get(str(money["cpf"]), [])
     site = statedata.website(d["state"], d["me"]["name"], d["contest"]["office"], d["contest"]["district"])
-    return page(request, "state_candidate.html", d=d, checks=checks, back=back_link(request), site=site, state_name=BY_CODE.get(d["state"], d["state"]),
+    office = d["contest"]["office"]
+    record = None
+    if d["state"] == "MA" and office == "Governor" and money and money["incumbent"]:
+        record = {"laws": malegislature.laws()}
+    elif d["state"] == "MA" and office in malegislature.BRANCH and (code := malegislature.member_code(d["me"]["name"], office)):
+        record = {"member": await _safe(malegislature.member(http, cache, code), None), "senate": malegislature.senate_record(code)}
+    return page(request, "state_candidate.html", record=record, d=d, checks=checks, back=back_link(request), site=site, state_name=BY_CODE.get(d["state"], d["state"]),
                 money=money, sources=sources, sources_total=sum(v for _, v in sources or []) or 1,
                 support=[o for o in outside if o["side"] == "S"], oppose=[o for o in outside if o["side"] == "O"],
                 outside_fetched=outside_fetched)

@@ -7,3 +7,4 @@ pillow==13.0.0
 pyproj==3.8.0
 pyshp==3.1.6
 shapely==2.2.0
+pypdf==6.19.0

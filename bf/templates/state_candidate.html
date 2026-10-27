@@ -18,6 +18,7 @@
   <a href="#primary">Primary results</a>
   <a href="#money">Money</a>
   <a href="#outside">Outside spending</a>
+  {% if record %}<a href="#record">In office</a>{% endif %}
   <a href="#checks">Fact checks · {{ checks | length }}</a>
 </nav>
 
@@ -81,6 +82,8 @@
   <p class="muted">We couldn't match {{ name }} to an OCPF campaign account for this year. <a href="https://www.ocpf.us/" target="_blank" rel="noopener">Search OCPF</a></p>
   {% endif %}
 </section>
+
+{% if record %}{% include "_ma_record.html" %}{% endif %}
 
 {% set who = name %}{% include "_checks.html" %}
 

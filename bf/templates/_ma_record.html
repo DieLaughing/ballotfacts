@@ -1,0 +1,81 @@
+<section id="record" aria-labelledby="h-record" class="block">
+  <h2 id="h-record">In office</h2>
+  {% if record.laws %}{% set L = record.laws %}
+  <p class="sub">The governor doesn't vote on bills; they sign them into law or veto them. These are the laws signed in the current session (2025–26), from the Massachusetts Legislature.</p>
+  <div class="tiles swipe-sm">
+    <div class="tile"><span>Laws signed</span><strong>{{ L.laws | length }}</strong></div>
+    {% if L.part %}<div class="tile"><span>Signed in part</span><strong>{{ L.part }}</strong></div>{% endif %}
+  </div>
+  {% macro law_row(x) %}
+  <div class="vrow">
+    <div>
+      <p class="vtitle"><a href="{{ x.link }}" target="_blank" rel="noopener">Chapter {{ x.chapter }} of {{ x.year }}</a> · {{ x.title }}</p>
+      <p class="muted small">{{ x.status }}</p>
+    </div>
+    {% if x.part %}<span class="rating">In part</span>{% endif %}
+  </div>
+  {% endmacro %}
+  <h3>Newest laws</h3>
+  <div class="list-box">
+    {% for x in L.laws[:10] %}{{ law_row(x) }}{% else %}<div class="row muted">None yet</div>{% endfor %}
+    {% if L.laws | length > 10 %}
+    <details class="row-more"><summary>{{ [L.laws | length - 10, 50] | min }} more</summary>
+      {% for x in L.laws[10:60] %}{{ law_row(x) }}{% endfor %}
+    </details>
+    {% endif %}
+  </div>
+  <p class="source">Every law signed, none picked by hand. "In part" means the governor vetoed some sections and signed the rest. Bills vetoed outright never become law, so they aren't listed; the Legislature's data doesn't collect them in one place. <a href="https://malegislature.gov/Laws/SessionLaws" target="_blank" rel="noopener">All session laws</a></p>
+
+  {% else %}{% set m = record.member %}{% set sv = record.senate %}
+  <p class="sub">What {{ name }} has done in the current session of the Legislature (2025–26){% if m %}, as {{ "state senator" if m.branch == "Senate" else "state representative" }} for {{ m.district }}{% endif %}.</p>
+
+  {% if sv %}
+  <h3>How they voted in the State Senate</h3>
+  <div class="tiles swipe-sm">
+    <div class="tile"><span>Votes cast</span><strong>{{ sv.total - sv.missed }}</strong></div>
+    <div class="tile"><span>Votes missed</span><strong>{{ sv.missed_pct }}%</strong></div>
+  </div>
+  {% macro senate_row(v) %}
+  <div class="vrow">
+    <div>
+      <p class="vtitle">{% if v.link %}<a href="{{ v.link }}" target="_blank" rel="noopener">{{ v.name }}</a> · {% endif %}{{ v.title or v.question or "Roll call" }}</p>
+      <p class="muted small">Roll call {{ v.roll }}{% if v.question and v.title %} · {{ v.question }}{% endif %}</p>
+    </div>
+    <span class="rating">{{ v.cast }}</span>
+  </div>
+  {% endmacro %}
+  <div class="list-box">
+    {% for v in sv.votes[:10] %}{{ senate_row(v) }}{% endfor %}
+    {% if sv.votes | length > 10 %}
+    <details class="row-more"><summary>{{ [sv.votes | length - 10, 50] | min }} more</summary>
+      {% for v in sv.votes[10:60] %}{{ senate_row(v) }}{% endfor %}
+    </details>
+    {% endif %}
+  </div>
+  <p class="source">{{ sv.missed }} of {{ sv.total }} roll calls missed. Every roll call, newest first, none picked by hand. The Senate doesn't publish dates with them.</p>
+  {% elif m and m.branch == "House" %}
+  <p class="muted">State House votes aren't shown: the House publishes them only inside its PDF journals, not as data. <a href="https://malegislature.gov/Journal/House" target="_blank" rel="noopener">House journals</a></p>
+  {% endif %}
+
+  {% if m %}
+  <h3>Bills they filed · {{ m.bills | length }}</h3>
+  {% if m.bills %}
+  {% macro bill_row(b) %}
+  <div class="vrow"><div>
+    <p class="vtitle"><a href="{{ b.link }}" target="_blank" rel="noopener">{{ b.number }}</a> · {{ b.title }}</p>
+    {% if b.filed %}<p class="muted small">Filed {{ b.filed | date }}</p>{% endif %}
+  </div></div>
+  {% endmacro %}
+  <div class="list-box">
+    {% for b in m.bills[:8] %}{{ bill_row(b) }}{% endfor %}
+    {% if m.bills | length > 8 %}
+    <details class="row-more"><summary>{{ [m.bills | length - 8, 50] | min }} more</summary>
+      {% for b in m.bills[8:58] %}{{ bill_row(b) }}{% endfor %}
+    </details>
+    {% endif %}
+  </div>
+  {% endif %}
+  <p class="source">Bills where {{ name }} is the lead sponsor{% if m.cosponsored %}; they also co-sponsored {{ m.cosponsored }}{% endif %}. From the Massachusetts Legislature; <a href="{{ m.profile }}" target="_blank" rel="noopener">their legislator page</a>.</p>
+  {% endif %}
+  {% endif %}
+</section>

@@ -35,7 +35,7 @@ CAST = {"Yea": "Y", "Aye": "Y", "Nay": "N", "No": "N", "Present": "P", "Not Voti
 SAY = {"Y": "Yes", "N": "No", "P": "Present", "-": "Didn't vote"}
 # Votes that decide a bill or resolution itself, going by the vote's official question. Everything
 # else (rules for debate, amendments, motions, quorum calls) is listed separately as other votes.
-FINAL = re.compile(r"Passage|Suspend the Rules and (Pass|Agree)|Concur|Conference Report|Overrid", re.I)
+FINAL = re.compile(r"Passage|Suspend the Rules and (Pass|Agree)|Concur|Conference Report|Overrid", re.IGNORECASE)
 BILL_TYPES = {"H R": "hr", "H RES": "hres", "H J RES": "hjres", "H CON RES": "hconres",
               "S": "s", "S RES": "sres", "S J RES": "sjres", "S CON RES": "sconres"}
 SHORT = {"hr": "H.R.", "hres": "H.Res.", "hjres": "H.J.Res.", "hconres": "H.Con.Res.",

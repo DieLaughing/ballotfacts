@@ -1,6 +1,6 @@
 from datetime import date
 
-from bf import census, civic, congress, factcheck, fec
+from bf import census, civic, congress, factcheck, fec, malegislature
 from bf.app import _names
 
 
@@ -156,3 +156,9 @@ def test_house_roll_call():
     assert congress.bill_link("H R 4626") == "https://www.congress.gov/bill/119th-congress/house-bill/4626"
     assert congress.bill_link("QUORUM") == "" and congress.bill_name("H J RES 213") == "H.J.Res. 213"
     assert congress.parse_roll(b'<xml>Error sanitizing file "roll363.xml". Please try again.</xml>') is None
+
+
+def test_session_law_titles():
+    assert malegislature.tidy_title("AN ACT AMENDING THE CHARTER OF THE CITY OF MALDEN") == "An Act Amending the Charter of the City of Malden"
+    assert malegislature.tidy_title("An Act relative to Bourne") == "An Act relative to Bourne"
+    assert malegislature.bill_name("SD4203") == "SD.4203" and malegislature.bill_name("H5640") == "H.5640"

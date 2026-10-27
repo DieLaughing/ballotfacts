@@ -27,6 +27,7 @@ Only public data is cached (races, money, fact checks), in a small SQLite file.
 | Federal candidates, money, outside spending | [OpenFEC](https://api.open.fec.gov/developers/) |
 | House votes | [House Clerk roll-call files](https://clerk.house.gov/Votes) (public XML, no key) |
 | Bills members introduced | [Congress.gov API](https://api.congress.gov/) (same api.data.gov key as OpenFEC) |
+| Massachusetts laws signed, State Senate votes, bills filed | [MA Legislature API](https://malegislature.gov/api) (public, no key) |
 | Polling places, official links | [Voting Information Project](https://www.votinginfoproject.org/) via [Google Civic Information API](https://developers.google.com/civic-information) |
 | Fact checks | [Google Fact Check Tools](https://toolbox.google.com/factcheck/apis) (ClaimReview) |
 | State legislators | [Open States](https://open.pluralpolicy.com/) |
