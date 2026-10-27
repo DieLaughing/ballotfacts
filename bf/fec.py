@@ -83,10 +83,10 @@ def party(full: str | None) -> str:
     return p.title() if p else "No party listed"
 
 
-async def _get(client: httpx.AsyncClient, path: str, **params) -> dict:
+async def _get(client: httpx.AsyncClient, path: str, timeout: float = 20, **params) -> dict:
     """The FEC API has the odd hiccup (5xx, or 429 when busy); two retries ride most of them out."""
     for attempt in range(3):
-        r = await client.get(API + path, params={"api_key": config.FEC_KEY, **params})
+        r = await client.get(API + path, params={"api_key": config.FEC_KEY, **params}, timeout=timeout)
         if r.status_code not in (429, 500, 502, 503, 504) or attempt == 2:
             break
         log.warning("FEC %s on %s, retrying", r.status_code, path)
@@ -97,37 +97,34 @@ async def _get(client: httpx.AsyncClient, path: str, **params) -> dict:
 
 async def race(client: httpx.AsyncClient, cache: Cache, office: str, state: str, district: str = "") -> list[dict]:
     """Everyone who filed for one seat, the campaigns still in the general election first."""
-    key = f"fec:race:{config.CYCLE}:{office}:{state}:{district}"
+    seat = f"{config.CYCLE}:{office}:{state}:{district}"
 
     async def load() -> list[dict]:
         q = {"cycle": config.CYCLE, "office": office, "state": state, "election_full": "true", "per_page": 100,
              "sort": "-total_receipts"}
         if office == "house":
             q["district"] = district
-        rows = (await _get(client, "elections/", **q))["results"]
-        try:
-            spend = await _outside_by_candidate(client, office, state, district)
-        except httpx.HTTPError as e:  # the race is still worth showing without it
-            log.warning("outside spending unavailable: %s", type(e).__name__)  # str(e) would include the API key
-            spend = {}
-        out = []
-        for r in rows:
-            out.append({
-                "id": r["candidate_id"],
-                "name": display_name(r["candidate_name"]),
-                "party": party(r.get("party_full")),
-                "incumbent": r.get("incumbent_challenge_full") == "Incumbent",
-                "raised": r.get("total_receipts") or 0,
-                "cash": r.get("cash_on_hand_end_period") or 0,
-                "through": r.get("coverage_end_date") or "",
-                "running": (r.get("coverage_end_date") or "") >= config.PRE_GENERAL_THROUGH,
-                "support": spend.get(r["candidate_id"], {}).get("S", 0),
-                "oppose": spend.get(r["candidate_id"], {}).get("O", 0),
-            })
-        out.sort(key=lambda c: (not c["running"], -c["raised"]))
-        return out
+        return [{
+            "id": r["candidate_id"],
+            "name": display_name(r["candidate_name"]),
+            "party": party(r.get("party_full")),
+            "incumbent": r.get("incumbent_challenge_full") == "Incumbent",
+            "raised": r.get("total_receipts") or 0,
+            "cash": r.get("cash_on_hand_end_period") or 0,
+            "through": r.get("coverage_end_date") or "",
+            "running": (r.get("coverage_end_date") or "") >= config.PRE_GENERAL_THROUGH,
+        } for r in (await _get(client, "elections/", **q))["results"]]
 
-    return await cache.fetch(key, TTL, load)
+    cands = await cache.fetch(f"fec:race:{seat}", TTL, load)
+    try:
+        # Cached separately: if the FEC is slow, the race still shows, and the next visit tries again.
+        spend = await cache.fetch(f"fec:outside:{seat}", TTL, lambda: _outside_by_candidate(client, office, state, district))
+    except httpx.HTTPError as e:
+        log.warning("outside spending unavailable: %s", type(e).__name__)  # str(e) would include the API key
+        spend = {}
+    out = [dict(c, support=spend.get(c["id"], {}).get("S", 0), oppose=spend.get(c["id"], {}).get("O", 0)) for c in cands]
+    out.sort(key=lambda c: (not c["running"], -c["raised"]))
+    return out
 
 
 async def _outside_by_candidate(client: httpx.AsyncClient, office: str, state: str, district: str) -> dict:
@@ -135,7 +132,7 @@ async def _outside_by_candidate(client: httpx.AsyncClient, office: str, state: s
     if office == "house":
         q["district"] = district
     totals: dict[str, dict[str, float]] = {}
-    for r in (await _get(client, "schedules/schedule_e/by_candidate/", **q))["results"]:
+    for r in (await _get(client, "schedules/schedule_e/by_candidate/", timeout=8, **q))["results"]:
         side = totals.setdefault(r["candidate_id"], {"S": 0, "O": 0})
         side[r["support_oppose_indicator"]] = side.get(r["support_oppose_indicator"], 0) + (r["total"] or 0)
     return totals
