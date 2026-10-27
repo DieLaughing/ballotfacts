@@ -16,7 +16,7 @@ def test_party():
 
 
 def test_names_uses_committee_nickname():
-    firsts, last = _names({"name": "T. Jonathan Ossoff", "committee_name": "JON OSSOFF FOR SENATE"})
+    firsts, last = _names("T. Jonathan Ossoff", "JON OSSOFF FOR SENATE")
     assert firsts == ["Jonathan", "Jon"] and last == "Ossoff"
 
 
@@ -73,3 +73,15 @@ def test_ocpf_match():
     assert match(rows, "Jack Peter Richardson", "State Representative", "3rd Barnstable")["office"] == "3rd Barnstable"
     assert match(rows, "Maura Healey", "Governor", "Statewide")["office"] == "Governor"
     assert match(rows, "Nobody Here", "Governor", "Statewide") is None
+
+
+def test_fec_website_cleanup():
+    assert fec.website("HTTPS://ELECTJON.COM/") == "https://electjon.com/"
+    assert fec.website("NIKEMAFORCONGRESS.COM") == "https://nikemaforcongress.com"
+    assert fec.website("NONE") == "" and fec.website(None) == ""
+
+
+def test_hand_checked_website_lookup():
+    from bf.statedata import website
+    assert website("MA", "Jack Peter Richardson", "State Representative", "3rd Barnstable")["url"] == "https://jackprichardson.com/"
+    assert website("MA", "Jack Peter Richardson", "State Representative", "2nd Barnstable") is None

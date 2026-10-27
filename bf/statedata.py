@@ -140,3 +140,17 @@ def offices() -> dict[str, dict]:
         links = dict((label, url) for url, label in v["links"])
         v["main"] = links.get("Election information") or (v["links"][0][0] if v["links"] else "")
     return data
+
+
+@cache
+def _websites() -> dict:
+    path = DATA / "websites.json"
+    return json.loads(path.read_text()) if path.exists() else {}
+
+
+def website(state: str, name: str, office: str, district: str) -> dict | None:
+    """A hand-checked campaign website (bf/data/websites.json), with the evidence for it."""
+    for w in _websites().get(state, []):
+        if slug(w["name"]) == slug(name) and w["office"] == office and norm(w["district"]) == norm(district):
+            return w
+    return None

@@ -3,9 +3,11 @@
 A free, nonpartisan voter guide. Enter your address and see:
 
 - **Where and how to vote:** nearby polling places, early-voting sites and drop boxes, plus official links (registration check, sample ballot, absentee voting).
-- **Your U.S. House and Senate races:** who's running, how much each campaign raised and from whom, and Super PAC spending for or against them.
+- **Your U.S. House and Senate races** (every state): who's running, how much each campaign raised and from whom, and Super PAC spending for or against them. Every outside group opens to plain FEC facts and its own page: who funds it and where else it spends.
+- **State and county races** where a state has been added (Massachusetts so far): party nominees, primary results, state campaign money and independent-expenditure spending, and the statewide ballot questions in the official yes/no wording.
 - **Fact checks:** published fact checks of claims by or about each candidate, in the fact-checker's own words.
-- **Your state legislators** (current officeholders).
+- **Campaign websites:** from FEC registrations, or hand-checked with the evidence shown.
+- **Results:** every state's official election office, for election night.
 
 Ballot Facts doesn't endorse candidates, rate claims or call races.
 
@@ -27,6 +29,8 @@ Only public data is cached (races, money, fact checks), in a small SQLite file.
 | Fact checks | [Google Fact Check Tools](https://toolbox.google.com/factcheck/apis) (ClaimReview) |
 | State legislators | [Open States](https://open.pluralpolicy.com/) |
 | Massachusetts campaign money, independent expenditures | [OCPF](https://www.ocpf.us/) API (`api.ocpf.us`); IE PAC spending collected by `tools/fetch_ma.py outside` |
+| Campaign websites | FEC Form 1 (federal); hand-checked entries with evidence in `bf/data/websites.json` (others) |
+| Every state's election office (Results page) | Voting Information Project via Google, collected by `tools/fetch_offices.py` |
 | Massachusetts state & county races, ballot questions | [ElectionStats](https://electionstats.state.ma.us/) primary results + the state's Information for Voters booklet, collected by `tools/fetch_ma.py` into `bf/data/ma-2026.json` |
 
 **Who's "running":** the FEC doesn't mark nominees, but only general-election campaigns file the pre-general report. Candidates whose latest report reaches its closing date are listed first; everyone else who registered for the seat is listed separately. Candidates raising under $5,000 don't file at all, so the official sample ballot is the full list.

@@ -1,0 +1,13 @@
+{
+ "about": "Campaign websites for non-federal candidates, each checked by a person before it was added. Federal candidates' websites come from their FEC registration instead. Suggest one: https://github.com/DieLaughing/ballotfacts/issues/new?labels=website",
+ "MA": [
+  {
+   "name": "Jack Peter Richardson",
+   "office": "State Representative",
+   "district": "3rd Barnstable",
+   "url": "https://jackprichardson.com/",
+   "checked": "2026-10-27",
+   "evidence": "Page title 'Jack Richardson for State Representative'; says he is running for 3rd Barnstable State Representative (Bourne, Falmouth, Mashpee); legal disclaimer 'Paid for by the Richardson Committee, PO Box 1065, North Falmouth, MA'."
+  }
+ ]
+}

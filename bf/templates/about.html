@@ -25,6 +25,11 @@
   </ul>
 </section>
 
+<section class="block prose" aria-labelledby="who">
+  <h2 id="who">Who runs this</h2>
+  <p>One person: <a href="https://github.com/DieLaughing" target="_blank" rel="noopener">DieLaughing</a>, as part of InPints, a small group of independent hobby projects. Not a campaign, party, PAC or advocacy group, and not affiliated with any of the data sources below.</p>
+</section>
+
 <section class="block prose" aria-labelledby="money">
   <h2 id="money">Who pays for this</h2>
   <p>One person, out of pocket. It runs on a small rented server alongside a few hobby projects. Ballot Facts takes no donations, no sponsorships, no advertising and no money from any campaign, party, PAC or advocacy group. If that ever changes, every dollar will be listed on this page.</p>
@@ -40,8 +45,14 @@
     <li><strong>State legislators:</strong> Open States.</li>
     <li><strong>Massachusetts state and county races:</strong> official 2026 primary results from the Secretary of the Commonwealth's <a href="https://electionstats.state.ma.us/" target="_blank" rel="noopener">ElectionStats</a>; ballot questions from the state's Information for Voters booklet. The script that collects them is in the repo, so anyone can rerun it and compare.</li>
     <li><strong>Massachusetts campaign money:</strong> the state's Office of Campaign and Political Finance (<a href="https://www.ocpf.us/" target="_blank" rel="noopener">OCPF</a>): money raised and spent, where it came from, and independent expenditure PAC spending for or against each candidate.</li>
+    <li><strong>Campaign websites:</strong> federal candidates' come from their own FEC registration. Others are added only after a person checks that the site names the candidate and the office; the evidence is shown on the candidate's page and kept in <a href="{{ config.REPO }}/blob/main/bf/data/websites.json" target="_blank" rel="noopener">websites.json</a>.</li>
   </ul>
   <p>We don't call races, endorse candidates, or rate claims. Where a source has gaps, we say so.</p>
+  <h3>How fresh is it?</h3>
+  <ul>
+    <li>Federal money, outside spending and fact checks are fetched live and kept for a few hours.</li>
+    <li>Massachusetts races and ballot questions come from a snapshot of the official primary results; each page shows when it was collected.</li>
+  </ul>
 </section>
 
 <section class="block prose" aria-labelledby="fix">

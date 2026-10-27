@@ -5,7 +5,9 @@
 <p class="eyebrow">{{ c.office }}{% if c.district != "Statewide" %}, {{ c.district }}{% endif %} · {{ state_name }}</p>
 <div class="page-head">
   <h1>{{ name }}</h1>
-  <p class="sub">{{ c.party }}{% if money and money.incumbent %} · <span class="tag">Incumbent</span>{% endif %}{% if d.me.won %} · <span class="tag">Nominee</span>{% endif %}{% if "(Write-In)" in d.me.name %} · won the primary as a write-in{% endif %}</p>
+  <p class="sub">{{ c.party }}{% if money and money.incumbent %} · <span class="tag">Incumbent</span>{% endif %}{% if d.me.won %} · <span class="tag">Nominee</span>{% endif %}{% if "(Write-In)" in d.me.name %} · won the primary as a write-in{% endif %}{% if site %} · <a href="{{ site.url }}" target="_blank" rel="noopener nofollow">Campaign website</a>{% endif %}</p>
+  {% if site %}<details class="why"><summary>How we know this is their site</summary><p>Checked by hand on {{ site.checked | date }}: {{ site.evidence }}</p></details>
+  {% else %}<p class="source">Know {{ name }}'s official campaign website? <a href="{{ config.REPO }}/issues/new?labels=website&amp;title={{ ('Website: ' ~ name ~ ', ' ~ c.office ~ (', ' ~ c.district if c.district != 'Statewide' else '')) | urlencode }}" target="_blank" rel="noopener">Suggest it</a>. Every suggestion is checked before it's added.</p>{% endif %}
 </div>
 
 <nav aria-label="On this page" class="jumps">

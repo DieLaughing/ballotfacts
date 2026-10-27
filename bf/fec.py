@@ -53,6 +53,14 @@ HONORIFICS = {"MR", "MRS", "MS", "DR", "HON", "REV", "SEN", "SENATOR", "REP", "G
 SUFFIXES = {"JR", "SR", "II", "III", "IV"}
 
 
+def website(raw: str | None) -> str:
+    """Campaigns type their own website on FEC Form 1: 'HTTPS://ELECTJON.COM/', 'nikemaforcongress.com'."""
+    raw = (raw or "").strip().lower()
+    if not raw or " " in raw or "." not in raw:
+        return ""
+    return raw if raw.startswith(("http://", "https://")) else "https://" + raw
+
+
 def display_name(fec_name: str) -> str:
     """'COLLINS, MICHAEL A JR' → 'Michael A. Collins Jr.' (the FEC stores LAST, FIRST MIDDLE)."""
     last, _, rest = fec_name.partition(",")
@@ -248,6 +256,7 @@ async def candidate(client: httpx.AsyncClient, cache: Cache, cid: str) -> dict |
             "incumbent": c.get("incumbent_challenge") == "I",
             "committee": pcc,
             "committee_name": committees[0].get("name", "") if committees else "",
+            "website": website(committees[0].get("website") if committees else ""),
             "raised": t.get("receipts") or 0,
             "spent": t.get("disbursements") or 0,
             "cash": t.get("last_cash_on_hand_end_period") or 0,

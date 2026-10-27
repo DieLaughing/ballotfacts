@@ -78,6 +78,10 @@ templates.env.globals.update(config=config, states=BY_CODE)
 async def security_headers(request: Request, call_next):
     response = await call_next(request)
     response.headers.update(HEADERS)
+    # Every GET page is public data, the same for everyone, so a CDN may keep it for five minutes.
+    # The address-based ballot (POST) sets its own private header.
+    if request.method == "GET" and response.status_code == 200 and "cache-control" not in response.headers:
+        response.headers["Cache-Control"] = "public, max-age=300"
     return response
 
 
@@ -130,7 +134,7 @@ async def district_ballot(request: Request, state: str, district: str):
     place = census.Place.from_key(state, district, q)
     http, cache = request.app.state.http, request.app.state.cache
     info, legislators = await asyncio.gather(
-        _safe(civic.lookup(http, f"{place.matched}", 0, 0), None),
+        _safe(civic.lookup(http, place.matched, 0, 0), None),  # town-level: official links, no polling places
         _safe(openstates.by_district(http, cache, state, place.state_upper, place.state_lower), []),
     )
     return await _ballot(request, place, info, legislators, by_link=True)
@@ -197,8 +201,7 @@ async def candidate(request: Request, cid: str):
     c = await _safe(fec.candidate(http, cache, cid), None)
     if not c:
         return page(request, "missing.html", 404)
-    firsts, last = _names(c)
-    checks = await _safe(factcheck.search(http, cache, firsts, last), [])
+    checks = await _safe(factcheck.search(http, cache, *_names(c["name"], c.get("committee_name", ""))), [])
     if c["office"] == "S":
         race_title, race_path = f"U.S. Senate, {BY_CODE.get(c['state'], c['state'])}", f"/race/{c['state']}/senate"
     else:
@@ -225,10 +228,8 @@ async def state_candidate(request: Request, state: str, contest_id: int, who: st
     d = statedata.candidate(state.upper(), contest_id, who)
     if not d:
         return page(request, "missing.html", 404)
-    words = [w for w in d["me"]["name"].replace(" (Write-In)", "").replace(".", "").split() if w not in ("Jr", "Sr", "II", "III", "IV")]
-    firsts = [w for w in words[:-1] if len(w) > 1][:1] or words[:1]
     http, cache = request.app.state.http, request.app.state.cache
-    checks = await _safe(factcheck.search(http, cache, firsts, words[-1]), [])
+    checks = await _safe(factcheck.search(http, cache, *_names(d["me"]["name"])), [])
     money = sources = None
     outside: list[dict] = []
     if d["state"] == "MA":
@@ -237,19 +238,20 @@ async def state_candidate(request: Request, state: str, contest_id: int, who: st
         if money:
             sources = await _safe(ocpf.sources(http, cache, money["cpf"]), None)
             outside = (statedata.load("MA") or {}).get("outside", {}).get(str(money["cpf"]), [])
-    return page(request, "state_candidate.html", d=d, checks=checks, back=back_link(request), state_name=BY_CODE.get(d["state"], d["state"]),
+    site = statedata.website(d["state"], d["me"]["name"], d["contest"]["office"], d["contest"]["district"])
+    return page(request, "state_candidate.html", d=d, checks=checks, back=back_link(request), site=site, state_name=BY_CODE.get(d["state"], d["state"]),
                 money=money, sources=sources, sources_total=sum(v for _, v in sources or []) or 1,
                 support=[o for o in outside if o["side"] == "S"], oppose=[o for o in outside if o["side"] == "O"],
                 outside_fetched=(statedata.load("MA") or {}).get("outside_fetched", ""))
 
 
-def _names(c: dict) -> tuple[list[str], str]:
-    """First names a candidate goes by (skipping initials), plus their last name. The campaign
-    committee's name often has the everyday one: 'JON OSSOFF FOR SENATE'."""
-    words = [w for w in c["name"].replace(".", "").split() if w not in ("Jr", "Sr", "II", "III", "IV")]
+def _names(name: str, committee_name: str = "") -> tuple[list[str], str]:
+    """First names a candidate goes by (skipping initials), plus their last name, for fact-check
+    searches. A campaign committee's name often has the everyday one: 'JON OSSOFF FOR SENATE'."""
+    words = [w for w in name.replace(" (Write-In)", "").replace(".", "").split() if w not in ("Jr", "Sr", "II", "III", "IV")]
     last = words[-1]
     firsts = [w for w in words[:-1] if len(w) > 1][:1]
-    committee = c.get("committee_name", "").title().split()
+    committee = committee_name.title().split()
     if last in committee and (i := committee.index(last)) > 0 and committee[i - 1] not in firsts:
         firsts.append(committee[i - 1])
     return firsts or [words[0]], last
@@ -274,4 +276,5 @@ async def healthz():
 
 @app.get("/robots.txt", response_class=PlainTextResponse)
 async def robots():
+    # Ballot pages call several outside APIs per view; search engines don't need to crawl them.
     return "User-agent: *\nDisallow: /ballot\n"

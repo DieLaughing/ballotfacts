@@ -7,7 +7,8 @@
 
 <div class="page-head">
   <h1>{{ c.name }}</h1>
-  <p class="sub">{{ c.party }}{% if c.incumbent %} · <span class="tag">Incumbent</span>{% endif %} · <a href="https://www.fec.gov/data/candidate/{{ c.id }}/" target="_blank" rel="noopener">FEC record</a></p>
+  <p class="sub">{{ c.party }}{% if c.incumbent %} · <span class="tag">Incumbent</span>{% endif %} {% if c.website %} · <a href="{{ c.website }}" target="_blank" rel="noopener nofollow">Campaign website</a>{% endif %} · <a href="https://www.fec.gov/data/candidate/{{ c.id }}/" target="_blank" rel="noopener">FEC record</a></p>
+  {% if c.website %}<p class="source">Website as the campaign listed it on its FEC registration.</p>{% endif %}
 </div>
 
 <nav aria-label="On this page" class="jumps">
