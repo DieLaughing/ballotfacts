@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% set active = 'home' %}{% set on_ballot = true %}{% from "_state_card.html" import state_card with context %}
 {% block title %}Your ballot · Ballot Facts{% endblock %}
+{% macro official_button(lookup) %}
+<form method="post" action="{{ lookup.url }}" target="_blank" class="official-lookup">
+  {% for k, v in lookup.fields.items() %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
+  <button type="submit" class="btn">Show my polling place on the official state site</button>
+  <p class="muted small">Opens the Secretary of the Commonwealth's lookup with your address already filled in. Your address goes to the state only when you press this; Ballot Facts doesn't keep it.</p>
+</form>
+{% endmacro %}
 {% block main %}
 <div class="page-head">
   <p class="eyebrow">General election · Nov 3</p>
@@ -45,6 +52,7 @@
     <span class="eyebrow">{{ "Statewide" if not r.district and not r.split else "District" }}</span>
     <h3 id="st-{{ loop.index }}">{{ r.office }}{% if r.district %}, {{ r.district }}{% endif %}</h3>
   </div>
+  {% set about = office_about(place.state, r.office) %}{% if about %}<p class="office-about"><strong>What this office does:</strong> {{ about }}</p>{% endif %}
   <ul class="swipe" aria-label="Nominees{% if r.nominees | length > 1 %}, swipe for more{% endif %}">
     {% for n in r.nominees %}
     {{ state_card(n, "/" ~ (place.state | lower) ~ "/c/" ~ n.contest ~ "/" ~ n.slug ~ (back | backq)) }}
@@ -66,14 +74,41 @@
 
 {% if state_source and state_source.questions %}
 <h2 class="section" id="questions">Statewide ballot questions</h2>
-<p class="sub">What a yes or no vote does, in the official words of the Attorney General and the Secretary of the Commonwealth.</p>
+<p class="sub">What a yes or no vote does, in the official words of the Attorney General and the Secretary of the Commonwealth, and who's paying on each side.</p>
 <div class="questions">
-  {% for q in state_source.questions %}
+  {% for q in state_source.questions %}{% set m = qmoney.get(q.number | string) %}
   <details class="question">
-    <summary><span class="qnum">{{ q.number }}</span><span>{{ q.title }}</span></summary>
+    <summary><span class="qnum">{{ q.number }}</span><span class="qtitle">{{ q.title }}{% if m %}<span class="qsub">Yes side {{ m.yes_total | money }} · No side {{ m.no_total | money }}</span>{% endif %}</span></summary>
     <div class="qbody">
       <p><strong>Yes:</strong> {{ q.yes | replace("A YES VOTE ", "") }}</p>
       <p><strong>No:</strong> {{ q.no | replace("A NO VOTE ", "") }}</p>
+      <h4>Who's paying</h4>
+      {% if m and (m.yes or m.no) %}
+      {% set total = (m.yes_total + m.no_total) or 1 %}
+      <svg class="split" width="100%" height="10" role="img" aria-label="Yes side {{ m.yes_total | money }}, No side {{ m.no_total | money }}">
+        <rect width="100%" height="10" rx="5" class="split-bg"></rect>
+        <rect width="{{ (100 * m.yes_total / total) | round(1) }}%" height="10" class="split-for"></rect>
+        <rect x="{{ (100 * m.yes_total / total) | round(1) }}%" width="{{ (100 * m.no_total / total) | round(1) }}%" height="10" class="split-against"></rect>
+      </svg>
+      <p class="ot"><span class="key key-for" aria-hidden="true"></span><strong>{{ m.yes_total | money }}</strong> raised to pass it <span class="key key-against" aria-hidden="true"></span><strong>{{ m.no_total | money }}</strong> to defeat it</p>
+      <div class="two qsides">
+        {% for label, rows in [("Committees for Yes", m.yes), ("Committees for No", m.no)] %}
+        <div>
+          <h5>{{ label }}</h5>
+          {% for c in rows %}
+          <div class="qc">
+            <div class="qc-head"><a href="https://www.ocpf.us/Filers?q={{ c.cpf }}" target="_blank" rel="noopener">{{ c.name }}</a><strong>{{ c.raised | money }}</strong></div>
+            {% if c.also %}<p class="muted small">Also campaigning on Question {{ c.also | join(", ") }}; its total covers all of them.</p>{% endif %}
+            {% if c.donors %}<p class="muted small">Biggest donors: {% for d in c.donors[:3] %}{{ d.name }} ({{ d.amount | money }}){{ ", " if not loop.last }}{% endfor %}</p>{% endif %}
+          </div>
+          {% else %}<p class="muted small">No committee registered.</p>{% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      <p class="source">Ballot question committees' own reports to OCPF since January {{ config.CYCLE - 1 }}; OCPF tags each committee with the question and side it was formed for{% if qfetched %}. Checked {{ qfetched[:10] | date }}{% endif %}.</p>
+      {% else %}
+      <p class="muted small">No committees have reported raising money for or against this question.</p>
+      {% endif %}
     </div>
   </details>
   {% endfor %}
@@ -111,6 +146,7 @@
   {% endfor %}
 </ul>
 <p class="source">Source: Voting Information Project via Google. Locations and hours can change; confirm with your election office.</p>
+{% if official_lookup %}{{ official_button(official_lookup) }}{% endif %}
 {% endif %}
 
 {% if not by_link and not (info and (info.polling or info.early or info.dropoff)) %}
@@ -120,8 +156,9 @@
   <div>
     <h3>We don't have polling places for your address</h3>
     <p>Polling-place data comes from each local election office, and yours hasn't shared it with the national feed we use. Your state's official lookup has it.</p>
+    {% if official_lookup %}{{ official_button(official_lookup) }}{% endif %}
   </div>
-  {% if info and info.finder %}<a class="btn" href="{{ info.finder }}" target="_blank" rel="noopener">Find your polling place</a>{% endif %}
+  {% if info and info.finder and not official_lookup %}<a class="btn" href="{{ info.finder }}" target="_blank" rel="noopener">Find your polling place</a>{% endif %}
 </div>
 {% endif %}
 

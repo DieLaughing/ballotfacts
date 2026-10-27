@@ -4,6 +4,7 @@
     <h3 id="race-{{ race.path | replace("/", "-") }}"{% if standalone %} class="visually-hidden"{% endif %}>{{ race.title }}</h3>
     {% if not standalone %}<a class="share" href="{{ race.path }}">Link to this race</a>{% endif %}
   </div>
+  {% if race.office_about %}<p class="office-about"><strong>What this office does:</strong> {{ race.office_about }}</p>{% endif %}
   {% if race.summary %}<p class="rsum">{{ race.summary }}</p>{% endif %}
   {% if race.running %}
   <ul class="swipe" aria-label="Candidates{% if race.running | length > 1 %}, swipe for more{% endif %}">

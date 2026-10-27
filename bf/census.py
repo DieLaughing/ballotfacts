@@ -4,6 +4,7 @@ The address is sent to the Census Bureau once and then forgotten: nothing here s
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from urllib.parse import urlencode
 
@@ -26,6 +27,11 @@ class Place:
     state_lower: str
     lat: float
     lng: float
+    # The street address itself, kept only for the page built from it (never in links or logs).
+    street_no: str = ""
+    street_name: str = ""
+    street_suffix: str = ""
+    zip: str = ""
 
     @property
     def district_label(self) -> str:
@@ -83,6 +89,10 @@ def parse(body: dict) -> Place | None:
         state_lower=_first(geos, "State Legislative Districts - Lower").get("NAME", ""),
         lat=float(m["coordinates"]["y"]),
         lng=float(m["coordinates"]["x"]),
+        street_name=" ".join(x for x in (m.get("addressComponents", {}).get("preDirection"),
+                                         m.get("addressComponents", {}).get("streetName")) if x),
+        street_suffix=m.get("addressComponents", {}).get("suffixType", ""),
+        zip=m.get("addressComponents", {}).get("zip", ""),
     )
 
 
@@ -92,4 +102,7 @@ async def lookup(client: httpx.AsyncClient, address: str) -> Place | None:
         "layers": "all", "format": "json",
     })
     r.raise_for_status()
-    return parse(r.json())
+    place = parse(r.json())
+    if place and (n := re.match(r"\s*(\d+[A-Za-z]?)\b", address)):
+        place.street_no = n.group(1)  # Census only returns the block's number range, not the house number
+    return place

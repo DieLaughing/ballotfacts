@@ -16,14 +16,15 @@ from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import background, census, civic, config, factcheck, fec, integrity, ocpf, openstates, photos, statedata
+from . import background, census, civic, config, factcheck, fec, integrity, ocpf, offices, openstates, photos, statedata
 from .cache import Cache
 from .states import BY_CODE
 
 log = logging.getLogger("bf")
 HERE = Path(__file__).parent
 
-CSP = ("default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; form-action 'self'; "
+# form-action also allows the Massachusetts official polling-place lookup (a button the voter presses).
+CSP = ("default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; form-action 'self' https://www.sec.state.ma.us; "
        "base-uri 'none'; frame-ancestors 'none'")
 HEADERS = {
     "Content-Security-Policy": CSP,
@@ -80,6 +81,7 @@ def initials(name: str) -> str:
 templates.env.filters["money"] = money
 templates.env.filters["initials"] = initials
 templates.env.globals["photo"] = photos.url
+templates.env.globals["office_about"] = offices.describe
 templates.env.filters["backq"] = from_query
 templates.env.filters["date"] = nice_date
 templates.env.globals.update(config=config, states=BY_CODE)
@@ -129,7 +131,7 @@ async def ballot(request: Request, address: str = Form("")):
         _safe(civic.lookup(http, address, place.lat, place.lng), None),
         _safe(openstates.legislators(http, cache, place_key, place.lat, place.lng), []),
     )
-    resp = await _ballot(request, place, info, legislators)
+    resp = await _ballot(request, place, info, legislators, official_lookup=statedata.ma_lookup(place))
     # Built from someone's address: keep it only in their own browser (so Back works), never in shared caches.
     resp.headers["Cache-Control"] = "private, max-age=0"
     return resp
@@ -151,7 +153,8 @@ async def district_ballot(request: Request, state: str, district: str):
     return await _ballot(request, place, info, legislators, by_link=True)
 
 
-async def _ballot(request: Request, place: census.Place, info, legislators, by_link: bool = False) -> HTMLResponse:
+async def _ballot(request: Request, place: census.Place, info, legislators, by_link: bool = False,
+                  official_lookup: dict | None = None) -> HTMLResponse:
     http, cache = request.app.state.http, request.app.state.cache
     house, senate = await asyncio.gather(
         _safe(fec.race(http, cache, "house", place.state, place.district), []),
@@ -168,8 +171,10 @@ async def _ballot(request: Request, place: census.Place, info, legislators, by_l
                 n["incumbent"] = bool(m and m["incumbent"])
                 n["cpf"] = m["cpf"] if m else None
             r["others"] = ocpf.others(rows, r["office"], r["district"], [n["name"] for n in r["nominees"]])
+    qmoney, qfetched = ocpf.questions(statedata.load("MA") or {}) if place.state == "MA" else ({}, "")
     return page(request, "ballot.html", place=place, info=info, races=races, legislators=legislators,
-                state_races=state_races, state_source=state_source, by_link=by_link, back=place.key)
+                state_races=state_races, state_source=state_source, by_link=by_link, back=place.key,
+                qmoney=qmoney, qfetched=qfetched, official_lookup=official_lookup)
 
 
 def back_link(request: Request) -> str:
@@ -189,6 +194,7 @@ def _race(office: str, state: str, district: str, cands: list[dict]) -> dict | N
     running = [c for c in cands if c["running"]]
     return {"title": title, "path": path, "running": running, "others": [c for c in cands if not c["running"]],
             "summary": race_summary(running),
+            "office_about": offices.FEDERAL[office],
             # one scale for every bar in the race, so cards compare at a glance
             "outside_total_max": max([c["support"] + c["oppose"] for c in running] + [1])}
 

@@ -4,7 +4,8 @@
   and its outside spending into the cache, so a voter's first lookup doesn't wait on a slow FEC
   response. That's ~350 FEC requests an hour, leaving most of the key's 1,000/hour for visitors.
   Set BF_WARM=0 to switch it off (staging does, so it doesn't spend the shared key's allowance).
-- Every day: re-add up Massachusetts independent expenditures from OCPF's reports, and fetch
+- Every day: re-add up Massachusetts independent expenditures and ballot-question committee money
+  from OCPF, and fetch
   any candidate photos we don't have yet (bf/photos.py).
 
 Both run inside the web app, a few requests a second at most, and log one line when they finish.
@@ -45,6 +46,8 @@ async def run(client: httpx.AsyncClient, cache: Cache) -> None:
             if ocpf.outside_age_hours() > OUTSIDE_EVERY_HOURS:
                 await ocpf.refresh_outside(client)
                 log.warning("refreshed Massachusetts independent expenditures")
+                await ocpf.refresh_questions(client)
+                log.warning("refreshed Massachusetts ballot question money")
             if photos.age_hours() > OUTSIDE_EVERY_HOURS:
                 await photos.refresh(client, cache, await ocpf.candidates(client, cache))
             if config.WARM:

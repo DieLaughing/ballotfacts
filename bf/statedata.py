@@ -132,6 +132,27 @@ def candidate(state: str, contest_id: int, who: str) -> dict | None:
 
 
 @cache
+def _ma_lookup_data() -> dict:
+    path = DATA / "ma-wheredoivote.json"
+    return json.loads(path.read_text()) if path.exists() else {}
+
+
+def ma_lookup(place: Place) -> dict | None:
+    """The fields Massachusetts's official "Where Do I Vote" form wants, filled in from the address
+    the voter already typed (town comes from the Census, so villages like East Falmouth just work)."""
+    data = _ma_lookup_data()
+    town = town_of(place).upper()
+    code = data.get("towns", {}).get(town)
+    if place.state != "MA" or not code or not place.street_no or not place.street_name:
+        return None
+    suffix = place.street_suffix.upper()
+    return {"url": data["source"], "fields": {
+        "St_no_high": place.street_no[:6], "St_nm": place.street_name.upper()[:25],
+        "StSuffix": suffix if suffix in data.get("suffixes", []) else "",
+        "Ct_twn_cd": code, "Ct_twn_nm": town, "Zip": place.zip[:5], "hidReset": "0"}}
+
+
+@cache
 def offices() -> dict[str, dict]:
     """Every state's official election office and its main link (tools/fetch_offices.py)."""
     path = DATA / "state-offices.json"

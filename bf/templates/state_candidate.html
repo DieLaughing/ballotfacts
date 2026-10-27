@@ -4,6 +4,7 @@
 {% block title %}{{ name }} · Ballot Facts{% endblock %}
 {% block main %}
 <p class="eyebrow">{{ c.office }}{% if c.district != "Statewide" %}, {{ c.district }}{% endif %} · {{ state_name }}</p>
+{% set about = office_about(d.state, c.office) %}
 <div class="page-head with-photo">
   {% set pic = photo("ma", money.cpf) if money else "" %}{% if pic %}<img class="headshot" src="{{ pic }}" alt="Photo of {{ name }} filed with OCPF" width="96" height="96">{% endif %}
   <h1>{{ name }}</h1>
@@ -22,6 +23,7 @@
 
 <section id="seat" class="block" aria-labelledby="h-seat">
   <h2 id="h-seat">On the ballot for this seat</h2>
+  {% if about %}<p class="office-about flush"><strong>What this office does:</strong> {{ about }}</p>{% endif %}
   <p class="sub">Party nominees for {{ c.office }}{% if c.district != "Statewide" %}, {{ c.district }}{% endif %}. Independent and third-party candidates may also be on the ballot; your sample ballot lists them.</p>
   <ul class="swipe">
     {{ state_card(dict(d.me, party=c.party, unopposed=c.candidates | length == 1, cpf=money.cpf if money else none, incumbent=money.incumbent if money else false), "", "This page") }}

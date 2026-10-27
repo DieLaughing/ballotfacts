@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import time
 from datetime import datetime, timezone
 
@@ -22,6 +23,8 @@ TTL = 6 * 3600
 MAJOR = {"Democratic", "Republican"}
 STATEWIDE = {"Governor", "Lieutenant Governor", "Attorney General", "Secretary of the Commonwealth", "Treasurer", "Auditor"}
 OUTSIDE_FILE = config.DATA / "ma-outside.json"  # refreshed daily by bf.background; the repo copy is the fallback
+QUESTIONS_FILE = config.DATA / "ma-question-money.json"  # likewise
+SIDES = {"1": "yes", "2": "no"}  # OCPF's bqPosition: 1 = formed to support the question, 2 = to oppose it
 
 # Receipt record types worth showing, in OCPF's own categories. Massachusetts itemizes gifts of
 # $50 or more; smaller ones are reported only as an aggregate.
@@ -149,3 +152,76 @@ def outside_age_hours() -> float:
         return (time.time() - OUTSIDE_FILE.stat().st_mtime) / 3600
     except OSError:
         return 1e9
+
+
+async def question_money(client: httpx.AsyncClient) -> dict[str, dict]:
+    """Ballot question number → the committees OCPF has tagged as campaigning for ("yes") or
+    against ("no") it this year, each with what it has raised since January of the year before
+    (signature gathering starts then) and its biggest donors. Committees aren't sorted onto a side
+    by us: OCPF's own tag on each committee says which question and which side."""
+    year = config.CYCLE
+    filers = await _get(client, "filers/listings/X", MaxCount=1000)
+    out: dict[str, dict] = {}
+    for f in filers:
+        payload = await _get(client, f"filer/payload/{f['cpfId']}")
+        tags = [t for t in (payload.get("filer") or {}).get("tags") or []
+                if t.get("year") == year and t.get("bqQuestionDescription", "").startswith("Question ")]
+        for t in tags:
+            side = SIDES.get(str(t.get("bqPosition")))
+            number = t["bqQuestionDescription"].split(":")[0].removeprefix("Question ").strip()
+            if not side or not number.isdigit():
+                continue
+            d = await _get(client, "search/items", CpfId=f["cpfId"], SearchTypeCategory="R", PageSize=200,
+                           SortField="amount", SortDirection="DESC", StartDate=f"1/1/{year - 1}", withSummary="true")
+            donors: dict[str, dict] = {}
+            for item in d.get("items") or []:
+                if item.get("recordTypeDescription") == "Aggregated Unitemized Receipts":
+                    continue
+                name = (item.get("fullNameReverse") or "").strip() or "Unnamed"
+                row = donors.setdefault(re.sub(r"[^a-z0-9]", "", name.lower()), {"name": name, "amount": 0.0, "gifts": 0,
+                                                       "where": item.get("cityStateZip", "").split("  ")[0].strip()})
+                row["amount"] += float(str(item.get("amount") or "0").replace("$", "").replace(",", "") or 0)
+                row["gifts"] += 1
+            ytd = payload.get("ytdReport") or {}
+            q = out.setdefault(number, {"yes": [], "no": []})
+            q[side].append({
+                "cpf": f["cpfId"], "name": f["filerName"].strip(),
+                "raised": (d.get("summary") or {}).get("total") or 0,
+                "cash": ytd.get("currentCashOnHandNumeric") or 0,
+                "donors": sorted(donors.values(), key=lambda r: -r["amount"])[:8],
+            })
+            await asyncio.sleep(0.3)
+        await asyncio.sleep(0.3)
+    # A committee can campaign on several questions; its money can't be split between them, so
+    # each entry says which other questions it's also working on (and totals don't add them twice).
+    seen: dict[int, list[str]] = {}
+    for number, q in out.items():
+        for side in q.values():
+            for c in side:
+                seen.setdefault(c["cpf"], []).append(number)
+    for number, q in out.items():
+        for side in q.values():
+            for c in side:
+                c["also"] = sorted((n for n in seen[c["cpf"]] if n != number), key=int)
+            side.sort(key=lambda c: -c["raised"])
+        for side in ("yes", "no"):
+            q[f"{side}_total"] = sum(c["raised"] for c in q[side])
+            q[f"{side}_shared"] = sum(c["raised"] for c in q[side] if c["also"])  # part of the total also used elsewhere
+    return out
+
+
+async def refresh_questions(client: httpx.AsyncClient) -> None:
+    data = {"fetched": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "questions": await question_money(client)}
+    QUESTIONS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    tmp = QUESTIONS_FILE.with_suffix(".tmp")
+    tmp.write_text(json.dumps(data))
+    tmp.replace(QUESTIONS_FILE)
+
+
+def questions(bundled: dict) -> tuple[dict, str]:
+    """The latest ballot-question money: today's refresh if there is one, else the copy in the repo."""
+    try:
+        data = json.loads(QUESTIONS_FILE.read_text())
+        return data["questions"], data["fetched"]
+    except (OSError, ValueError, KeyError):
+        return bundled.get("question_money", {}), bundled.get("question_money_fetched", "")

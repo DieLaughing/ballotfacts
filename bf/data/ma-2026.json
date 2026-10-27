@@ -14256,5 +14256,1385 @@
    }
   ]
  },
- "outside_fetched": "2026-10-27T17:57Z"
+ "outside_fetched": "2026-10-27T17:57Z",
+ "question_money": {
+  "7": {
+   "yes": [
+    {
+     "cpf": 95528,
+     "name": "Legalize Starter Homes",
+     "raised": 1477397.53,
+     "cash": 11212.16,
+     "donors": [
+      {
+       "name": "Greater Boston Real Estate Board",
+       "amount": 350000.0,
+       "gifts": 3,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Mass Association of Realtors PAC",
+       "amount": 350000.0,
+       "gifts": 3,
+       "where": "Foxborough, MA"
+      },
+      {
+       "name": "Mass Association of Realtors",
+       "amount": 150000.0,
+       "gifts": 1,
+       "where": "Foxborough, MA"
+      },
+      {
+       "name": "Marcus Partners LLC",
+       "amount": 100000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Eastern Bank",
+       "amount": 100000.0,
+       "gifts": 2,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Mikula, Gary",
+       "amount": 60500.0,
+       "gifts": 3,
+       "where": "Wellesley Hills, MA"
+      },
+      {
+       "name": "Claremont Companies LLC",
+       "amount": 50000.0,
+       "gifts": 1,
+       "where": "Bridgewater, MA"
+      },
+      {
+       "name": "Davis Management Company LLC",
+       "amount": 50000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95551,
+     "name": "Abundant Housing Legalize Starter Homes",
+     "raised": 274457.89,
+     "cash": 216250.0,
+     "donors": [
+      {
+       "name": "Welcoming Neighbors Network",
+       "amount": 250000.0,
+       "gifts": 1,
+       "where": "Washington, DC"
+      },
+      {
+       "name": "Abundant Housing Massachusetts",
+       "amount": 24457.89,
+       "gifts": 4,
+       "where": "Boston, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95550,
+     "name": "Democratic Socialists For a Fair Massachusetts",
+     "raised": 5704.95,
+     "cash": 34.5,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Democratic Socialists of America, Inc",
+       "amount": 654.95,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Del Bonis, James",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": [
+      "1",
+      "2",
+      "4",
+      "9"
+     ]
+    }
+   ],
+   "no": [],
+   "yes_total": 1757560.37,
+   "no_total": 0,
+   "yes_shared": 5704.95,
+   "no_shared": 0
+  },
+  "8": {
+   "yes": [
+    {
+     "cpf": 95533,
+     "name": "Coalition for a Healthy Massachusetts, Inc.",
+     "raised": 3781835.0,
+     "cash": 980451.01,
+     "donors": [
+      {
+       "name": "SAM ACTION INC",
+       "amount": 3730000.0,
+       "gifts": 6,
+       "where": "ALEXANDRIA, VA"
+      },
+      {
+       "name": "AMERICANS AGAINST LEGALIZING MARIJUANA",
+       "amount": 50000.0,
+       "gifts": 1,
+       "where": "CARMICHAEL, CA"
+      },
+      {
+       "name": "FREUDBERG, JEFFREY",
+       "amount": 600.0,
+       "gifts": 2,
+       "where": "NEWTON, MA"
+      },
+      {
+       "name": "BREEN, ALEXANDER",
+       "amount": 250.0,
+       "gifts": 1,
+       "where": "STONEHAM, MA"
+      },
+      {
+       "name": "CONNORS, THOMAS",
+       "amount": 250.0,
+       "gifts": 1,
+       "where": "NEWTON, MA"
+      },
+      {
+       "name": "HOFFMAN, JAMES",
+       "amount": 250.0,
+       "gifts": 1,
+       "where": "MANCHESTER, MA"
+      },
+      {
+       "name": "KELLY, BRIAN",
+       "amount": 250.0,
+       "gifts": 1,
+       "where": "WESTWOOD, MA"
+      },
+      {
+       "name": "ZHANG, YONG",
+       "amount": 200.0,
+       "gifts": 1,
+       "where": "LONGMEADOW, MA"
+      }
+     ],
+     "also": []
+    }
+   ],
+   "no": [
+    {
+     "cpf": 95539,
+     "name": "Committee to Protect Cannabis Regulation",
+     "raised": 2973755.32,
+     "cash": 947621.62,
+     "donors": [
+      {
+       "name": "INSA",
+       "amount": 283932.79,
+       "gifts": 7,
+       "where": "Chicopee, MA"
+      },
+      {
+       "name": "Ascend Wellness Holdings, LLC",
+       "amount": 250000.0,
+       "gifts": 3,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Curaleaf Inc.",
+       "amount": 241875.0,
+       "gifts": 2,
+       "where": "Hanover, MA"
+      },
+      {
+       "name": "Chicago Atlantic Admin, LLC",
+       "amount": 125000.0,
+       "gifts": 1,
+       "where": "Chicago, IL"
+      },
+      {
+       "name": "Vireo Health",
+       "amount": 125000.0,
+       "gifts": 1,
+       "where": "Minneapolis, MN"
+      },
+      {
+       "name": "Retailers Association of Massachuestts",
+       "amount": 100000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Verano Holdings",
+       "amount": 100000.0,
+       "gifts": 1,
+       "where": "Sharon, MA"
+      },
+      {
+       "name": "Evergreen Strategies LLC",
+       "amount": 100000.0,
+       "gifts": 2,
+       "where": "Stow, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95559,
+     "name": "Coalition for Responsible Cannabis Policy",
+     "raised": 150175.9,
+     "cash": 100.0,
+     "donors": [
+      {
+       "name": "Stiefel, Todd",
+       "amount": 150000.0,
+       "gifts": 1,
+       "where": "Raleigh, NC"
+      },
+      {
+       "name": "Goldstein, Diane",
+       "amount": 100.0,
+       "gifts": 1,
+       "where": "Las Vegas, NV"
+      },
+      {
+       "name": "Law Enforcement Action Partnership",
+       "amount": 75.9,
+       "gifts": 2,
+       "where": "Beverly, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95554,
+     "name": "Committee for Keep Cannabis Legal, Vote No on 8",
+     "raised": 14862.93,
+     "cash": 3215.0,
+     "donors": [
+      {
+       "name": "New England Cannabis Convention",
+       "amount": 2000.0,
+       "gifts": 1,
+       "where": "North Attleboro, MA"
+      },
+      {
+       "name": "Numerical, Inc",
+       "amount": 2000.0,
+       "gifts": 1,
+       "where": "Burlington, VT"
+      },
+      {
+       "name": "Massachusetts Cannabis Reform Coalition",
+       "amount": 1574.41,
+       "gifts": 2,
+       "where": "Westboro, MA"
+      },
+      {
+       "name": "Rogers, Kristin",
+       "amount": 1271.15,
+       "gifts": 1,
+       "where": "Middleton, MA"
+      },
+      {
+       "name": "The Shirt Factory",
+       "amount": 1011.0,
+       "gifts": 1,
+       "where": "Salem, nh"
+      },
+      {
+       "name": "Custom Bag Distributing Company, Inc.",
+       "amount": 1000.0,
+       "gifts": 1,
+       "where": "Easton, MA"
+      },
+      {
+       "name": "Lit Alerts",
+       "amount": 500.0,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Crossley, Kyle",
+       "amount": 375.31,
+       "gifts": 1,
+       "where": "Auburndale, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95549,
+     "name": "Democratic Socialists Against Reactionary Rollbacks",
+     "raised": 5704.95,
+     "cash": 50.0,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Democratic Socialists of America, Inc",
+       "amount": 654.95,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Del Bonis, James",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": [
+      "3",
+      "5"
+     ]
+    }
+   ],
+   "yes_total": 3781835.0,
+   "no_total": 3144499.0999999996,
+   "yes_shared": 0,
+   "no_shared": 5704.95
+  },
+  "1": {
+   "yes": [
+    {
+     "cpf": 95538,
+     "name": "Coalition for Healthy Democracy 2026",
+     "raised": 7920929.68,
+     "cash": 338994.5,
+     "donors": [
+      {
+       "name": "Balson, Andrew",
+       "amount": 790000.0,
+       "gifts": 4,
+       "where": "West Newton, MA"
+      },
+      {
+       "name": "Nunnelly, Mark",
+       "amount": 525000.0,
+       "gifts": 3,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Bekenstein, Joshua",
+       "amount": 500000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Peeler, David",
+       "amount": 500000.0,
+       "gifts": 2,
+       "where": "Cambridge, MA"
+      },
+      {
+       "name": "Poler, Dwight",
+       "amount": 300000.0,
+       "gifts": 3,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Peeler, David Randolph",
+       "amount": 250000.0,
+       "gifts": 1,
+       "where": "Cambridge, MA"
+      },
+      {
+       "name": "Peller, David Randolph",
+       "amount": 250000.0,
+       "gifts": 1,
+       "where": "Cambridge, MA"
+      },
+      {
+       "name": "Connaughton, John",
+       "amount": 250000.0,
+       "gifts": 2,
+       "where": "Chestnut Hill, MA"
+      }
+     ],
+     "also": [
+      "3"
+     ]
+    },
+    {
+     "cpf": 95535,
+     "name": "Committee for Transparency and Democracy",
+     "raised": 374937.0,
+     "cash": 28250.14,
+     "donors": [
+      {
+       "name": "Committee to Elect Diana Dizoglio",
+       "amount": 150000.0,
+       "gifts": 1,
+       "where": "Methuen, MA"
+      },
+      {
+       "name": "Partners in Democracy",
+       "amount": 43247.0,
+       "gifts": 4,
+       "where": "Foxborough, MA"
+      },
+      {
+       "name": "Massachusetts Teachers Association",
+       "amount": 30000.0,
+       "gifts": 1,
+       "where": "Quincy, MA"
+      },
+      {
+       "name": "Diantonio, David",
+       "amount": 25000.0,
+       "gifts": 1,
+       "where": "Andover, MA"
+      },
+      {
+       "name": "National Association of Government Employees",
+       "amount": 25000.0,
+       "gifts": 1,
+       "where": "Quincy, MA"
+      },
+      {
+       "name": "Kennealy, Michael",
+       "amount": 10000.0,
+       "gifts": 1,
+       "where": "Lexington, MA"
+      },
+      {
+       "name": "Krisbharmony LLC",
+       "amount": 10000.0,
+       "gifts": 1,
+       "where": "Las Vegas, NV"
+      },
+      {
+       "name": "May, Robert",
+       "amount": 10000.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95550,
+     "name": "Democratic Socialists For a Fair Massachusetts",
+     "raised": 5704.95,
+     "cash": 34.5,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Democratic Socialists of America, Inc",
+       "amount": 654.95,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Del Bonis, James",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": [
+      "2",
+      "4",
+      "7",
+      "9"
+     ]
+    }
+   ],
+   "no": [],
+   "yes_total": 8301571.63,
+   "no_total": 0,
+   "yes_shared": 7926634.63,
+   "no_shared": 0
+  },
+  "3": {
+   "yes": [
+    {
+     "cpf": 95538,
+     "name": "Coalition for Healthy Democracy 2026",
+     "raised": 7920929.68,
+     "cash": 338994.5,
+     "donors": [
+      {
+       "name": "Balson, Andrew",
+       "amount": 790000.0,
+       "gifts": 4,
+       "where": "West Newton, MA"
+      },
+      {
+       "name": "Nunnelly, Mark",
+       "amount": 525000.0,
+       "gifts": 3,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Bekenstein, Joshua",
+       "amount": 500000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Peeler, David",
+       "amount": 500000.0,
+       "gifts": 2,
+       "where": "Cambridge, MA"
+      },
+      {
+       "name": "Poler, Dwight",
+       "amount": 300000.0,
+       "gifts": 3,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Peeler, David Randolph",
+       "amount": 250000.0,
+       "gifts": 1,
+       "where": "Cambridge, MA"
+      },
+      {
+       "name": "Peller, David Randolph",
+       "amount": 250000.0,
+       "gifts": 1,
+       "where": "Cambridge, MA"
+      },
+      {
+       "name": "Connaughton, John",
+       "amount": 250000.0,
+       "gifts": 2,
+       "where": "Chestnut Hill, MA"
+      }
+     ],
+     "also": [
+      "1"
+     ]
+    }
+   ],
+   "no": [
+    {
+     "cpf": 95547,
+     "name": "Voter Rights MA",
+     "raised": 316821.58,
+     "cash": 27000.0,
+     "donors": [
+      {
+       "name": "1199 SEIU MA PAC",
+       "amount": 100000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Teachers Association",
+       "amount": 97717.26,
+       "gifts": 3,
+       "where": "Quincy, MA"
+      },
+      {
+       "name": "MA Democratic State Committee",
+       "amount": 63346.4,
+       "gifts": 6,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Seiu Massachusetts State Council",
+       "amount": 25650.0,
+       "gifts": 2,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Local 509 Service Employees Int'l Union Comm on Pol Ed, MA Workers' Pol Action Comm.",
+       "amount": 10000.0,
+       "gifts": 1,
+       "where": "Marlborough, MA"
+      },
+      {
+       "name": "Progressive Massachusetts",
+       "amount": 5925.37,
+       "gifts": 6,
+       "where": "Cohasset, MA"
+      },
+      {
+       "name": "AFT Massachusetts Solidarity",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "National Association of Government Employees",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "Quincy, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95549,
+     "name": "Democratic Socialists Against Reactionary Rollbacks",
+     "raised": 5704.95,
+     "cash": 50.0,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Democratic Socialists of America, Inc",
+       "amount": 654.95,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Del Bonis, James",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": [
+      "5",
+      "8"
+     ]
+    }
+   ],
+   "yes_total": 7920929.68,
+   "no_total": 322526.53,
+   "yes_shared": 7920929.68,
+   "no_shared": 5704.95
+  },
+  "5": {
+   "yes": [
+    {
+     "cpf": 95536,
+     "name": "Taxpayers for an Affordable Massachusetts",
+     "raised": 2646364.91,
+     "cash": 68523.53,
+     "donors": [
+      {
+       "name": "Massachusetts Opportunity Alliance",
+       "amount": 1900000.0,
+       "gifts": 7,
+       "where": "Burlington, MA"
+      },
+      {
+       "name": "Massachusetts High Technology Council",
+       "amount": 132298.41,
+       "gifts": 7,
+       "where": "Burlington, MA"
+      },
+      {
+       "name": "Abp Trust",
+       "amount": 100000.0,
+       "gifts": 1,
+       "where": "Newton, MA"
+      },
+      {
+       "name": "Stata, Raymond",
+       "amount": 100000.0,
+       "gifts": 1,
+       "where": "Dover, MA"
+      },
+      {
+       "name": "Brown, Michael",
+       "amount": 50000.0,
+       "gifts": 1,
+       "where": "Wellesley, MA"
+      },
+      {
+       "name": "Massachusetts Competitive Partnership Inc.",
+       "amount": 50000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Pioneer Institute, Inc.",
+       "amount": 50000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Difillippo, Steve",
+       "amount": 50000.0,
+       "gifts": 2,
+       "where": "Boston, MA"
+      }
+     ],
+     "also": []
+    }
+   ],
+   "no": [
+    {
+     "cpf": 95540,
+     "name": "Protect Massachusetts Future",
+     "raised": 991332.96,
+     "cash": 42436.84,
+     "donors": [
+      {
+       "name": "Seiu Mass State Council",
+       "amount": 442920.0,
+       "gifts": 11,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "1199 SEIU MA PAC",
+       "amount": 150000.0,
+       "gifts": 3,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massacusetts Teachers Association",
+       "amount": 100000.0,
+       "gifts": 3,
+       "where": "Quincy, MA"
+      },
+      {
+       "name": "Massachusetts Teachers Association",
+       "amount": 77171.4,
+       "gifts": 5,
+       "where": "Quincy, MA"
+      },
+      {
+       "name": "Local 509 Service Employees Int'l Union Comm on Pol Ed, MA Workers' Pol Action Comm.",
+       "amount": 50000.0,
+       "gifts": 3,
+       "where": "Marlborough, MA"
+      },
+      {
+       "name": "AFSCME",
+       "amount": 25000.0,
+       "gifts": 1,
+       "where": "Westborough, MA"
+      },
+      {
+       "name": "Aft Massachusetts",
+       "amount": 25000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "MA & Northern NE Laborers' District Council Pol Action Comm",
+       "amount": 25000.0,
+       "gifts": 1,
+       "where": "Hopkinton, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95544,
+     "name": "Raise Up Massachusetts 2026",
+     "raised": 82765.41,
+     "cash": 26967.41,
+     "donors": [
+      {
+       "name": "Seiu Ma State Council",
+       "amount": 25000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Boston Teachers Union Cope-pipe",
+       "amount": 15000.0,
+       "gifts": 1,
+       "where": "Dorchester, MA"
+      },
+      {
+       "name": "Raise Up Massachusetts 2024",
+       "amount": 14566.78,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Progressive Massachusetts",
+       "amount": 9772.619999999999,
+       "gifts": 7,
+       "where": "Cohasset, MA"
+      },
+      {
+       "name": "Jewish Alliance For Law and Social Action",
+       "amount": 7598.0,
+       "gifts": 4,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Coalition For Social Justice Education Fund",
+       "amount": 6113.01,
+       "gifts": 6,
+       "where": "New Bedford, MA"
+      },
+      {
+       "name": "Massachusetts Action For Justice",
+       "amount": 2000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Ionetto, Michael",
+       "amount": 1000.0,
+       "gifts": 1,
+       "where": "Somerville, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95545,
+     "name": "Democratic Socialists Against Austerity",
+     "raised": 6426.0,
+     "cash": 509.85,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc.",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Kretschmar, Andrew",
+       "amount": 746.0,
+       "gifts": 2,
+       "where": "South Hadley, MA"
+      },
+      {
+       "name": "Letendre-cahillane, Nikolas",
+       "amount": 250.0,
+       "gifts": 2,
+       "where": "Northampton, MA"
+      },
+      {
+       "name": "Goodhind, Jeff",
+       "amount": 100.0,
+       "gifts": 1,
+       "where": "Granby, MA"
+      },
+      {
+       "name": "Dolan, Bruce",
+       "amount": 70.0,
+       "gifts": 2,
+       "where": "South Deerfield, MA"
+      },
+      {
+       "name": "Epstein, Michael",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Ashfield, MA"
+      },
+      {
+       "name": "Recuber, Timothy",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Leeds, MA"
+      },
+      {
+       "name": "Morsmith, Alexandra",
+       "amount": 25.0,
+       "gifts": 1,
+       "where": "Florence, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95549,
+     "name": "Democratic Socialists Against Reactionary Rollbacks",
+     "raised": 5704.95,
+     "cash": 50.0,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Democratic Socialists of America, Inc",
+       "amount": 654.95,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Del Bonis, James",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": [
+      "3",
+      "8"
+     ]
+    }
+   ],
+   "yes_total": 2646364.91,
+   "no_total": 1086229.32,
+   "yes_shared": 0,
+   "no_shared": 5704.95
+  },
+  "2": {
+   "yes": [
+    {
+     "cpf": 95532,
+     "name": "Labor Unions for Public Counsel Workers Rights",
+     "raised": 1083060.0,
+     "cash": 960.0,
+     "donors": [
+      {
+       "name": "National Association of Government Employees",
+       "amount": 542060.0,
+       "gifts": 6,
+       "where": "Quincy, MA"
+      },
+      {
+       "name": "Seiu Local 888",
+       "amount": 541000.0,
+       "gifts": 5,
+       "where": "Braintree, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95550,
+     "name": "Democratic Socialists For a Fair Massachusetts",
+     "raised": 5704.95,
+     "cash": 34.5,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Democratic Socialists of America, Inc",
+       "amount": 654.95,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Del Bonis, James",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": [
+      "1",
+      "4",
+      "7",
+      "9"
+     ]
+    }
+   ],
+   "no": [],
+   "yes_total": 1088764.95,
+   "no_total": 0,
+   "yes_shared": 5704.95,
+   "no_shared": 0
+  },
+  "4": {
+   "yes": [
+    {
+     "cpf": 95531,
+     "name": "YES on Election Day Voter Registration",
+     "raised": 168052.14,
+     "cash": 3917.34,
+     "donors": [
+      {
+       "name": "William F. Galvin Committee",
+       "amount": 79000.0,
+       "gifts": 4,
+       "where": "Brighton, MA"
+      },
+      {
+       "name": "International Brotherhood of Teamsters",
+       "amount": 10000.0,
+       "gifts": 1,
+       "where": "Washington, DC"
+      },
+      {
+       "name": "MA & Northern NE Laborers' District Council Pol Action Comm",
+       "amount": 10000.0,
+       "gifts": 1,
+       "where": "Hopkinton, MA"
+      },
+      {
+       "name": "Rivers, Robert",
+       "amount": 10000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Massachusetts Teachers Association",
+       "amount": 8000.0,
+       "gifts": 1,
+       "where": "Quincy, MA"
+      },
+      {
+       "name": "1199 SEIU MA PAC",
+       "amount": 7500.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Afscme Council 93",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "American Federation of Teachers MA PAC",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "Boston, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95553,
+     "name": "Vote YES on 4 Election Day Registration",
+     "raised": 156005.53,
+     "cash": 0,
+     "donors": [
+      {
+       "name": "American Civil Liberties Union",
+       "amount": 112511.85,
+       "gifts": 20,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Common Cause Massachusetts",
+       "amount": 22230.560000000005,
+       "gifts": 16,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Massvote",
+       "amount": 6099.15,
+       "gifts": 4,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Progressive Massachusetts",
+       "amount": 4437.99,
+       "gifts": 3,
+       "where": "Cohasset, MA"
+      },
+      {
+       "name": "Massachusetts Voter Table",
+       "amount": 3178.44,
+       "gifts": 4,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "League of Women Voters Of Massachusetts",
+       "amount": 3172.02,
+       "gifts": 4,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Warren For Senate, Inc.",
+       "amount": 3000.0,
+       "gifts": 1,
+       "where": "Foxboro, MA"
+      },
+      {
+       "name": "SEIU 509",
+       "amount": 1186.65,
+       "gifts": 1,
+       "where": "Marlborough, MA"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95550,
+     "name": "Democratic Socialists For a Fair Massachusetts",
+     "raised": 5704.95,
+     "cash": 34.5,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Democratic Socialists of America, Inc",
+       "amount": 654.95,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Del Bonis, James",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": [
+      "1",
+      "2",
+      "7",
+      "9"
+     ]
+    }
+   ],
+   "no": [],
+   "yes_total": 329762.62,
+   "no_total": 0,
+   "yes_shared": 5704.95,
+   "no_shared": 0
+  },
+  "9": {
+   "yes": [
+    {
+     "cpf": 95525,
+     "name": "Yes for A Safe Massachusetts",
+     "raised": 900155.09,
+     "cash": 428726.15,
+     "donors": [
+      {
+       "name": "Massachusetts Teachers Association",
+       "amount": 500237.0,
+       "gifts": 3,
+       "where": "Quincy, MA"
+      },
+      {
+       "name": "Everytown For Gun Safety Action Fund",
+       "amount": 94526.51999999999,
+       "gifts": 13,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Alliance For Gun Responsibility",
+       "amount": 50000.0,
+       "gifts": 2,
+       "where": "Seattle, WA"
+      },
+      {
+       "name": "Travis, Nigel",
+       "amount": 35000.0,
+       "gifts": 2,
+       "where": "Wellesley, MA"
+      },
+      {
+       "name": "Malloy, Molly",
+       "amount": 25000.0,
+       "gifts": 1,
+       "where": "Chestnut Hill, MA"
+      },
+      {
+       "name": "Local 509 Service Employees Int'l Union Comm on Pol Ed, MA Workers' Pol Action Comm.",
+       "amount": 20000.0,
+       "gifts": 2,
+       "where": "Marlborough, MA"
+      },
+      {
+       "name": "Jewish Alliance For Law and Social Action",
+       "amount": 16809.89,
+       "gifts": 5,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "1199 SEIU MA PAC",
+       "amount": 15000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      }
+     ],
+     "also": []
+    },
+    {
+     "cpf": 95550,
+     "name": "Democratic Socialists For a Fair Massachusetts",
+     "raised": 5704.95,
+     "cash": 34.5,
+     "donors": [
+      {
+       "name": "Democratic Socialists of America, Inc",
+       "amount": 5000.0,
+       "gifts": 1,
+       "where": "New York, NY"
+      },
+      {
+       "name": "Massachusetts Democratic Socialists of America, Inc",
+       "amount": 654.95,
+       "gifts": 1,
+       "where": "Pittsfield, MA"
+      },
+      {
+       "name": "Del Bonis, James",
+       "amount": 50.0,
+       "gifts": 1,
+       "where": "Brookline, MA"
+      }
+     ],
+     "also": [
+      "1",
+      "2",
+      "4",
+      "7"
+     ]
+    }
+   ],
+   "no": [
+    {
+     "cpf": 95523,
+     "name": "The Civil Rights Coalition",
+     "raised": 457380.95,
+     "cash": 57199.43,
+     "donors": [
+      {
+       "name": "Freudberg, Jeffrey",
+       "amount": 64619.94000000004,
+       "gifts": 25,
+       "where": "Newton Centre, MA"
+      },
+      {
+       "name": "Gun Owners Action League",
+       "amount": 22776.0,
+       "gifts": 2,
+       "where": "Westborough, MA"
+      },
+      {
+       "name": "Old Colony Sportsmen's Assoc. Inc.",
+       "amount": 21932.629999999997,
+       "gifts": 2,
+       "where": "Pembroke, MA"
+      },
+      {
+       "name": "EcoGeek, Inc.",
+       "amount": 21425.0,
+       "gifts": 4,
+       "where": "Sandwich, MA"
+      },
+      {
+       "name": "Hadden, Daniel",
+       "amount": 13550.0,
+       "gifts": 1,
+       "where": "Medway, MA"
+      },
+      {
+       "name": "Snider, Steven",
+       "amount": 12500.0,
+       "gifts": 3,
+       "where": "Newton, MA"
+      },
+      {
+       "name": "Eric, Dewhirst",
+       "amount": 8335.839999999998,
+       "gifts": 8,
+       "where": "Taunton, MA"
+      },
+      {
+       "name": "Masshole Firearms",
+       "amount": 7600.0,
+       "gifts": 2,
+       "where": "South Grafton, MA"
+      }
+     ],
+     "also": []
+    }
+   ],
+   "yes_total": 905860.0399999999,
+   "no_total": 457380.95,
+   "yes_shared": 5704.95,
+   "no_shared": 0
+  },
+  "6": {
+   "yes": [
+    {
+     "cpf": 95527,
+     "name": "Vote Yes for Water and Nature",
+     "raised": 4329820.21,
+     "cash": 1180572.17,
+     "donors": [
+      {
+       "name": "Mass Audubon",
+       "amount": 1133916.5299999996,
+       "gifts": 17,
+       "where": "Lincoln, MA"
+      },
+      {
+       "name": "The Trustees of Reservations",
+       "amount": 822459.6200000001,
+       "gifts": 16,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Waerstad, Kirsten",
+       "amount": 800000.0,
+       "gifts": 1,
+       "where": "Belmont, MA"
+      },
+      {
+       "name": "Grigg, Natasha",
+       "amount": 420278.51,
+       "gifts": 3,
+       "where": "Boxford, MA"
+      },
+      {
+       "name": "Conservation Law Foundation",
+       "amount": 310163.28,
+       "gifts": 8,
+       "where": "Boston, MA"
+      },
+      {
+       "name": "Pounds, Helen",
+       "amount": 250000.0,
+       "gifts": 1,
+       "where": "Cambridge, MA"
+      },
+      {
+       "name": "Panek, Jessie B.",
+       "amount": 160000.0,
+       "gifts": 1,
+       "where": "Harvard, MA"
+      },
+      {
+       "name": "The Nature Conservancy",
+       "amount": 77151.71,
+       "gifts": 5,
+       "where": "Arlington, VA"
+      }
+     ],
+     "also": []
+    }
+   ],
+   "no": [],
+   "yes_total": 4329820.21,
+   "no_total": 0,
+   "yes_shared": 0,
+   "no_shared": 0
+  }
+ },
+ "question_money_fetched": "2026-10-27T19:57Z"
 }
