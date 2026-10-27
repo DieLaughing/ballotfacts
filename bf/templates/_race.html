@@ -1,19 +1,26 @@
 <section class="race" aria-labelledby="race-{{ race.path | replace("/", "-") }}">
   <div class="race-head">
     <span class="eyebrow">Federal</span>
-    <h3 id="race-{{ race.path | replace("/", "-") }}">{{ race.title }}</h3>
-    <a class="share" href="{{ race.path }}">Link to this race</a>
+    <h3 id="race-{{ race.path | replace("/", "-") }}"{% if standalone %} class="visually-hidden"{% endif %}>{{ race.title }}</h3>
+    {% if not standalone %}<a class="share" href="{{ race.path }}">Link to this race</a>{% endif %}
   </div>
   {% if race.running %}
-  <div class="cand-cols" aria-hidden="true"><span>Candidate</span><span>Raised</span><span>Outside $ for</span><span>Outside $ against</span></div>
-  <ul class="cands">
+  <ul class="swipe" aria-label="Candidates{% if race.running | length > 1 %}, swipe for more{% endif %}">
     {% for c in race.running %}
-    <li><a class="cand" href="/candidate/{{ c.id }}">
-      <span class="who"><strong>{{ c.name }}</strong> <span class="muted">{{ c.party }}</span>{% if c.incumbent %} <span class="tag">Incumbent</span>{% endif %}</span>
-      <span class="num"><span class="lbl">Raised </span>{{ c.raised | money }}</span>
-      <span class="num"><span class="lbl">Outside $ for </span>{{ c.support | money }}</span>
-      <span class="num"><span class="lbl">Outside $ against </span>{{ c.oppose | money }}</span>
-      <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    <li><a class="ccard" href="/candidate/{{ c.id }}">
+      <span class="ccard-who">
+        <strong>{{ c.name }}</strong>
+        <span class="muted">{{ c.party }}{% if c.incumbent %} · <span class="tag">Incumbent</span>{% endif %}</span>
+      </span>
+      <span class="ccard-big"><span class="muted">Campaign raised</span><strong>{{ c.raised | money }}</strong></span>
+      <span class="ccard-bars">
+        <span class="mini"><span>Outside $ for</span><strong>{{ c.support | money }}</strong></span>
+        <progress max="{{ race.outside_max }}" value="{{ c.support }}" aria-hidden="true"></progress>
+        <span class="mini"><span>Outside $ against</span><strong>{{ c.oppose | money }}</strong></span>
+        <progress class="against" max="{{ race.outside_max }}" value="{{ c.oppose }}" aria-hidden="true"></progress>
+      </span>
+      <span class="ccard-go">Money, donors &amp; fact checks
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
     </a></li>
     {% endfor %}
   </ul>
@@ -29,5 +36,5 @@
     </ul>
   </details>
   {% endif %}
-  <p class="source">Listed first: campaigns that filed the FEC's pre-general report, which only general-election candidates file. Candidates who raise under $5,000 don't have to report, so check your official sample ballot for the full list. Source: FEC.</p>
+  <p class="source">Shown as cards: campaigns that filed the FEC's pre-general report, which only general-election candidates file. Candidates who raise under $5,000 don't have to report, so check your official sample ballot for the full list. Source: FEC.</p>
 </section>

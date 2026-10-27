@@ -19,7 +19,7 @@
 <section id="money" aria-labelledby="h-money" class="block">
   <h2 id="h-money">Money</h2>
   <p class="sub">From the campaign's FEC reports, 2025–26{% if c.through %}, through {{ c.through | date }}{% endif %}.</p>
-  <div class="tiles">
+  <div class="tiles swipe-sm">
     <div class="tile"><span>Raised</span><strong>{{ c.raised | money }}</strong></div>
     <div class="tile"><span>Spent</span><strong>{{ c.spent | money }}</strong></div>
     <div class="tile"><span>Cash on hand</span><strong>{{ c.cash | money }}</strong></div>

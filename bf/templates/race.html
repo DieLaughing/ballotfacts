@@ -6,5 +6,5 @@
   <h1>{{ race.title }}</h1>
   <p class="sub">Not sure this is your district? <a href="/">Look up your address</a>.</p>
 </div>
-{% include "_race.html" %}
+{% set standalone = true %}{% include "_race.html" %}
 {% endblock %}

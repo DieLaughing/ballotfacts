@@ -8,6 +8,13 @@
   <p class="sub">{{ place.matched }} · {{ place.county }} · Congressional {{ place.district_label }}{% if place.state_upper %} · {{ place.state_upper }}{% endif %}{% if place.state_lower %} · {{ place.state_lower }}{% endif %} · <a href="/">Change address</a></p>
 </div>
 
+<nav aria-label="On this page" class="jumps">
+  <a href="#federal">Federal races</a>
+  {% if info and (info.polling or info.early or info.dropoff) %}<a href="#vote">Where to vote</a>{% endif %}
+  {% if info and info.offices %}<a href="#links">Official links</a>{% endif %}
+  {% if legislators %}<a href="#legislators">State legislators</a>{% endif %}
+</nav>
+
 {% set sample = info.sample_ballot if info else None %}
 <section class="callout" aria-labelledby="full">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6"/><path d="M10 17h6"/></svg>
@@ -18,17 +25,17 @@
   {% if sample %}<a class="btn" href="{{ sample }}">See your official sample ballot</a>{% endif %}
 </section>
 
-<h2 class="section">Federal races</h2>
+<h2 class="section" id="federal">Federal races</h2>
 {% for race in races %}{% include "_race.html" %}{% else %}
 <p class="muted">We couldn't load federal races right now. Try again in a minute.</p>
 {% endfor %}
 
 {% if info and (info.polling or info.early or info.dropoff) %}
-<h2 class="section">Where to vote</h2>
-<div class="sites">
+<h2 class="section" id="vote">Where to vote</h2>
+<ul class="swipe sites" aria-label="Voting options, swipe for more">
   {% for title, rows, note in [("Early voting", info.early, "Vote in person before Election Day."), ("On Election Day", info.polling, "Your assigned polling place may differ; check with your election office."), ("Ballot drop boxes", info.dropoff, "For mail ballots.")] %}
   {% if rows %}
-  <section class="site-box" aria-label="{{ title }}">
+  <li class="site-box">
     <h3>{{ title }}</h3>
     <p class="muted">{{ note }}</p>
     <ul>
@@ -37,15 +44,15 @@
         {% if s.dates %}<br><span class="muted">{{ s.dates }}</span>{% endif %}{% if s.hours %}<br><span class="muted hours">{{ s.hours }}</span>{% endif %}</li>
       {% endfor %}
     </ul>
-  </section>
+  </li>
   {% endif %}
   {% endfor %}
-</div>
+</ul>
 <p class="source">Source: Voting Information Project via Google. Locations and hours can change; confirm with your election office.</p>
 {% endif %}
 
 {% if info and info.offices %}
-<h2 class="section">Official links</h2>
+<h2 class="section" id="links">Official links</h2>
 <div class="sites">
   {% for o in info.offices %}
   <section class="site-box" aria-label="{{ o.name }}">
@@ -57,7 +64,7 @@
 {% endif %}
 
 {% if legislators %}
-<h2 class="section">Who represents you in the state legislature now</h2>
+<h2 class="section" id="legislators">Who represents you in the state legislature now</h2>
 <div class="table-box">
   <table>
     <thead><tr><th scope="col">Name</th><th scope="col">Seat</th><th scope="col">Party</th></tr></thead>

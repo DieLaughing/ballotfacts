@@ -123,8 +123,10 @@ def _race(office: str, state: str, district: str, cands: list[dict]) -> dict | N
     else:
         seat = "At-large" if district == "00" else f"District {int(district)}"
         title, path = f"U.S. House, {BY_CODE[state]} {seat}", f"/race/{state}/house/{district}"
-    return {"title": title, "path": path, "running": [c for c in cands if c["running"]],
-            "others": [c for c in cands if not c["running"]]}
+    running = [c for c in cands if c["running"]]
+    return {"title": title, "path": path, "running": running, "others": [c for c in cands if not c["running"]],
+            # one scale for every bar in the race, so cards compare at a glance
+            "outside_max": max([c["support"] for c in running] + [c["oppose"] for c in running] + [1])}
 
 
 @app.get("/race/{state}/senate", response_class=HTMLResponse)
