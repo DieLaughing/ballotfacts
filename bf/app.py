@@ -12,11 +12,11 @@ from urllib.parse import urlencode
 
 import httpx
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import background, census, civic, config, factcheck, fec, integrity, ocpf, openstates, statedata
+from . import background, census, civic, config, factcheck, fec, integrity, ocpf, openstates, photos, statedata
 from .cache import Cache
 from .states import BY_CODE
 
@@ -79,6 +79,7 @@ def initials(name: str) -> str:
 
 templates.env.filters["money"] = money
 templates.env.filters["initials"] = initials
+templates.env.globals["photo"] = photos.url
 templates.env.filters["backq"] = from_query
 templates.env.filters["date"] = nice_date
 templates.env.globals.update(config=config, states=BY_CODE)
@@ -165,6 +166,7 @@ async def _ballot(request: Request, place: census.Place, info, legislators, by_l
                 m = ocpf.match(rows, n["name"], r["office"], n.get("district") or r["district"] or "Statewide")
                 n["raised"] = m["raised"] if m else None
                 n["incumbent"] = bool(m and m["incumbent"])
+                n["cpf"] = m["cpf"] if m else None
             r["others"] = ocpf.others(rows, r["office"], r["district"], [n["name"] for n in r["nominees"]])
     return page(request, "ballot.html", place=place, info=info, races=races, legislators=legislators,
                 state_races=state_races, state_source=state_source, by_link=by_link, back=place.key)
@@ -186,8 +188,49 @@ def _race(office: str, state: str, district: str, cands: list[dict]) -> dict | N
         title, path = f"U.S. House, {BY_CODE[state]} {seat}", f"/race/{state}/house/{district}"
     running = [c for c in cands if c["running"]]
     return {"title": title, "path": path, "running": running, "others": [c for c in cands if not c["running"]],
+            "summary": race_summary(running),
             # one scale for every bar in the race, so cards compare at a glance
             "outside_total_max": max([c["support"] + c["oppose"] for c in running] + [1])}
+
+
+def race_summary(running: list[dict]) -> str:
+    """One plain sentence or three about the race, built only from the numbers on the page."""
+    if not running:
+        return ""
+    last = lambda c: c["name"].replace(" Jr.", "").replace(" Sr.", "").split()[-1]
+    by_money = sorted(running, key=lambda c: -c["raised"])
+    top = by_money[0]
+    if len(running) == 1:
+        out = [f"{top['name']} is the only campaign in this race still reporting to the FEC, with {money(top['raised'])} raised."]
+    else:
+        second = by_money[1]
+        ratio = top["raised"] / max(second["raised"], 1)
+        if ratio >= 1.5:
+            out = [f"{last(top)} has raised the most, {money(top['raised'])}: about {ratio:.0f} times as much as {last(second)}."]
+        else:
+            out = [f"{last(top)} ({money(top['raised'])}) and {last(second)} ({money(second['raised'])}) have raised similar amounts."]
+    incumbents = [c for c in running if c["incumbent"]]
+    if incumbents:
+        out.append(f"{incumbents[0]['name']} is the incumbent.")
+    spent = sum(c["support"] + c["oppose"] for c in running)
+    if not spent:
+        out.append("No outside groups have reported spending in this race.")
+    else:
+        side, c = _biggest_outside(running)
+        out.append(f"Outside groups have spent {money(spent)}; the most, {money(c['support'] if side == 'to support' else c['oppose'])}, {side} {last(c)}.")
+    return " ".join(out)
+
+
+def _biggest_outside(running: list[dict]) -> tuple[str, dict]:
+    best = max(running, key=lambda c: max(c["support"], c["oppose"]))
+    return ("to support", best) if best["support"] >= best["oppose"] else ("to oppose", best)
+
+
+@app.get("/photo/{name}")
+async def photo(name: str):
+    if not photos.NAME.fullmatch(name) or not (photos.DIR / name).exists():
+        return PlainTextResponse("not found", status_code=404)
+    return FileResponse(photos.DIR / name, media_type="image/jpeg", headers={"Cache-Control": "public, max-age=604800"})
 
 
 @app.get("/race/{state}/senate", response_class=HTMLResponse)

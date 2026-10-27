@@ -4,12 +4,13 @@
     <h3 id="race-{{ race.path | replace("/", "-") }}"{% if standalone %} class="visually-hidden"{% endif %}>{{ race.title }}</h3>
     {% if not standalone %}<a class="share" href="{{ race.path }}">Link to this race</a>{% endif %}
   </div>
+  {% if race.summary %}<p class="rsum">{{ race.summary }}</p>{% endif %}
   {% if race.running %}
   <ul class="swipe" aria-label="Candidates{% if race.running | length > 1 %}, swipe for more{% endif %}">
     {% for c in race.running %}
     <li><div class="ccard fed">
       <div class="chead">
-        <span class="mono" aria-hidden="true">{{ c.name | initials }}</span>
+        {% set pic = photo("fed", c.id) %}{% if pic %}<img class="mono" src="{{ pic }}" alt="" width="44" height="44">{% else %}<span class="mono" aria-hidden="true">{{ c.name | initials }}</span>{% endif %}
         <div class="cwho">
           <a class="cname" href="/candidate/{{ c.id }}{{ back | backq }}">{{ c.name }}</a>
           <div class="ctags"><span class="pill">{{ c.party }}</span>{% if c.incumbent %}<span class="pill">Incumbent</span>{% endif %}</div>

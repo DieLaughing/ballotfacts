@@ -101,3 +101,13 @@ def test_ocpf_others_skips_major_parties_and_nominees():
 def test_integrity_slug():
     from bf.integrity import slugify
     assert slugify("Jon", "Ossoff") == "jon-ossoff" and slugify("Ed", "Markey") == "ed-markey"
+
+
+def test_race_summary_is_built_from_the_numbers():
+    from bf.app import race_summary
+    a = {"name": "Ann Lee", "raised": 3_000_000, "incumbent": True, "support": 0, "oppose": 500_000}
+    b = {"name": "Bo Diaz", "raised": 1_000_000, "incumbent": False, "support": 0, "oppose": 0}
+    s = race_summary([a, b])
+    assert "Lee has raised the most, $3.0M: about 3 times as much as Diaz." in s
+    assert "Ann Lee is the incumbent." in s and "$500K, to oppose Lee" in s
+    assert "No outside groups" in race_summary([dict(a, oppose=0), b])

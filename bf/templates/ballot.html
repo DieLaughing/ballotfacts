@@ -48,6 +48,7 @@
   <ul class="swipe" aria-label="Nominees{% if r.nominees | length > 1 %}, swipe for more{% endif %}">
     {% for n in r.nominees %}
     <li><a class="ccard compact" href="/{{ place.state | lower }}/c/{{ n.contest }}/{{ n.slug }}{{ back | backq }}">
+      {% set pic = photo("ma", n.cpf) if n.cpf else "" %}{% if pic %}<img class="mono sm" src="{{ pic }}" alt="" width="40" height="40">{% endif %}
       <span class="ccard-who"><strong>{{ n.name | replace(" (Write-In)", "") }}</strong><span class="muted">{{ n.party }}{% if n.incumbent %} · <span class="tag">Incumbent</span>{% endif %}{% if n.district %} · {{ n.district }} district{% endif %}{% if "(Write-In)" in n.name %} · won as a write-in{% endif %}</span></span>
       <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if n.unopposed %}Unopposed{% else %}Won, {{ n.pct }}%{% endif %}</strong></span>
       {% if n.raised is not none %}<span class="ccard-big"><span class="muted">Raised this year</span><strong>{{ n.raised | money }}</strong></span>{% endif %}

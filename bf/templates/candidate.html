@@ -5,7 +5,8 @@
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
   {{ race_title }}</a>
 
-<div class="page-head">
+<div class="page-head with-photo">
+  {% set pic = photo("fed", c.id) %}{% if pic %}<img class="headshot" src="{{ pic }}" alt="Official portrait of {{ c.name }}" width="96" height="96">{% endif %}
   <h1>{{ c.name }}</h1>
   <p class="sub">{{ c.party }}{% if c.incumbent %} · <span class="tag">Incumbent</span>{% endif %} {% if c.website %} · <a href="{{ c.website }}" target="_blank" rel="noopener nofollow">Campaign website</a>{% endif %} · <a href="https://www.fec.gov/data/candidate/{{ c.id }}/" target="_blank" rel="noopener">FEC record</a></p>
   {% if c.website %}<p class="source">Website as the campaign listed it on its FEC registration.</p>{% endif %}
