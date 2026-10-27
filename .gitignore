@@ -1,9 +1,10 @@
 .venv/
 __pycache__/
 .pytest_cache/
-data/
+/data/
 .env
 *.env
 !.env.example
 deploy*.env
 *.local.md
+.cloudflare/
