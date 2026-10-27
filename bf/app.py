@@ -35,7 +35,9 @@ HEADERS = {
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.http = httpx.AsyncClient(timeout=20, headers={"User-Agent": config.USER_AGENT})
+    # IPv4 only: the Google key is locked to the server's IPv4 address, and the server also has IPv6.
+    app.state.http = httpx.AsyncClient(timeout=20, headers={"User-Agent": config.USER_AGENT},
+                                       transport=httpx.AsyncHTTPTransport(local_address="0.0.0.0", retries=1))
     app.state.cache = Cache(config.DATA / "cache.db")
     yield
     await app.state.http.aclose()
