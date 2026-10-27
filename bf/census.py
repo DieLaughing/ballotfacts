@@ -32,6 +32,9 @@ class Place:
     street_name: str = ""
     street_suffix: str = ""
     zip: str = ""
+    # Massachusetts ward/precinct, from bf/precincts.py: "FALMOUTH||4" and "Falmouth Precinct 4"
+    precinct_key: str = ""
+    precinct_name: str = ""
 
     @property
     def district_label(self) -> str:
@@ -41,7 +44,8 @@ class Place:
     def key(self) -> str:
         """A link to this ballot that names districts and the town, never the street address.
         Everyone in the same districts shares it, so it can be cached and passed around."""
-        q = {"town": self.town, "county": self.county, "up": self.state_upper, "lo": self.state_lower}
+        q = {"town": self.town, "county": self.county, "up": self.state_upper, "lo": self.state_lower,
+             "pct": self.precinct_key, "pn": self.precinct_name}
         return f"/ballot/{self.state}/{self.district}?" + urlencode({k: v for k, v in q.items() if v})
 
     @classmethod
@@ -50,7 +54,8 @@ class Place:
         town = q.get("town", "")
         label = ", ".join(x for x in (town.removesuffix(" town").removesuffix(" city"), state) if x)
         return cls(matched=label, state=state, state_name=BY_CODE[state], district=district, county=q.get("county", ""),
-                   town=town, state_upper=q.get("up", ""), state_lower=q.get("lo", ""), lat=0.0, lng=0.0)
+                   town=town, state_upper=q.get("up", ""), state_lower=q.get("lo", ""), lat=0.0, lng=0.0,
+                   precinct_key=q.get("pct", ""), precinct_name=q.get("pn", ""))
 
 
 def _first(geos: dict, needle: str) -> dict:

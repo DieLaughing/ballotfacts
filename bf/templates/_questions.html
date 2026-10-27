@@ -1,0 +1,39 @@
+<div class="questions">
+  {% for q in state_source.questions %}{% set m = qmoney.get(q.number | string) %}
+  <details class="question">
+    <summary><span class="qnum">{{ q.number }}</span><span class="qtitle">{{ q.title }}{% if m %}<span class="qsub">Yes side {{ m.yes_total | money }} · No side {{ m.no_total | money }}{% if m.yes_shared >= 0.1 * m.yes_total and m.yes_shared or m.no_shared >= 0.1 * m.no_total and m.no_shared %} · includes committees also working on other questions{% endif %}</span>{% endif %}</span></summary>
+    <div class="qbody">
+      <p><strong>Yes:</strong> {{ q.yes | replace("A YES VOTE ", "") }}</p>
+      <p><strong>No:</strong> {{ q.no | replace("A NO VOTE ", "") }}</p>
+      <h4>Who's paying</h4>
+      {% if m and (m.yes or m.no) %}
+      {% set total = (m.yes_total + m.no_total) or 1 %}
+      <svg class="split" width="100%" height="10" role="img" aria-label="Yes side {{ m.yes_total | money }}, No side {{ m.no_total | money }}">
+        <rect width="100%" height="10" rx="5" class="split-bg"></rect>
+        <rect width="{{ (100 * m.yes_total / total) | round(1) }}%" height="10" class="split-for"></rect>
+        <rect x="{{ (100 * m.yes_total / total) | round(1) }}%" width="{{ (100 * m.no_total / total) | round(1) }}%" height="10" class="split-against"></rect>
+      </svg>
+      <p class="ot"><span class="key key-for" aria-hidden="true"></span><strong>{{ m.yes_total | money }}</strong> raised to pass it <span class="key key-against" aria-hidden="true"></span><strong>{{ m.no_total | money }}</strong> to defeat it</p>
+      <div class="two qsides">
+        {% for label, rows in [("Committees for Yes", m.yes), ("Committees for No", m.no)] %}
+        <div>
+          <h5>{{ label }}</h5>
+          {% for c in rows %}
+          <div class="qc">
+            <div class="qc-head"><a href="https://www.ocpf.us/Filers?q={{ c.cpf }}" target="_blank" rel="noopener">{{ c.name }}</a><strong>{{ c.raised | money }}</strong></div>
+            {% if c.also %}<p class="muted small">Also campaigning on Question {{ c.also | join(", ") }}; its total covers all of them.</p>{% endif %}
+            {% if c.donors %}<p class="muted small">Biggest donors: {% for d in c.donors[:3] %}{{ d.name }} ({{ d.amount | money }}){{ ", " if not loop.last }}{% endfor %}</p>{% endif %}
+          </div>
+          {% else %}<p class="muted small">No committee registered.</p>{% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      <p class="source">Ballot question committees' own reports to OCPF since January {{ config.CYCLE - 1 }}; OCPF tags each committee with the question and side it was formed for{% if qfetched %}. Checked {{ qfetched[:10] | date }}{% endif %}.</p>
+      {% else %}
+      <p class="muted small">No committees have reported raising money for or against this question.</p>
+      {% endif %}
+    </div>
+  </details>
+  {% endfor %}
+</div>
+<p class="source">Source: <a href="{{ state_source.questions_source }}" target="_blank" rel="noopener">Information for Voters booklet</a>, which also has the full text, fiscal impact and arguments for and against.</p>

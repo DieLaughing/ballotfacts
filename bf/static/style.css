@@ -347,3 +347,10 @@ img.mono { object-fit: cover; padding: 0; }
 .official-lookup { margin-top: 12px; }
 .official-lookup .btn { border: 0; cursor: pointer; font: inherit; font-weight: 700; }
 .official-lookup p { margin: 8px 0 0; max-width: 620px; }
+.precinct { display: inline-flex; flex-direction: column; gap: 2px; padding: 14px 18px; margin-bottom: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--soft); }
+.precinct strong { font-size: 20px; }
+.precinct p { margin: 4px 0 0; max-width: 520px; }
+.feature { display: flex; flex-direction: column; gap: 4px; margin-top: 32px; padding: 18px 20px; max-width: 720px; border: 1px solid var(--line-2); border-radius: 16px; text-decoration: none; color: var(--ink); background: var(--soft); }
+.feature:hover { border-color: var(--accent); color: var(--ink); }
+.feature strong { font-size: 19px; }
+.feature .muted { font-size: 15px; }

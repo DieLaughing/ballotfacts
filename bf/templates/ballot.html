@@ -4,7 +4,7 @@
 {% macro official_button(lookup) %}
 <form method="post" action="{{ lookup.url }}" target="_blank" class="official-lookup">
   {% for k, v in lookup.fields.items() %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
-  <button type="submit" class="btn">Show my polling place on the official state site</button>
+  <button type="submit" class="btn">{% if place.precinct_name %}See the polling place for {{ place.precinct_name }}{% else %}Show my polling place{% endif %} (official state site)</button>
   <p class="muted small">Opens the Secretary of the Commonwealth's lookup with your address already filled in. Your address goes to the state only when you press this; Ballot Facts doesn't keep it.</p>
 </form>
 {% endmacro %}
@@ -12,7 +12,7 @@
 <div class="page-head">
   <p class="eyebrow">General election · Nov 3</p>
   <h1>Your ballot</h1>
-  <p class="sub">{{ place.matched }}{% if place.county %} · {{ place.county }}{% endif %} · Congressional {{ place.district_label }}{% if place.state_upper %} · {{ place.state_upper }}{% endif %}{% if place.state_lower %} · {{ place.state_lower }}{% endif %} · <a href="/">Change address</a></p>
+  <p class="sub">{{ place.matched }}{% if place.precinct_name %} · {{ place.precinct_name }}{% endif %}{% if place.county %} · {{ place.county }}{% endif %} · Congressional {{ place.district_label }}{% if place.state_upper %} · {{ place.state_upper }}{% endif %}{% if place.state_lower %} · {{ place.state_lower }}{% endif %} · <a href="/">Change address</a></p>
 </div>
 
 <nav aria-label="On this page" class="jumps">
@@ -74,50 +74,22 @@
 
 {% if state_source and state_source.questions %}
 <h2 class="section" id="questions">Statewide ballot questions</h2>
-<p class="sub">What a yes or no vote does, in the official words of the Attorney General and the Secretary of the Commonwealth, and who's paying on each side.</p>
-<div class="questions">
-  {% for q in state_source.questions %}{% set m = qmoney.get(q.number | string) %}
-  <details class="question">
-    <summary><span class="qnum">{{ q.number }}</span><span class="qtitle">{{ q.title }}{% if m %}<span class="qsub">Yes side {{ m.yes_total | money }} · No side {{ m.no_total | money }}{% if m.yes_shared >= 0.1 * m.yes_total and m.yes_shared or m.no_shared >= 0.1 * m.no_total and m.no_shared %} · includes committees also working on other questions{% endif %}</span>{% endif %}</span></summary>
-    <div class="qbody">
-      <p><strong>Yes:</strong> {{ q.yes | replace("A YES VOTE ", "") }}</p>
-      <p><strong>No:</strong> {{ q.no | replace("A NO VOTE ", "") }}</p>
-      <h4>Who's paying</h4>
-      {% if m and (m.yes or m.no) %}
-      {% set total = (m.yes_total + m.no_total) or 1 %}
-      <svg class="split" width="100%" height="10" role="img" aria-label="Yes side {{ m.yes_total | money }}, No side {{ m.no_total | money }}">
-        <rect width="100%" height="10" rx="5" class="split-bg"></rect>
-        <rect width="{{ (100 * m.yes_total / total) | round(1) }}%" height="10" class="split-for"></rect>
-        <rect x="{{ (100 * m.yes_total / total) | round(1) }}%" width="{{ (100 * m.no_total / total) | round(1) }}%" height="10" class="split-against"></rect>
-      </svg>
-      <p class="ot"><span class="key key-for" aria-hidden="true"></span><strong>{{ m.yes_total | money }}</strong> raised to pass it <span class="key key-against" aria-hidden="true"></span><strong>{{ m.no_total | money }}</strong> to defeat it</p>
-      <div class="two qsides">
-        {% for label, rows in [("Committees for Yes", m.yes), ("Committees for No", m.no)] %}
-        <div>
-          <h5>{{ label }}</h5>
-          {% for c in rows %}
-          <div class="qc">
-            <div class="qc-head"><a href="https://www.ocpf.us/Filers?q={{ c.cpf }}" target="_blank" rel="noopener">{{ c.name }}</a><strong>{{ c.raised | money }}</strong></div>
-            {% if c.also %}<p class="muted small">Also campaigning on Question {{ c.also | join(", ") }}; its total covers all of them.</p>{% endif %}
-            {% if c.donors %}<p class="muted small">Biggest donors: {% for d in c.donors[:3] %}{{ d.name }} ({{ d.amount | money }}){{ ", " if not loop.last }}{% endfor %}</p>{% endif %}
-          </div>
-          {% else %}<p class="muted small">No committee registered.</p>{% endfor %}
-        </div>
-        {% endfor %}
-      </div>
-      <p class="source">Ballot question committees' own reports to OCPF since January {{ config.CYCLE - 1 }}; OCPF tags each committee with the question and side it was formed for{% if qfetched %}. Checked {{ qfetched[:10] | date }}{% endif %}.</p>
-      {% else %}
-      <p class="muted small">No committees have reported raising money for or against this question.</p>
-      {% endif %}
-    </div>
-  </details>
-  {% endfor %}
-</div>
-<p class="source">Source: <a href="{{ state_source.questions_source }}" target="_blank" rel="noopener">Information for Voters booklet</a>, which also has the full text, fiscal impact and arguments for and against.</p>
+<p class="sub">What a yes or no vote does, in the official words of the Attorney General and the Secretary of the Commonwealth, and who's paying on each side. <a href="/ma/questions">Open just the questions</a>: handy on your phone in the booth.</p>
+{% include "_questions.html" %}
 {% endif %}
 
+{% macro precinct_card() %}
+{% if place.precinct_name %}
+<div class="precinct">
+  <span class="k">Your precinct</span>
+  <strong>{{ place.precinct_name }}</strong>
+  <p class="muted small">From the state's official precinct map (<a href="https://www.mass.gov/info-details/massgis-data-2022-wards-and-precincts" target="_blank" rel="noopener">MassGIS</a>). Your polling place is set by your precinct.</p>
+</div>
+{% endif %}
+{% endmacro %}
 {% if by_link %}
 <h2 class="section" id="vote">Where to vote</h2>
+{{ precinct_card() }}
 <form method="post" action="/ballot" class="callout lookup-again">
   <div>
     <h3>Polling places depend on your street address</h3>
@@ -129,6 +101,7 @@
 {% endif %}
 {% if info and (info.polling or info.early or info.dropoff) %}
 <h2 class="section" id="vote">Where to vote</h2>
+{{ precinct_card() }}
 <ul class="swipe sites" aria-label="Voting options, swipe for more">
   {% for title, rows, note in [("Early voting", info.early, "Vote in person before Election Day."), ("On Election Day", info.polling, "Your assigned polling place may differ; check with your election office."), ("Ballot drop boxes", info.dropoff, "For mail ballots.")] %}
   {% if rows %}
@@ -151,6 +124,7 @@
 
 {% if not by_link and not (info and (info.polling or info.early or info.dropoff)) %}
 <h2 class="section" id="vote">Where to vote</h2>
+{{ precinct_card() }}
 <div class="callout">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
   <div>

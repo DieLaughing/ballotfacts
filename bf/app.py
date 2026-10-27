@@ -16,7 +16,7 @@ from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import background, census, civic, config, factcheck, fec, integrity, ocpf, offices, openstates, photos, statedata
+from . import background, census, civic, config, factcheck, fec, integrity, ocpf, offices, openstates, photos, precincts, statedata
 from .cache import Cache
 from .states import BY_CODE
 
@@ -126,6 +126,8 @@ async def ballot(request: Request, address: str = Form("")):
     place = await _safe(census.lookup(http, address), None) if len(address) > 5 else None
     if not place:
         return page(request, "home.html", 422, error="We couldn't find that address. Try the full street address with city and state.")
+    if place.state == "MA" and (p := precincts.find(place.lat, place.lng)):
+        place.precinct_key, place.precinct_name = p.key, p.name
     place_key = f"{place.state}:{place.district}:{place.state_upper}:{place.state_lower}"
     info, legislators = await asyncio.gather(
         _safe(civic.lookup(http, address, place.lat, place.lng), None),
@@ -143,7 +145,7 @@ async def district_ballot(request: Request, state: str, district: str):
     state = state.upper()
     if state not in BY_CODE or not re.fullmatch(r"\d\d", district):
         return page(request, "missing.html", 404)
-    q = {k: v[:80] for k, v in request.query_params.items() if k in ("town", "county", "up", "lo")}
+    q = {k: v[:80] for k, v in request.query_params.items() if k in ("town", "county", "up", "lo", "pct", "pn")}
     place = census.Place.from_key(state, district, q)
     http, cache = request.app.state.http, request.app.state.cache
     info, legislators = await asyncio.gather(
@@ -275,6 +277,15 @@ async def candidate(request: Request, cid: str):
     return page(request, "candidate.html", c=c, checks=checks, back=back_link(request), integrity_url=ii, race_title=race_title, race_path=race_path,
                 raised_total=raised_total,
                 support=[o for o in c["outside"] if o["side"] == "S"], oppose=[o for o in c["outside"] if o["side"] == "O"])
+
+
+@app.get("/ma/questions", response_class=HTMLResponse)
+async def ma_questions(request: Request):
+    """The statewide questions and who's paying, on their own: no address needed, quick on a phone."""
+    data = statedata.load("MA") or {}
+    qmoney, qfetched = ocpf.questions(data)
+    return page(request, "questions.html", state_source={"questions": data.get("questions", []),
+                "questions_source": data.get("questions_source", "")}, qmoney=qmoney, qfetched=qfetched)
 
 
 @app.get("/group/{gid}", response_class=HTMLResponse)

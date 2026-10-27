@@ -12,6 +12,12 @@ The statewide ballot questions come from the state's official Information for Vo
 (PDF): each question's title and the "what your vote will do" statements written jointly by the
 Attorney General and the Secretary of the Commonwealth. Needs `pdftotext` (poppler).
 
+Precincts: for offices whose districts split a city or town (in practice the Governor's Council),
+each contest also records which wards and precincts of those split places it covers, so the site
+can tell a voter which district they're in. To refresh only that (16 requests):
+
+    python tools/fetch_ma.py precincts
+
 Independent expenditures (Massachusetts's Super PAC spending) come from OCPF's IEPAC reports,
 added up per candidate and per group, for or against. To refresh only those (about 140 requests):
 
@@ -123,8 +129,33 @@ def client_headers() -> dict:
     return {"User-Agent": "BallotFacts data fetch (+https://github.com/DieLaughing/ballotfacts)"}
 
 
+def precincts(client: httpx.Client, found: list[dict]) -> None:
+    """Add "precincts" ("TOWN|WARD|PCT" keys) to contests for offices that split a town between districts."""
+    by_office: dict[tuple[str, str], set[str]] = {}
+    for c in found:
+        if c["district"] != "Statewide":
+            for t in c["towns"]:
+                by_office.setdefault((c["office"], t), set()).add(c["district"])
+    split = {(o, t) for (o, t), ds in by_office.items() if len(ds) > 1}
+    # State Rep, State Senate and Congress are matched by the Census's own district names already.
+    for c in found:
+        towns = {t for t in c["towns"] if (c["office"], t) in split}
+        if c["office"] != "Governor's Council" or not towns:
+            continue
+        rows = list(csv.reader(io.StringIO(client.get(f"{BASE}/elections/download/{c['id']}/precincts_include:1/").text)))
+        c["precincts"] = sorted({f"{r[0].upper()}|{'' if r[1] in ('-', '') else r[1]}|{r[2]}"
+                                 for r in rows[1:] if r and r[0] in towns and len(r) > 2 and r[2]})
+        time.sleep(0.5)
+
+
 def main() -> None:
     client = httpx.Client(timeout=30, follow_redirects=True, headers=client_headers())
+    if sys.argv[1:] == ["precincts"]:
+        data = json.loads(OUT.read_text())
+        precincts(client, data["contests"])
+        OUT.write_text(json.dumps(data, indent=1))
+        print(f"{sum(1 for c in data['contests'] if c.get('precincts'))} contests with precinct lists", file=sys.stderr)
+        return
     if sys.argv[1:] == ["outside"]:
         data = json.loads(OUT.read_text())
         data["outside"] = outside()
@@ -145,6 +176,7 @@ def main() -> None:
         if n % 50 == 0:
             print(f"  {n}/{len(found)}", file=sys.stderr)
         time.sleep(0.5)
+    precincts(client, found)
     qs = questions(client)
     print(f"{len(qs)} ballot questions", file=sys.stderr)
     OUT.parent.mkdir(parents=True, exist_ok=True)

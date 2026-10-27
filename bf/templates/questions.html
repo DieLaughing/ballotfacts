@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Massachusetts ballot questions: who's paying · Ballot Facts{% endblock %}
+{% block main %}
+<div class="page-head">
+  <p class="eyebrow">Massachusetts · Nov 3</p>
+  <h1>The 9 ballot questions</h1>
+  <p class="sub">What a yes or no vote does, in the official words of the Attorney General and the Secretary of the Commonwealth, and who's paying on each side. Tap a question to open it.</p>
+</div>
+{% include "_questions.html" %}
+<p class="source">Your town may have local questions too (they're numbered after these). Those aren't covered yet; your official sample ballot lists them. <a href="/">See your whole ballot</a>.</p>
+{% endblock %}

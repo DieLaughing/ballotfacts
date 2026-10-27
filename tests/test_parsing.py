@@ -111,3 +111,15 @@ def test_race_summary_is_built_from_the_numbers():
     assert "Lee has raised the most, $3.0M: about 3 times as much as Diaz." in s
     assert "Ann Lee is the incumbent." in s and "$500K, to oppose Lee" in s
     assert "No outside groups" in race_summary([dict(a, oppose=0), b])
+
+
+def test_split_city_resolved_by_precinct():
+    from bf.census import Place
+    from bf.statedata import in_my_precinct
+    gc3 = {"precincts": ["BOSTON|21|1", "BOSTON|21|2"]}
+    gc4 = {"precincts": ["BOSTON|10|1"]}
+    voter = Place(matched="", state="MA", state_name="Massachusetts", district="07", county="", town="Boston city",
+                  state_upper="", state_lower="", lat=0, lng=0, precinct_key="BOSTON|21|2")
+    assert in_my_precinct(gc3, voter) and not in_my_precinct(gc4, voter)
+    elsewhere = Place(**{**voter.__dict__, "precinct_key": "ACTON||1"})
+    assert in_my_precinct(gc4, elsewhere)  # Acton isn't split, so the town match decides

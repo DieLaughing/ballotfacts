@@ -18,7 +18,7 @@ import time
 
 import httpx
 
-from . import config, fec, ocpf, photos
+from . import config, fec, ocpf, photos, precincts
 from .cache import Cache
 from .states import BY_CODE
 
@@ -41,6 +41,10 @@ async def warm_races(client: httpx.AsyncClient, cache: Cache) -> None:
 
 async def run(client: httpx.AsyncClient, cache: Cache) -> None:
     await asyncio.sleep(30)  # let the app finish starting
+    try:
+        await precincts.download(client)
+    except httpx.HTTPError as e:
+        log.warning("precinct map download failed: %s", type(e).__name__)
     while True:
         try:
             if ocpf.outside_age_hours() > OUTSIDE_EVERY_HOURS:

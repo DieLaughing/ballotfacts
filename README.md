@@ -29,6 +29,8 @@ Only public data is cached (races, money, fact checks), in a small SQLite file.
 | Fact checks | [Google Fact Check Tools](https://toolbox.google.com/factcheck/apis) (ClaimReview) |
 | State legislators | [Open States](https://open.pluralpolicy.com/) |
 | Massachusetts campaign money, independent expenditures | [OCPF](https://www.ocpf.us/) API (`api.ocpf.us`); IE PAC spending collected by `tools/fetch_ma.py outside` |
+| Massachusetts wards and precincts | [MassGIS 2022 Wards and Precincts](https://www.mass.gov/info-details/massgis-data-2022-wards-and-precincts), downloaded by the app; Governor's Council precinct lists from ElectionStats (`tools/fetch_ma.py precincts`) |
+| Massachusetts ballot-question money | OCPF ballot question committees, tagged by OCPF with question and side |
 | Campaign websites | FEC Form 1 (federal); hand-checked entries with evidence in `bf/data/websites.json` (others) |
 | Every state's election office (Results page) | Voting Information Project via Google, collected by `tools/fetch_offices.py` |
 | Massachusetts state & county races, ballot questions | [ElectionStats](https://electionstats.state.ma.us/) primary results + the state's Information for Voters booklet, collected by `tools/fetch_ma.py` into `bf/data/ma-2026.json` |

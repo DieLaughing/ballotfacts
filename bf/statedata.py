@@ -42,6 +42,18 @@ def town_of(place: Place) -> str:
     return re.sub(r"\s+(town|city|town city|plantation|township)$", "", place.town.lower()).strip()
 
 
+def in_my_precinct(contest: dict, place: Place) -> bool:
+    """For contests that list the precincts they cover in split towns: is the voter's one of them?
+    True when we can't tell (no precinct known, or the voter's town isn't split for this office)."""
+    listed = contest.get("precincts")
+    if not listed or not place.precinct_key:
+        return True
+    town = place.precinct_key.split("|")[0]
+    if not any(k.startswith(town + "|") for k in listed):
+        return True
+    return place.precinct_key in listed
+
+
 def _merge_split_towns(races: list[dict]) -> list[dict]:
     """A big city can sit in several districts for one office (Boston has three Governor's Council
     districts). Without precinct data we can't tell which is the voter's, so show them together,
@@ -69,6 +81,12 @@ def load(state: str) -> dict | None:
     if not path.exists():
         return None
     data = json.loads(path.read_text())
+    # Both parties' primaries cover the same seat, but only a contest with votes lists its precincts.
+    seat_precincts: dict[tuple[str, str], set[str]] = {}
+    for c in data["contests"]:
+        seat_precincts.setdefault((c["office"], c["district"]), set()).update(c.get("precincts") or [])
+    for c in data["contests"]:
+        c["precincts"] = sorted(seat_precincts[(c["office"], c["district"])])
     by_town: dict[str, list[dict]] = {}
     for c in data["contests"]:
         for t in c["towns"]:
@@ -91,6 +109,8 @@ def races(place: Place) -> tuple[list[dict], dict | None]:
         mine = getattr(place, LEGISLATIVE[c["office"]], "") if c["office"] in LEGISLATIVE else ""
         if mine and norm(mine) != norm(c["district"]):
             continue  # the town is split; this is the other half's seat
+        if not in_my_precinct(c, place):
+            continue  # a split city: this district covers other wards and precincts
         seats.setdefault((c["office"], c["district"]), []).append(c)
 
     out = []
