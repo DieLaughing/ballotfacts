@@ -1,0 +1,33 @@
+<section class="race" aria-labelledby="race-{{ race.path | replace("/", "-") }}">
+  <div class="race-head">
+    <span class="eyebrow">Federal</span>
+    <h3 id="race-{{ race.path | replace("/", "-") }}">{{ race.title }}</h3>
+    <a class="share" href="{{ race.path }}">Link to this race</a>
+  </div>
+  {% if race.running %}
+  <div class="cand-cols" aria-hidden="true"><span>Candidate</span><span>Raised</span><span>Outside $ for</span><span>Outside $ against</span></div>
+  <ul class="cands">
+    {% for c in race.running %}
+    <li><a class="cand" href="/candidate/{{ c.id }}">
+      <span class="who"><strong>{{ c.name }}</strong> <span class="muted">{{ c.party }}</span>{% if c.incumbent %} <span class="tag">Incumbent</span>{% endif %}</span>
+      <span class="num"><span class="lbl">Raised </span>{{ c.raised | money }}</span>
+      <span class="num"><span class="lbl">Outside $ for </span>{{ c.support | money }}</span>
+      <span class="num"><span class="lbl">Outside $ against </span>{{ c.oppose | money }}</span>
+      <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="pad muted">No campaign in this race has filed a pre-general report with the FEC yet.</p>
+  {% endif %}
+  {% if race.others %}
+  <details class="others">
+    <summary>{{ race.others | length }} more registered with the FEC for this seat</summary>
+    <p class="muted">Includes people who lost their primary, dropped out, or never raised enough to report. Some may still be on your ballot, especially independents and smaller parties.</p>
+    <ul>
+      {% for c in race.others %}<li><a href="/candidate/{{ c.id }}">{{ c.name }}</a> <span class="muted">{{ c.party }}{% if c.through %} · last report through {{ c.through | date }}{% endif %}</span></li>{% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+  <p class="source">Listed first: campaigns that filed the FEC's pre-general report, which only general-election candidates file. Candidates who raise under $5,000 don't have to report, so check your official sample ballot for the full list. Source: FEC.</p>
+</section>

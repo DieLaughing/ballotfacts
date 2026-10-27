@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}{{ c.name }} · Ballot Facts{% endblock %}
+{% block main %}
+<a class="back" href="{{ race_path }}">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  {{ race_title }}</a>
+
+<div class="page-head">
+  <h1>{{ c.name }}</h1>
+  <p class="sub">{{ c.party }}{% if c.incumbent %} · <span class="tag">Incumbent</span>{% endif %} · <a href="https://www.fec.gov/data/candidate/{{ c.id }}/">FEC record</a></p>
+</div>
+
+<nav aria-label="On this page" class="jumps">
+  <a href="#money">Money</a>
+  <a href="#outside">Outside spending</a>
+  <a href="#checks">Fact checks · {{ checks | length }}</a>
+</nav>
+
+<section id="money" aria-labelledby="h-money" class="block">
+  <h2 id="h-money">Money</h2>
+  <p class="sub">From the campaign's FEC reports, 2025–26{% if c.through %}, through {{ c.through | date }}{% endif %}.</p>
+  <div class="tiles">
+    <div class="tile"><span>Raised</span><strong>{{ c.raised | money }}</strong></div>
+    <div class="tile"><span>Spent</span><strong>{{ c.spent | money }}</strong></div>
+    <div class="tile"><span>Cash on hand</span><strong>{{ c.cash | money }}</strong></div>
+  </div>
+
+  <h3>Where the campaign's money came from</h3>
+  <ul class="bars">
+    {% for label, amount in c.sources if amount > 0 %}
+    <li><span class="bar-label">{{ label }}</span><progress max="{{ raised_total }}" value="{{ amount }}" aria-hidden="true"></progress><span class="num">{{ amount | money }} <span class="muted">· {{ (100 * amount / raised_total) | round | int }}%</span></span></li>
+    {% endfor %}
+  </ul>
+
+  {% if c.employers %}
+  <h3>Top employers of donors</h3>
+  <div class="list-box">
+    {% for e in c.employers %}<div class="row"><span>{{ e.name }}</span><strong>{{ e.total | money }}</strong></div>{% endfor %}
+  </div>
+  <p class="source">Employers as donors reported them, for gifts over $200. Shown to see which industries back a campaign; individual donor names aren't shown here.</p>
+  {% endif %}
+</section>
+
+<section id="outside" aria-labelledby="h-outside" class="block">
+  <h2 id="h-outside">Outside spending</h2>
+  <p class="sub">Super PACs and other groups spending on their own, not given to the campaign. From FEC independent-expenditure reports.</p>
+  {% if support or oppose %}
+  <div class="two">
+    {% for title, rows in [("To support " ~ c.name, support), ("To oppose " ~ c.name, oppose)] %}
+    <div class="list-box">
+      <h3 class="list-head">{{ title }}</h3>
+      {% for o in rows[:10] %}<div class="row">{% if o.id %}<a href="https://www.fec.gov/data/committee/{{ o.id }}/">{{ o.name }}</a>{% else %}<span>{{ o.name }}</span>{% endif %}<strong>{{ o.total | money }}</strong></div>
+      {% else %}<div class="row muted">None reported</div>{% endfor %}
+      {% if rows | length > 10 %}
+      <details class="row-more"><summary>{{ rows | length - 10 }} more groups</summary>
+        {% for o in rows[10:] %}<div class="row">{% if o.id %}<a href="https://www.fec.gov/data/committee/{{ o.id }}/">{{ o.name }}</a>{% else %}<span>{{ o.name }}</span>{% endif %}<strong>{{ o.total | money }}</strong></div>{% endfor %}
+      </details>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="muted">No outside spending reported for or against this candidate.</p>
+  {% endif %}
+</section>
+
+<section id="checks" aria-labelledby="h-checks" class="block">
+  <h2 id="h-checks">Fact checks</h2>
+  <p class="sub">Published fact checks of claims made by {{ c.name }} or about them. Ratings are in the fact-checker's own words; Ballot Facts doesn't rate claims.</p>
+  {% for k in checks %}
+  <article class="check">
+    <div>
+      <p class="claim">“{{ k.claim }}”</p>
+      <p class="muted">{% if k.claimant %}{{ k.claimant }}{% if k.said %}, {{ k.said | date }}{% endif %} · {% endif %}checked by {{ k.by }}{% if k.date %}, {{ k.date | date }}{% endif %}{% if k.url %} · <a href="{{ k.url }}">Read the fact check</a>{% endif %}</p>
+    </div>
+    {% if k.rating %}<span class="rating">{{ k.rating }}</span>{% endif %}
+  </article>
+  {% else %}
+  <p class="muted">No published fact checks found for {{ c.name }}. Most down-ballot candidates are never fact-checked.</p>
+  {% endfor %}
+  <p class="source">Source: Google Fact Check Tools (ClaimReview data from PolitiFact, FactCheck.org, AP, Reuters, local newsrooms and others).</p>
+</section>
+
+<section class="block">
+  <h2>Where they stand</h2>
+  <p class="muted">Candidate positions are coming soon from Vote Smart. Until then, check the candidate's own campaign site.</p>
+</section>
+{% endblock %}

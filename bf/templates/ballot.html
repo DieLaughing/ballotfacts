@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% set active = 'home' %}
+{% block title %}Your ballot · Ballot Facts{% endblock %}
+{% block main %}
+<div class="page-head">
+  <p class="eyebrow">General election · Nov 3</p>
+  <h1>Your ballot</h1>
+  <p class="sub">{{ place.matched }} · {{ place.county }} · Congressional {{ place.district_label }}{% if place.state_upper %} · {{ place.state_upper }}{% endif %}{% if place.state_lower %} · {{ place.state_lower }}{% endif %} · <a href="/">Change address</a></p>
+</div>
+
+{% set sample = info.sample_ballot if info else None %}
+<section class="callout" aria-labelledby="full">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6"/><path d="M10 17h6"/></svg>
+  <div>
+    <h2 id="full">Your full ballot has more on it</h2>
+    <p>State, county, city, school board and ballot measures aren't listed here yet. Your election office's sample ballot shows every one.</p>
+  </div>
+  {% if sample %}<a class="btn" href="{{ sample }}">See your official sample ballot</a>{% endif %}
+</section>
+
+<h2 class="section">Federal races</h2>
+{% for race in races %}{% include "_race.html" %}{% else %}
+<p class="muted">We couldn't load federal races right now. Try again in a minute.</p>
+{% endfor %}
+
+{% if info and (info.polling or info.early or info.dropoff) %}
+<h2 class="section">Where to vote</h2>
+<div class="sites">
+  {% for title, rows, note in [("Early voting", info.early, "Vote in person before Election Day."), ("On Election Day", info.polling, "Your assigned polling place may differ; check with your election office."), ("Ballot drop boxes", info.dropoff, "For mail ballots.")] %}
+  {% if rows %}
+  <section class="site-box" aria-label="{{ title }}">
+    <h3>{{ title }}</h3>
+    <p class="muted">{{ note }}</p>
+    <ul>
+      {% for s in rows %}
+      <li><strong>{{ s.name }}</strong><br><span>{{ s.address }}</span>{% if s.miles is not none %} <span class="muted">· {{ "%.1f" | format(s.miles) }} mi</span>{% endif %}
+        {% if s.dates %}<br><span class="muted">{{ s.dates }}</span>{% endif %}{% if s.hours %}<br><span class="muted hours">{{ s.hours }}</span>{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% endfor %}
+</div>
+<p class="source">Source: Voting Information Project via Google. Locations and hours can change; confirm with your election office.</p>
+{% endif %}
+
+{% if info and info.offices %}
+<h2 class="section">Official links</h2>
+<div class="sites">
+  {% for o in info.offices %}
+  <section class="site-box" aria-label="{{ o.name }}">
+    <h3>{{ o.name }}</h3>
+    <ul class="links">{% for url, label in o.links %}<li><a href="{{ url }}">{{ label }}</a></li>{% endfor %}</ul>
+  </section>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if legislators %}
+<h2 class="section">Who represents you in the state legislature now</h2>
+<div class="table-box">
+  <table>
+    <thead><tr><th scope="col">Name</th><th scope="col">Seat</th><th scope="col">Party</th></tr></thead>
+    <tbody>{% for p in legislators %}<tr><th scope="row"><a href="{{ p.url }}">{{ p.name }}</a></th><td>{{ p.chamber }}, District {{ p.district }}</td><td>{{ p.party }}</td></tr>{% endfor %}</tbody>
+  </table>
+</div>
+<p class="source">Current officeholders, not this year's candidates. Source: Open States.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set active = 'about' %}
+{% block title %}About & sources · Ballot Facts{% endblock %}
+{% block main %}
+<div class="page-head">
+  <h1>About Ballot Facts</h1>
+  <p class="lede">A free, nonpartisan look at what's on your ballot: who's running, who's paying for them, and what's been fact-checked. Built for voters, not campaigns.</p>
+</div>
+
+<section class="block prose" aria-labelledby="privacy">
+  <h2 id="privacy">What we collect: nothing</h2>
+  <ul>
+    <li><strong>Your address</strong> is sent to the US Census Bureau (to find your districts) and Google's Civic Information API (to find polling places), once, when you press the button. We don't store it, log it, or put it in the page address.</li>
+    <li><strong>No cookies, no accounts, no analytics, no ads.</strong> The site loads nothing from any other company: no fonts, scripts or trackers.</li>
+    <li><strong>No JavaScript.</strong> Every page is plain HTML and CSS.</li>
+  </ul>
+</section>
+
+<section class="block prose" aria-labelledby="verify">
+  <h2 id="verify">Don't take our word for it</h2>
+  <ul>
+    <li>All of the code is public at <a href="{{ config.REPO }}">{{ config.REPO | replace("https://", "") }}</a>, under the AGPL licence.</li>
+    <li>The footer of every page shows the exact version of the code this site is running. Click it to see that version.</li>
+    <li>Your browser enforces our rule against outside content: every page sends a <code>Content-Security-Policy</code> header that blocks scripts and loading anything from other sites. You can see it in your browser's developer tools under Network.</li>
+  </ul>
+</section>
+
+<section class="block prose" aria-labelledby="money">
+  <h2 id="money">Who pays for this</h2>
+  <p>One person, out of pocket. It runs on a small rented server alongside a few hobby projects. Ballot Facts takes no donations, no sponsorships, no advertising and no money from any campaign, party, PAC or advocacy group. If that ever changes, every dollar will be listed on this page.</p>
+</section>
+
+<section class="block prose" aria-labelledby="sources">
+  <h2 id="sources">Where the data comes from</h2>
+  <ul>
+    <li><strong>Districts:</strong> US Census Bureau geocoder, using the 2026 district maps.</li>
+    <li><strong>Federal candidates and money:</strong> Federal Election Commission (OpenFEC API). Updated about daily.</li>
+    <li><strong>Polling places and official links:</strong> the Voting Information Project, through Google's Civic Information API.</li>
+    <li><strong>Fact checks:</strong> Google Fact Check Tools, which collects ClaimReview data published by fact-checkers.</li>
+    <li><strong>State legislators:</strong> Open States.</li>
+  </ul>
+  <p>We don't call races, endorse candidates, or rate claims. Where a source has gaps, we say so.</p>
+</section>
+
+<section class="block prose" aria-labelledby="fix">
+  <h2 id="fix">Something wrong?</h2>
+  <p>Open an issue on <a href="{{ config.REPO }}/issues">GitHub</a>. Corrections are public too.</p>
+</section>
+{% endblock %}

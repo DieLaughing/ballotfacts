@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ race.title }} · Ballot Facts{% endblock %}
+{% block main %}
+<div class="page-head">
+  <p class="eyebrow">General election · Nov 3</p>
+  <h1>{{ race.title }}</h1>
+  <p class="sub">Not sure this is your district? <a href="/">Look up your address</a>.</p>
+</div>
+{% include "_race.html" %}
+{% endblock %}
