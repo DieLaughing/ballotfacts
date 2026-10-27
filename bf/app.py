@@ -133,7 +133,10 @@ async def ballot(request: Request, address: str = Form("")):
         _safe(civic.lookup(http, address, place.lat, place.lng), None),
         _safe(openstates.legislators(http, cache, place_key, place.lat, place.lng), []),
     )
-    resp = await _ballot(request, place, info, legislators, official_lookup=statedata.ma_lookup(place))
+    typed_zip = re.search(r"\b(\d{5})(?:-\d{4})?\s*$", address)
+    zip_mismatch = bool(typed_zip and place.zip and typed_zip.group(1) != place.zip)
+    resp = await _ballot(request, place, info, legislators, official_lookup=statedata.ma_lookup(place),
+                         zip_mismatch=zip_mismatch)
     # Built from someone's address: keep it only in their own browser (so Back works), never in shared caches.
     resp.headers["Cache-Control"] = "private, max-age=0"
     return resp
@@ -156,7 +159,7 @@ async def district_ballot(request: Request, state: str, district: str):
 
 
 async def _ballot(request: Request, place: census.Place, info, legislators, by_link: bool = False,
-                  official_lookup: dict | None = None) -> HTMLResponse:
+                  official_lookup: dict | None = None, zip_mismatch: bool = False) -> HTMLResponse:
     http, cache = request.app.state.http, request.app.state.cache
     house, senate = await asyncio.gather(
         _safe(fec.race(http, cache, "house", place.state, place.district), []),
@@ -176,7 +179,7 @@ async def _ballot(request: Request, place: census.Place, info, legislators, by_l
     qmoney, qfetched = ocpf.questions(statedata.load("MA") or {}) if place.state == "MA" else ({}, "")
     return page(request, "ballot.html", place=place, info=info, races=races, legislators=legislators,
                 state_races=state_races, state_source=state_source, by_link=by_link, back=place.key,
-                qmoney=qmoney, qfetched=qfetched, official_lookup=official_lookup)
+                qmoney=qmoney, qfetched=qfetched, official_lookup=official_lookup, zip_mismatch=zip_mismatch)
 
 
 def back_link(request: Request) -> str:

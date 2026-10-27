@@ -15,6 +15,9 @@
   <p class="sub">{{ place.matched }}{% if place.precinct_name %} · {{ place.precinct_name }}{% endif %}{% if place.county %} · {{ place.county }}{% endif %} · Congressional {{ place.district_label }}{% if place.state_upper %} · {{ place.state_upper }}{% endif %}{% if place.state_lower %} · {{ place.state_lower }}{% endif %} · <a href="/">Change address</a></p>
 </div>
 
+{% if zip_mismatch %}
+<p class="error">We matched your address to <strong>{{ place.matched }}</strong>, which has a different ZIP code than the one you typed. If that's not your home, <a href="/">try again</a> with your town name; everything below is for the address shown.</p>
+{% endif %}
 <nav aria-label="On this page" class="jumps">
   <a href="#federal">Federal races</a>
   {% if state_races %}<a href="#state">State &amp; county</a>{% endif %}
