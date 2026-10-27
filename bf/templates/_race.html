@@ -7,21 +7,43 @@
   {% if race.running %}
   <ul class="swipe" aria-label="Candidates{% if race.running | length > 1 %}, swipe for more{% endif %}">
     {% for c in race.running %}
-    <li><a class="ccard" href="/candidate/{{ c.id }}{{ back | backq }}">
-      <span class="ccard-who">
-        <strong>{{ c.name }}</strong>
-        <span class="muted">{{ c.party }}{% if c.incumbent %} · <span class="tag">Incumbent</span>{% endif %}</span>
-      </span>
-      <span class="ccard-big"><span class="muted">Campaign raised</span><strong>{{ c.raised | money }}</strong></span>
-      <span class="ccard-bars">
-        <span class="mini"><span>Outside $ for</span><strong>{{ c.support | money }}</strong></span>
-        <progress max="{{ race.outside_max }}" value="{{ c.support }}" aria-hidden="true"></progress>
-        <span class="mini"><span>Outside $ against</span><strong>{{ c.oppose | money }}</strong></span>
-        <progress class="against" max="{{ race.outside_max }}" value="{{ c.oppose }}" aria-hidden="true"></progress>
-      </span>
-      <span class="ccard-go">Money, donors &amp; fact checks
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
-    </a></li>
+    <li><div class="ccard fed">
+      <div class="chead">
+        <span class="mono" aria-hidden="true">{{ c.name | initials }}</span>
+        <div class="cwho">
+          <a class="cname" href="/candidate/{{ c.id }}{{ back | backq }}">{{ c.name }}</a>
+          <div class="ctags"><span class="pill">{{ c.party }}</span>{% if c.incumbent %}<span class="pill">Incumbent</span>{% endif %}</div>
+        </div>
+      </div>
+      <div class="cmoney">
+        <div><span class="k">Campaign raised</span><strong class="v">{{ c.raised | money }}</strong></div>
+        <div><span class="k">Cash on hand</span><strong class="v2">{{ c.cash | money }}</strong></div>
+      </div>
+      <div class="cout">
+        <span class="k">Outside groups</span>
+        {% if c.support or c.oppose %}
+        <svg class="split" width="100%" height="10" role="img" aria-label="{{ c.support | money }} for, {{ c.oppose | money }} against">
+          <rect width="100%" height="10" rx="5" class="split-bg"></rect>
+          <rect width="{{ (100 * c.support / race.outside_total_max) | round(1) }}%" height="10" class="split-for"></rect>
+          <rect x="{{ (100 * c.support / race.outside_total_max) | round(1) }}%" width="{{ (100 * c.oppose / race.outside_total_max) | round(1) }}%" height="10" class="split-against"></rect>
+        </svg>
+        <p class="ot"><span class="key key-for" aria-hidden="true"></span><strong>{{ c.support | money }}</strong> for <span class="key key-against" aria-hidden="true"></span><strong>{{ c.oppose | money }}</strong> against</p>
+        {% else %}
+        <p class="ot muted">None reported</p>
+        {% endif %}
+      </div>
+      <details class="cmore">
+        <summary>{% if c.groups %}Who's spending{% else %}More{% endif %}</summary>
+        {% if c.groups %}
+        <ul class="glist">
+          {% for g in c.groups[:5] %}<li>{% if g.id %}<a href="/group/{{ g.id }}{{ back | backq }}">{{ g.name }}</a>{% else %}<span>{{ g.name }}</span>{% endif %}<span class="muted">{{ "for" if g.side == "S" else "against" }}</span><strong>{{ g.total | money }}</strong></li>{% endfor %}
+        </ul>
+        {% if c.groups | length > 5 %}<p class="muted small">and {{ c.groups | length - 5 }} more on the full page</p>{% endif %}
+        {% endif %}
+        <a class="fullpage" href="/candidate/{{ c.id }}{{ back | backq }}">Donors, employers &amp; fact checks
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </details>
+    </div></li>
     {% endfor %}
   </ul>
   {% else %}

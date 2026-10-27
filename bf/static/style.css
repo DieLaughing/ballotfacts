@@ -292,3 +292,37 @@ a[target="_blank"]:not(.btn):not(.ccard-go)::after { content: "\2009↗" / ""; f
 .also { padding: 0 20px 14px; font-size: 15px; }
 .also p { margin: 0 0 6px; }
 .also .muted { font-size: 13px; }
+
+/* Federal candidate cards, v2: the name leads; money in one line; outside groups as one split bar */
+.ccard.fed { gap: 14px; }
+.chead { display: flex; align-items: center; gap: 12px; }
+.mono { flex: 0 0 auto; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--soft); border: 1px solid var(--line); font-weight: 800; font-size: 15px; letter-spacing: 0.02em; color: var(--ink); }
+.cwho { min-width: 0; }
+.cname { display: block; font-size: 20px; font-weight: 800; line-height: 1.2; color: var(--ink); text-decoration: none; }
+.cname:hover { color: var(--accent); text-decoration: underline; }
+.ctags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.pill { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--ink-2); }
+.cmoney { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.cmoney > div:last-child { text-align: right; }
+.k { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.v { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.v2 { font-size: 18px; font-weight: 700; }
+.cout .k { margin-bottom: 8px; }
+.split { display: block; }
+.split-bg { fill: var(--bar-bg); }
+.split-for { fill: var(--bar); }
+.split-against { fill: var(--muted); }
+.ot { margin: 8px 0 0; font-size: 14px; color: var(--ink-2); display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; }
+.key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+.key-for { background: var(--bar); }
+.key-against { background: var(--muted); margin-left: 8px; }
+.cmore { margin-top: auto; border-top: 1px solid var(--line); }
+.cmore summary { display: flex; align-items: center; justify-content: space-between; min-height: 48px; cursor: pointer; list-style: none; font-weight: 700; font-size: 15px; color: var(--accent); }
+.cmore summary::-webkit-details-marker { display: none; }
+.cmore summary::after { content: "+"; font-size: 20px; font-weight: 400; }
+.cmore[open] summary::after { content: "−"; }
+.glist { list-style: none; margin: 0 0 8px; padding: 0; font-size: 14px; }
+.glist li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); }
+.glist a, .glist span:first-child { overflow-wrap: anywhere; }
+.fullpage { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 700; font-size: 14px; text-decoration: none; }
+.callout h3 { margin: 0; font-size: 17px; }

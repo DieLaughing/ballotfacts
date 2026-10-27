@@ -17,11 +17,12 @@ from . import config
 URL = "https://www.googleapis.com/civicinfo/v2/voterinfo"
 
 SAMPLE_BALLOT = "See your official sample ballot"
+FINDER = "Official polling place finder"
 # Google's field → what we call the link, in the order voters usually need them.
 LINKS = [
     ("electionRegistrationConfirmationUrl", "Check your registration"),
     ("ballotInfoUrl", SAMPLE_BALLOT),
-    ("votingLocationFinderUrl", "Official polling place finder"),
+    ("votingLocationFinderUrl", FINDER),
     ("absenteeVotingInfoUrl", "Mail and absentee voting"),
     ("electionRegistrationUrl", "Register to vote"),
     ("electionInfoUrl", "Election information"),
@@ -50,6 +51,14 @@ class VoterInfo:
     early: list[Site] = field(default_factory=list)
     dropoff: list[Site] = field(default_factory=list)
     offices: list[Office] = field(default_factory=list)
+
+    @property
+    def finder(self) -> str | None:
+        for office in reversed(self.offices):
+            for url, label in office.links:
+                if label == FINDER:
+                    return url
+        return None
 
     @property
     def sample_ballot(self) -> str | None:

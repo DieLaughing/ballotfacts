@@ -122,7 +122,8 @@ async def race(client: httpx.AsyncClient, cache: Cache, office: str, state: str,
     except httpx.HTTPError as e:
         log.warning("outside spending unavailable: %s", type(e).__name__)  # str(e) would include the API key
         spend = {}
-    out = [dict(c, support=spend.get(c["id"], {}).get("S", 0), oppose=spend.get(c["id"], {}).get("O", 0)) for c in cands]
+    out = [dict(c, support=spend.get(c["id"], {}).get("S", 0), oppose=spend.get(c["id"], {}).get("O", 0),
+                groups=spend.get(c["id"], {}).get("groups", [])) for c in cands]
     out.sort(key=lambda c: (not c["running"], -c["raised"]))
     return out
 
@@ -131,10 +132,16 @@ async def _outside_by_candidate(client: httpx.AsyncClient, office: str, state: s
     q = {"cycle": config.CYCLE, "office": office, "state": state, "per_page": 100}
     if office == "house":
         q["district"] = district
-    totals: dict[str, dict[str, float]] = {}
+    totals: dict[str, dict] = {}
     for r in (await _get(client, "schedules/schedule_e/by_candidate/", timeout=8, **q))["results"]:
-        side = totals.setdefault(r["candidate_id"], {"S": 0, "O": 0})
-        side[r["support_oppose_indicator"]] = side.get(r["support_oppose_indicator"], 0) + (r["total"] or 0)
+        if not r.get("total"):
+            continue
+        side = totals.setdefault(r["candidate_id"], {"S": 0, "O": 0, "groups": []})
+        side[r["support_oppose_indicator"]] = side.get(r["support_oppose_indicator"], 0) + r["total"]
+        side["groups"].append({"name": tidy(r.get("committee_name") or "Unregistered group or person"),
+                               "id": r.get("committee_id") or "", "side": r["support_oppose_indicator"], "total": r["total"]})
+    for side in totals.values():
+        side["groups"].sort(key=lambda g: -g["total"])
     return totals
 
 
@@ -230,21 +237,24 @@ async def candidate(client: httpx.AsyncClient, cache: Cache, cid: str) -> dict |
         if not found:
             return None
         c = found[0]
-        totals = (await _get(client, f"candidate/{cid}/totals/", cycle=config.CYCLE, election_full="true"))["results"]
+        totals, outside, committees = await asyncio.gather(
+            _get(client, f"candidate/{cid}/totals/", cycle=config.CYCLE, election_full="true"),
+            _get(client, "schedules/schedule_e/by_candidate/", candidate_id=cid, cycle=config.CYCLE, per_page=100, sort="-total"),
+            _get(client, f"candidate/{cid}/committees/", designation="P", cycle=config.CYCLE),
+        )
+        totals, outside, committees = totals["results"], outside["results"], committees["results"]
         t = totals[0] if totals else {}
-        outside = (await _get(client, "schedules/schedule_e/by_candidate/", candidate_id=cid, cycle=config.CYCLE,
-                              per_page=100, sort="-total"))["results"]
-        committees = (await _get(client, f"candidate/{cid}/committees/", designation="P", cycle=config.CYCLE))["results"]
         pcc = committees[0]["committee_id"] if committees else None
         employers, home_share = [], None
         if pcc:
-            by_state = (await _get(client, "schedules/schedule_a/by_state/", committee_id=pcc, cycle=config.CYCLE,
-                                   per_page=100))["results"]
+            by_state, rows = await asyncio.gather(
+                _get(client, "schedules/schedule_a/by_state/", committee_id=pcc, cycle=config.CYCLE, per_page=100),
+                _get(client, "schedules/schedule_a/by_employer/", committee_id=pcc, cycle=config.CYCLE, sort="-total", per_page=40),
+            )
+            by_state, rows = by_state["results"], rows["results"]
             itemized = sum(r["total"] or 0 for r in by_state)
             if itemized:
                 home_share = round(100 * sum(r["total"] or 0 for r in by_state if r["state"] == c.get("state")) / itemized)
-            rows = (await _get(client, "schedules/schedule_a/by_employer/", committee_id=pcc, cycle=config.CYCLE,
-                               sort="-total", per_page=40))["results"]
             employers = [{"name": tidy(r["employer"]), "total": r["total"]}
                          for r in rows if (r.get("employer") or "").upper().strip(" .") not in NOT_EMPLOYERS][:10]
         groups = await _groups(client, [r["committee_id"] for r in outside if r.get("committee_id")])

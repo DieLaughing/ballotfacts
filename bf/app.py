@@ -72,7 +72,13 @@ def from_query(back: str | None) -> str:
     return "?" + urlencode({"from": back}) if back else ""
 
 
+def initials(name: str) -> str:
+    words = [w for w in name.replace(".", "").split() if w not in ("Jr", "Sr", "II", "III", "IV") and len(w) > 1]
+    return (words[0][0] + words[-1][0]).upper() if len(words) > 1 else name[:1].upper()
+
+
 templates.env.filters["money"] = money
+templates.env.filters["initials"] = initials
 templates.env.filters["backq"] = from_query
 templates.env.filters["date"] = nice_date
 templates.env.globals.update(config=config, states=BY_CODE)
@@ -181,7 +187,7 @@ def _race(office: str, state: str, district: str, cands: list[dict]) -> dict | N
     running = [c for c in cands if c["running"]]
     return {"title": title, "path": path, "running": running, "others": [c for c in cands if not c["running"]],
             # one scale for every bar in the race, so cards compare at a glance
-            "outside_max": max([c["support"] for c in running] + [c["oppose"] for c in running] + [1])}
+            "outside_total_max": max([c["support"] + c["oppose"] for c in running] + [1])}
 
 
 @app.get("/race/{state}/senate", response_class=HTMLResponse)
