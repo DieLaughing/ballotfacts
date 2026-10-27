@@ -26,6 +26,10 @@ LEGISLATIVE = {"State Senate": "state_upper", "State Representative": "state_low
 ORDINALS = {"first": "1st", "second": "2nd", "third": "3rd", "fourth": "4th", "fifth": "5th"}
 
 
+def slug(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", name.lower().replace(" (write-in)", "")).strip("-")
+
+
 def norm(district: str) -> str:
     """'First Plymouth & Norfolk' and 'Plymouth and Norfolk District' style names → one comparable form."""
     d = district.lower().replace("&", "and").removesuffix(" district")
@@ -91,7 +95,7 @@ def races(place: Place) -> tuple[list[dict], dict | None]:
 
     out = []
     for (office, district), primaries in seats.items():
-        nominees = [dict(x, party=p["party"], unopposed=len(p["candidates"]) == 1, contest=p["id"])
+        nominees = [dict(x, party=p["party"], unopposed=len(p["candidates"]) == 1, contest=p["id"], slug=slug(x["name"]))
                     for p in primaries for x in p["candidates"] if x["won"]]
         if not nominees:
             continue
@@ -106,3 +110,22 @@ def races(place: Place) -> tuple[list[dict], dict | None]:
     out = _merge_split_towns(out)
     return out, {"source": data["source"], "fetched": data["fetched"], "about": data["about"],
                  "questions": data.get("questions", []), "questions_source": data.get("questions_source", "")}
+
+
+def candidate(state: str, contest_id: int, who: str) -> dict | None:
+    """One nominee's page: their primary, the other nominees for the same seat, and the towns it covers."""
+    data = load(state)
+    if not data:
+        return None
+    contest = next((c for c in data["contests"] if c["id"] == contest_id), None)
+    if not contest:
+        return None
+    me = next((x for x in contest["candidates"] if slug(x["name"]) == who), None)
+    if not me:
+        return None
+    rivals = [dict(x, party=c["party"], contest=c["id"], slug=slug(x["name"]), unopposed=len(c["candidates"]) == 1)
+              for c in data["contests"]
+              if c["office"] == contest["office"] and c["district"] == contest["district"] and c["id"] != contest_id
+              for x in c["candidates"] if x["won"]]
+    return {"state": state, "contest": contest, "me": me, "rivals": rivals,
+            "source": data["source"], "fetched": data["fetched"]}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ g.name | title }} · Ballot Facts{% endblock %}
+{% block main %}
+<p class="eyebrow">Outside money · FEC committee {{ g.id }}</p>
+<div class="page-head">
+  <h1>{{ g.name }}</h1>
+  <p class="lede">{{ g.about.kind }}</p>
+  <p class="sub">{% if g.about.party %}{{ g.about.party }} · {% endif %}{% if g.about.since %}Registered {{ g.about.since }}{% endif %}{% if g.about.state %} · {{ g.about.state }}{% endif %}{% if g.treasurer %} · Treasurer: {{ g.treasurer }}{% endif %}{% if g.about.linked %} · Linked committee: {{ g.about.linked }}{% endif %}{% if g.website %} · <a href="https://{{ g.website | replace("https://", "") | replace("http://", "") }}" target="_blank" rel="noopener nofollow">Their website</a>{% endif %} · <a href="https://www.fec.gov/data/committee/{{ g.id }}/" target="_blank" rel="noopener">FEC record</a></p>
+</div>
+
+<section class="block" aria-labelledby="h-totals">
+  <h2 id="h-totals">This cycle (2025–26)</h2>
+  <div class="tiles swipe-sm">
+    <div class="tile"><span>Raised</span><strong>{{ g.raised | money }}</strong></div>
+    <div class="tile"><span>Spent</span><strong>{{ g.spent | money }}</strong></div>
+    <div class="tile"><span>Spent for or against candidates</span><strong>{{ g.independent | money }}</strong></div>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="h-funds">
+  <h2 id="h-funds">Who funds it</h2>
+  <p class="sub">The biggest contributors among its 100 largest contributions this cycle, as reported to the FEC. Linked names are other FEC committees; open them to see who funds those. Nonprofits that aren't FEC committees don't have to disclose their donors.</p>
+  <div class="list-box">
+    {% for d in g.donors %}<div class="row"><span>{% if d.group %}<a href="/group/{{ d.group }}">{{ d.name }}</a>{% else %}{{ d.name }}{% endif %}<span class="muted small">{% if d.where %} · {{ d.where }}{% endif %}{% if d.employer %} · {{ d.employer }}{% endif %}{% if d.gifts > 1 %} · {{ d.gifts }} contributions{% endif %}{% if d.conduit %} · a payment platform passing along many people's donations{% endif %}</span></span><strong>{{ d.amount | money }}</strong></div>
+    {% else %}<div class="row muted">No contributions reported this cycle</div>{% endfor %}
+  </div>
+</section>
+
+<section class="block" aria-labelledby="h-spends">
+  <h2 id="h-spends">Where it spends</h2>
+  <p class="sub">Its largest independent spending for or against federal candidates this cycle, added up by candidate.</p>
+  {% if g.spends %}
+  <div class="list-box">
+    {% for x in g.spends %}<div class="row"><span><a href="/candidate/{{ x.cid }}">{{ x.name }}</a> <span class="muted small">· {{ "for" if x.side == "S" else "against" }} · {{ x.office }}{% if x.state %}, {{ x.state }}{% endif %}{% if x.district and x.district != "00" %}-{{ x.district }}{% endif %}</span></span><strong>{{ x.total | money }}</strong></div>{% endfor %}
+  </div>
+  {% else %}<p class="muted">No independent spending on candidates reported this cycle.</p>{% endif %}
+  <p class="source">Source: FEC. Totals update about daily.</p>
+</section>
+{% endblock %}

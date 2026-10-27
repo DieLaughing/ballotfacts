@@ -1,0 +1,13 @@
+{% if o.about %}
+<details class="grow">
+  <summary><span class="gname">{{ o.name }}</span><strong>{{ o.total | money }}</strong></summary>
+  <div class="gbody">
+    <p>{{ o.about.kind }}</p>
+    <p class="muted">{% if o.about.party %}{{ o.about.party }} · {% endif %}{% if o.about.since %}registered with the FEC in {{ o.about.since }}{% endif %}{% if o.about.state %} · based in {{ o.about.state }}{% endif %}{% if o.about.linked %} · linked committee: {{ o.about.linked }}{% endif %}</p>
+    <a class="glink" href="/group/{{ o.id }}">Who funds it, and where else it spends
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
+  </div>
+</details>
+{% else %}
+<div class="row"><span>{{ o.name }}</span><strong>{{ o.total | money }}</strong></div>
+{% endif %}

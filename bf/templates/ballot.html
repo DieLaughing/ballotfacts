@@ -28,7 +28,7 @@
     <p>State, county, city, school board and ballot measures aren't listed here yet for {{ place.state_name }}. Your election office's sample ballot shows every one.</p>
     {% endif %}
   </div>
-  {% if sample %}<a class="btn" href="{{ sample }}">See your official sample ballot</a>{% endif %}
+  {% if sample %}<a class="btn" href="{{ sample }}" target="_blank" rel="noopener">See your official sample ballot</a>{% endif %}
 </section>
 
 <h2 class="section" id="federal">Federal races</h2>
@@ -46,19 +46,19 @@
   </div>
   <ul class="swipe" aria-label="Nominees{% if r.nominees | length > 1 %}, swipe for more{% endif %}">
     {% for n in r.nominees %}
-    <li><div class="ccard compact">
+    <li><a class="ccard compact" href="/{{ place.state | lower }}/c/{{ n.contest }}/{{ n.slug }}">
       <span class="ccard-who"><strong>{{ n.name | replace(" (Write-In)", "") }}</strong><span class="muted">{{ n.party }}{% if n.district %} · {{ n.district }} district{% endif %}{% if "(Write-In)" in n.name %} · won as a write-in{% endif %}</span></span>
       <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if n.unopposed %}Unopposed{% else %}Won, {{ n.pct }}%{% endif %}</strong></span>
-      <a class="ccard-go" href="https://electionstats.state.ma.us/elections/view/{{ n.contest }}/">Primary results
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
-    </div></li>
+      <span class="ccard-go">Primary results &amp; fact checks
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+    </a></li>
     {% endfor %}
   </ul>
   {% if r.split %}<p class="source">{{ place.town | replace(" town", "") | replace(" city", "") }} is split between {{ r.split | length }} districts for this office ({{ r.split | join(", ") }}), and we can't tell which is yours from your address yet. Your sample ballot shows the right one.</p>
   {% elif r.nominees | length == 1 %}<p class="source">Only one party nominated a candidate. Independents may also be on the ballot.</p>{% endif %}
 </section>
 {% endfor %}
-<p class="source">Party nominees from the official Sept 1 primary results ({{ state_source.about }}). Source: <a href="{{ state_source.source }}">Massachusetts ElectionStats</a>, checked {{ state_source.fetched[:10] | date }}.</p>
+<p class="source">Party nominees from the official Sept 1 primary results ({{ state_source.about }}). Source: <a href="{{ state_source.source }}" target="_blank" rel="noopener">Massachusetts ElectionStats</a>, checked {{ state_source.fetched[:10] | date }}.</p>
 {% endif %}
 
 {% if state_source and state_source.questions %}
@@ -75,7 +75,7 @@
   </details>
   {% endfor %}
 </div>
-<p class="source">Source: <a href="{{ state_source.questions_source }}">Information for Voters booklet</a>, which also has the full text, fiscal impact and arguments for and against.</p>
+<p class="source">Source: <a href="{{ state_source.questions_source }}" target="_blank" rel="noopener">Information for Voters booklet</a>, which also has the full text, fiscal impact and arguments for and against.</p>
 {% endif %}
 
 {% if info and (info.polling or info.early or info.dropoff) %}
@@ -105,7 +105,7 @@
   {% for o in info.offices %}
   <section class="site-box" aria-label="{{ o.name }}">
     <h3>{{ o.name }}</h3>
-    <ul class="links">{% for url, label in o.links %}<li><a href="{{ url }}">{{ label }}</a></li>{% endfor %}</ul>
+    <ul class="links">{% for url, label in o.links %}<li><a href="{{ url }}" target="_blank" rel="noopener">{{ label }}</a></li>{% endfor %}</ul>
   </section>
   {% endfor %}
 </div>
@@ -116,7 +116,7 @@
 <div class="table-box">
   <table>
     <thead><tr><th scope="col">Name</th><th scope="col">Seat</th><th scope="col">Party</th></tr></thead>
-    <tbody>{% for p in legislators %}<tr><th scope="row"><a href="{{ p.url }}">{{ p.name }}</a></th><td>{{ p.chamber }}, District {{ p.district }}</td><td>{{ p.party }}</td></tr>{% endfor %}</tbody>
+    <tbody>{% for p in legislators %}<tr><th scope="row"><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a></th><td>{{ p.chamber }}, District {{ p.district }}</td><td>{{ p.party }}</td></tr>{% endfor %}</tbody>
   </table>
 </div>
 <p class="source">Current officeholders, not this year's candidates. Source: Open States.</p>

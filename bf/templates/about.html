@@ -19,7 +19,7 @@
 <section class="block prose" aria-labelledby="verify">
   <h2 id="verify">Don't take our word for it</h2>
   <ul>
-    <li>All of the code is public at <a href="{{ config.REPO }}">{{ config.REPO | replace("https://", "") }}</a>, under the AGPL licence.</li>
+    <li>All of the code is public at <a href="{{ config.REPO }}" target="_blank" rel="noopener">{{ config.REPO | replace("https://", "") }}</a>, under the AGPL licence.</li>
     <li>The footer of every page shows the exact version of the code this site is running. Click it to see that version.</li>
     <li>Your browser enforces our rule against outside content: every page sends a <code>Content-Security-Policy</code> header that blocks scripts and loading anything from other sites. You can see it in your browser's developer tools under Network.</li>
   </ul>
@@ -38,13 +38,13 @@
     <li><strong>Polling places and official links:</strong> the Voting Information Project, through Google's Civic Information API.</li>
     <li><strong>Fact checks:</strong> Google Fact Check Tools, which collects ClaimReview data published by fact-checkers.</li>
     <li><strong>State legislators:</strong> Open States.</li>
-    <li><strong>Massachusetts state and county races:</strong> official 2026 primary results from the Secretary of the Commonwealth's <a href="https://electionstats.state.ma.us/">ElectionStats</a>; ballot questions from the state's Information for Voters booklet. The script that collects them is in the repo, so anyone can rerun it and compare.</li>
+    <li><strong>Massachusetts state and county races:</strong> official 2026 primary results from the Secretary of the Commonwealth's <a href="https://electionstats.state.ma.us/" target="_blank" rel="noopener">ElectionStats</a>; ballot questions from the state's Information for Voters booklet. The script that collects them is in the repo, so anyone can rerun it and compare.</li>
   </ul>
   <p>We don't call races, endorse candidates, or rate claims. Where a source has gaps, we say so.</p>
 </section>
 
 <section class="block prose" aria-labelledby="fix">
   <h2 id="fix">Something wrong?</h2>
-  <p>Open an issue on <a href="{{ config.REPO }}/issues">GitHub</a>. Corrections are public too.</p>
+  <p>Open an issue on <a href="{{ config.REPO }}/issues" target="_blank" rel="noopener">GitHub</a>. Corrections are public too.</p>
 </section>
 {% endblock %}

@@ -1,0 +1,16 @@
+<section id="checks" aria-labelledby="h-checks" class="block">
+  <h2 id="h-checks">Fact checks</h2>
+  <p class="sub">Published fact checks of claims made by {{ who }} or about them. Ratings are in the fact-checker's own words; Ballot Facts doesn't rate claims.</p>
+  {% for k in checks %}
+  <article class="check">
+    <div>
+      <p class="claim">“{{ k.claim }}”</p>
+      <p class="muted">{% if k.claimant %}{{ k.claimant }}{% if k.said %}, {{ k.said | date }}{% endif %} · {% endif %}checked by {{ k.by }}{% if k.date %}, {{ k.date | date }}{% endif %}{% if k.url %} · <a href="{{ k.url }}" target="_blank" rel="noopener">Read the fact check</a>{% endif %}</p>
+    </div>
+    {% if k.rating %}<span class="rating">{{ k.rating }}</span>{% endif %}
+  </article>
+  {% else %}
+  <p class="muted">No published fact checks found for {{ who }}. Most down-ballot candidates are never fact-checked.</p>
+  {% endfor %}
+  <p class="source">Source: Google Fact Check Tools (ClaimReview data from PolitiFact, FactCheck.org, AP, Reuters, local newsrooms and others).</p>
+</section>

@@ -256,3 +256,16 @@ a.ccard-go { text-decoration: none; min-height: 44px; }
   .jumps::-webkit-scrollbar { display: none; }
   .jumps a { flex: 0 0 auto; }
 }
+a[target="_blank"]:not(.btn):not(.ccard-go)::after { content: "\2009↗" / ""; font-size: 0.85em; }
+.towns { color: var(--ink-2); line-height: 1.8; max-width: 860px; }
+.grow { border-top: 1px solid var(--line); }
+.list-head + .grow, .list-box > .grow:first-child { border-top: 0; }
+.grow summary { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 48px; padding: 10px 20px; cursor: pointer; list-style: none; font-size: 15px; }
+.grow summary::-webkit-details-marker { display: none; }
+.gname { color: var(--accent); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+.grow[open] summary { background: var(--soft); }
+.gbody { padding: 4px 20px 16px; background: var(--soft); font-size: 15px; }
+.gbody p { margin: 0 0 8px; }
+.glink { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 700; text-decoration: none; }
+.small { font-size: 13px; }
+.row-more .grow:first-of-type { border-top: 1px solid var(--line); }

@@ -166,6 +166,27 @@ async def candidate(request: Request, cid: str):
                 support=[o for o in c["outside"] if o["side"] == "S"], oppose=[o for o in c["outside"] if o["side"] == "O"])
 
 
+@app.get("/group/{gid}", response_class=HTMLResponse)
+async def group(request: Request, gid: str):
+    if not re.fullmatch(r"C\d{8}", gid):
+        return page(request, "missing.html", 404)
+    g = await _safe(fec.group(request.app.state.http, request.app.state.cache, gid), None)
+    if not g:
+        return page(request, "missing.html", 404)
+    return page(request, "group.html", g=g)
+
+
+@app.get("/{state}/c/{contest_id}/{who}", response_class=HTMLResponse)
+async def state_candidate(request: Request, state: str, contest_id: int, who: str):
+    d = statedata.candidate(state.upper(), contest_id, who)
+    if not d:
+        return page(request, "missing.html", 404)
+    words = [w for w in d["me"]["name"].replace(" (Write-In)", "").replace(".", "").split() if w not in ("Jr", "Sr", "II", "III", "IV")]
+    firsts = [w for w in words[:-1] if len(w) > 1][:1] or words[:1]
+    checks = await _safe(factcheck.search(request.app.state.http, request.app.state.cache, firsts, words[-1]), [])
+    return page(request, "state_candidate.html", d=d, checks=checks, state_name=BY_CODE.get(d["state"], d["state"]))
+
+
 def _names(c: dict) -> tuple[list[str], str]:
     """First names a candidate goes by (skipping initials), plus their last name. The campaign
     committee's name often has the everyday one: 'JON OSSOFF FOR SENATE'."""

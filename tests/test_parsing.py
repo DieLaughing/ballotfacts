@@ -59,3 +59,8 @@ def test_split_city_offices_are_merged():
              for i, (d, n) in enumerate([("3rd", "A"), ("4th", "B")])] + [{"office": "Sheriff", "district": "Suffolk", "nominees": [], "contests": [9]}]
     out = _merge_split_towns(races)
     assert len(out) == 2 and out[0]["split"] == ["3rd", "4th"] and [n["district"] for n in out[0]["nominees"]] == ["3rd", "4th"]
+
+
+def test_tidy_keeps_acronyms():
+    assert fec.tidy("A16Z CAPITAL MANAGEMENT LLC.") == "A16Z Capital Management LLC."
+    assert fec.tidy("WINRED") == "Winred"

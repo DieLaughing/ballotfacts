@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% set c = d.contest %}{% set name = d.me.name | replace(" (Write-In)", "") %}
+{% block title %}{{ name }} · Ballot Facts{% endblock %}
+{% block main %}
+<p class="eyebrow">{{ c.office }}{% if c.district != "Statewide" %}, {{ c.district }}{% endif %} · {{ state_name }}</p>
+<div class="page-head">
+  <h1>{{ name }}</h1>
+  <p class="sub">{{ c.party }}{% if d.me.won %} · <span class="tag">Nominee</span>{% endif %}{% if "(Write-In)" in d.me.name %} · won the primary as a write-in{% endif %}</p>
+</div>
+
+<nav aria-label="On this page" class="jumps">
+  <a href="#seat">On the ballot</a>
+  <a href="#primary">Primary results</a>
+  <a href="#money">Money</a>
+  <a href="#checks">Fact checks · {{ checks | length }}</a>
+</nav>
+
+<section id="seat" class="block" aria-labelledby="h-seat">
+  <h2 id="h-seat">On the ballot for this seat</h2>
+  <p class="sub">Party nominees for {{ c.office }}{% if c.district != "Statewide" %}, {{ c.district }}{% endif %}. Independent and third-party candidates may also be on the ballot; your sample ballot lists them.</p>
+  <ul class="swipe">
+    <li><div class="ccard compact">
+      <span class="ccard-who"><strong>{{ name }}</strong><span class="muted">{{ c.party }} · this page</span></span>
+      <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if c.candidates | length == 1 %}Unopposed{% else %}Won, {{ d.me.pct }}%{% endif %}</strong></span>
+    </div></li>
+    {% for r in d.rivals %}
+    <li><a class="ccard compact" href="/{{ d.state | lower }}/c/{{ r.contest }}/{{ r.slug }}">
+      <span class="ccard-who"><strong>{{ r.name | replace(" (Write-In)", "") }}</strong><span class="muted">{{ r.party }}</span></span>
+      <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if r.unopposed %}Unopposed{% else %}Won, {{ r.pct }}%{% endif %}</strong></span>
+      <span class="ccard-go">See their page
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+    </a></li>
+    {% endfor %}
+  </ul>
+  {% if not d.rivals %}<p class="source">No other party nominated a candidate for this seat in the primary.</p>{% endif %}
+</section>
+
+<section id="primary" class="block" aria-labelledby="h-primary">
+  <h2 id="h-primary">{{ c.party }} primary, Sept 1</h2>
+  <ul class="bars">
+    {% set top = (c.candidates | map(attribute="votes") | max) or 1 %}
+    {% for x in c.candidates | sort(attribute="votes", reverse=true) %}
+    <li><span class="bar-label">{{ x.name | replace(" (Write-In)", " (write-in)") }}{% if x.won %} <span class="tag">Won</span>{% endif %}</span><progress max="{{ top }}" value="{{ x.votes }}" aria-hidden="true"></progress><span class="num">{{ "{:,}".format(x.votes) }} <span class="muted">· {{ x.pct }}%</span></span></li>
+    {% endfor %}
+  </ul>
+  <p class="source">Official results from the Secretary of the Commonwealth. <a href="https://electionstats.state.ma.us/elections/view/{{ c.id }}/" target="_blank" rel="noopener">Results by town on ElectionStats</a></p>
+</section>
+
+<section id="money" class="block" aria-labelledby="h-money">
+  <h2 id="h-money">Money</h2>
+  <p class="muted">Massachusetts state and county candidates report their fundraising to the Office of Campaign and Political Finance (OCPF), not the FEC. We haven't connected that data yet. <a href="https://www.ocpf.us/" target="_blank" rel="noopener">Search {{ name }} on OCPF</a></p>
+</section>
+
+{% set who = name %}{% include "_checks.html" %}
+
+{% if c.towns %}
+<section class="block" aria-labelledby="h-towns">
+  <h2 id="h-towns">Where this seat's voters live</h2>
+  <p class="sub">{{ c.towns | length }} {{ "town" if c.towns | length == 1 else "cities and towns" }} vote in this race{% if c.district != "Statewide" %} (all or part of each){% endif %}.</p>
+  <p class="towns">{{ c.towns | join(" · ") }}</p>
+</section>
+{% endif %}
+{% endblock %}
