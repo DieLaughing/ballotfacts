@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_state_card.html" import state_card with context %}
 {% set c = d.contest %}{% set name = d.me.name | replace(" (Write-In)", "") %}
 {% block title %}{{ name }} · Ballot Facts{% endblock %}
 {% block main %}
@@ -23,18 +24,8 @@
   <h2 id="h-seat">On the ballot for this seat</h2>
   <p class="sub">Party nominees for {{ c.office }}{% if c.district != "Statewide" %}, {{ c.district }}{% endif %}. Independent and third-party candidates may also be on the ballot; your sample ballot lists them.</p>
   <ul class="swipe">
-    <li><div class="ccard compact">
-      <span class="ccard-who"><strong>{{ name }}</strong><span class="muted">{{ c.party }} · this page</span></span>
-      <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if c.candidates | length == 1 %}Unopposed{% else %}Won, {{ d.me.pct }}%{% endif %}</strong></span>
-    </div></li>
-    {% for r in d.rivals %}
-    <li><a class="ccard compact" href="/{{ d.state | lower }}/c/{{ r.contest }}/{{ r.slug }}{{ back | backq }}">
-      <span class="ccard-who"><strong>{{ r.name | replace(" (Write-In)", "") }}</strong><span class="muted">{{ r.party }}</span></span>
-      <span class="ccard-big"><span class="muted">Sept 1 primary</span><strong>{% if r.unopposed %}Unopposed{% else %}Won, {{ r.pct }}%{% endif %}</strong></span>
-      <span class="ccard-go">See their page
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
-    </a></li>
-    {% endfor %}
+    {{ state_card(dict(d.me, party=c.party, unopposed=c.candidates | length == 1, cpf=money.cpf if money else none, incumbent=money.incumbent if money else false), "", "This page") }}
+    {% for r in d.rivals %}{{ state_card(r, "/" ~ (d.state | lower) ~ "/c/" ~ r.contest ~ "/" ~ r.slug ~ (back | backq)) }}{% endfor %}
   </ul>
   {% if not d.rivals %}<p class="source">No other party nominated a candidate for this seat in the primary.</p>{% endif %}
 </section>

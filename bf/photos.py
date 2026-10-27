@@ -3,7 +3,8 @@ never loads anything from another site).
 
 - Members of Congress: official portraits from the unitedstates project (public domain), matched
   to FEC candidate ids through its legislators-current list.
-- Massachusetts candidates: the photo the campaign filed with OCPF, where there is one.
+- Massachusetts officeholders (legislators, governor and so on): their official portrait, linked
+  from Open States; other Massachusetts candidates: the photo the campaign filed with OCPF, if any.
 Candidates without a photo keep their initials.
 """
 from __future__ import annotations
@@ -46,11 +47,13 @@ async def congress_ids(client: httpx.AsyncClient, cache: Cache) -> dict[str, str
     return await cache.fetch("photos:congress-ids", 24 * 3600, load)
 
 
-async def fetch(client: httpx.AsyncClient, kind: str, ident: str | int, source: str) -> bool:
-    """Download, crop to a square and save one thumbnail. Remembers misses for a week."""
+async def fetch(client: httpx.AsyncClient, kind: str, ident: str | int, source: str, try_anyway: bool = False) -> bool:
+    """Download, crop to a square and save one thumbnail. Remembers misses for a week, unless
+    try_anyway (a second source for someone the first one had no photo of)."""
     DIR.mkdir(parents=True, exist_ok=True)
     out, miss = DIR / f"{kind}-{ident}.jpg", DIR / f"{kind}-{ident}.none"
-    if out.exists() or (miss.exists() and time.time() - miss.stat().st_mtime < RETRY_MISSING_AFTER):
+    recent_miss = miss.exists() and time.time() - miss.stat().st_mtime < RETRY_MISSING_AFTER
+    if out.exists() or (recent_miss and not try_anyway):
         return out.exists()
     r = await client.get(source)
     if r.status_code != 200 or len(r.content) > 8_000_000:
@@ -69,14 +72,43 @@ async def fetch(client: httpx.AsyncClient, kind: str, ident: str | int, source: 
     return True
 
 
+async def official_ma(client: httpx.AsyncClient) -> list[dict]:
+    """Massachusetts officeholders with an official portrait, from Open States."""
+    if not config.OPENSTATES_KEY:
+        return []
+    people, page = [], 1
+    while True:
+        r = await client.get("https://v3.openstates.org/people", headers={"X-API-KEY": config.OPENSTATES_KEY},
+                             params={"jurisdiction": "ma", "per_page": 50, "page": page})
+        r.raise_for_status()
+        d = r.json()
+        people += [{"name": p["name"], "image": p["image"]} for p in d["results"] if p.get("image")]
+        if page >= d["pagination"]["max_page"]:
+            return people
+        page += 1
+        await asyncio.sleep(7)  # Open States' free tier allows about 10 requests a minute
+
+
+def _same_person(official: str, ocpf_name: str) -> bool:
+    """'Dave Vieira' and 'Vieira, David T.': same last name, same first initial."""
+    last, _, first = ocpf_name.partition(",")
+    words = official.replace(".", "").split()
+    return bool(words) and words[-1].lower() == last.strip().lower() and words[0][:1].lower() == first.strip()[:1].lower()
+
+
 async def refresh(client: httpx.AsyncClient, cache: Cache, ma_candidates: list[dict]) -> None:
     """Fill in any photos we don't have yet; existing ones are kept."""
     got = 0
     for fec_id, bioguide in (await congress_ids(client, cache)).items():
         got += await fetch(client, "fed", fec_id, CONGRESS_PHOTO.format(bioguide))
         await asyncio.sleep(0.2)
+    officials = await official_ma(client)
     for c in ma_candidates:
-        got += await fetch(client, "ma", c["cpf"], OCPF_PHOTO.format(c["cpf"]))
+        match = [o for o in officials if _same_person(o["name"], c["name"])]
+        if len(match) == 1:  # an official portrait beats a campaign photo
+            got += await fetch(client, "ma", c["cpf"], match[0]["image"], try_anyway=True)
+        else:
+            got += await fetch(client, "ma", c["cpf"], OCPF_PHOTO.format(c["cpf"]))
         await asyncio.sleep(0.2)
     (DIR / ".refreshed").touch()
     log.warning("photos ready: %d", got)

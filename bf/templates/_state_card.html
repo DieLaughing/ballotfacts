@@ -1,0 +1,19 @@
+{# One state/county nominee, laid out like the federal cards. Needs: n (name, party, unopposed, pct;
+   optional raised, cpf, incumbent, district), href ("" for the page you're on). #}
+{% macro state_card(n, href, note="") %}
+<li><div class="ccard fed">
+  <div class="chead">
+    {% set pic = photo("ma", n.cpf) if n.cpf else "" %}{% if pic %}<img class="mono" src="{{ pic }}" alt="" width="44" height="44">{% else %}<span class="mono" aria-hidden="true">{{ n.name | replace(" (Write-In)", "") | initials }}</span>{% endif %}
+    <div class="cwho">
+      {% if href %}<a class="cname" href="{{ href }}">{{ n.name | replace(" (Write-In)", "") }}</a>{% else %}<span class="cname">{{ n.name | replace(" (Write-In)", "") }}</span>{% endif %}
+      <div class="ctags"><span class="pill">{{ n.party }}</span>{% if n.incumbent %}<span class="pill">Incumbent</span>{% endif %}{% if n.district %}<span class="pill">{{ n.district }} district</span>{% endif %}{% if "(Write-In)" in n.name %}<span class="pill">Write-in</span>{% endif %}{% if note %}<span class="pill">{{ note }}</span>{% endif %}</div>
+    </div>
+  </div>
+  <div class="cmoney">
+    {% if n.raised is defined and n.raised is not none %}<div><span class="k">Raised this year</span><strong class="v">{{ n.raised | money }}</strong></div>{% else %}<div></div>{% endif %}
+    <div><span class="k">Sept 1 primary</span><strong class="v2">{% if n.unopposed %}Unopposed{% else %}Won, {{ n.pct }}%{% endif %}</strong></div>
+  </div>
+  {% if href %}<a class="fullpage" href="{{ href }}">Money, results &amp; fact checks
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>{% endif %}
+</div></li>
+{% endmacro %}
