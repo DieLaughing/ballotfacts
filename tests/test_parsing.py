@@ -123,3 +123,15 @@ def test_split_city_resolved_by_precinct():
     assert in_my_precinct(gc3, voter) and not in_my_precinct(gc4, voter)
     elsewhere = Place(**{**voter.__dict__, "precinct_key": "ACTON||1"})
     assert in_my_precinct(gc4, elsewhere)  # Acton isn't split, so the town match decides
+
+
+def test_head_and_404(tmp_path, monkeypatch):
+    from fastapi.testclient import TestClient
+    from bf import app as appmod, config
+    monkeypatch.setattr(config, "DATA", tmp_path)
+    monkeypatch.setattr(appmod.background, "run", lambda *a: __import__("asyncio").sleep(0))
+    with TestClient(appmod.app) as client:
+        assert client.head("/").status_code == 200
+        r = client.get("/no-such-page")
+        assert r.status_code == 404 and "Not found" in r.text and "Content-Security-Policy" in r.headers
+        assert client.get("/about").headers["cache-control"] == "public, max-age=300"

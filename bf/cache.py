@@ -20,6 +20,8 @@ class Cache:
         self.db = sqlite3.connect(path, check_same_thread=False, isolation_level=None)
         self.db.execute("PRAGMA journal_mode=WAL")
         self.db.execute("CREATE TABLE IF NOT EXISTS cache (key TEXT PRIMARY KEY, expires REAL, value TEXT)")
+        # Expired rows stay as a fallback for when a source is down, but not forever.
+        self.db.execute("DELETE FROM cache WHERE expires < ?", (time.time() - 7 * 24 * 3600,))
         self.inflight: dict[str, asyncio.Future] = {}
 
     def get(self, key: str, stale: bool = False) -> Any | None:

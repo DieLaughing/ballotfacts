@@ -12,7 +12,7 @@ from urllib.parse import urlencode
 
 import httpx
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -87,9 +87,21 @@ templates.env.filters["date"] = nice_date
 templates.env.globals.update(config=config, states=BY_CODE)
 
 
+@app.exception_handler(404)
+async def not_found(request: Request, exc):
+    """Unknown addresses get the site's own page, not a bare JSON error."""
+    return page(request, "missing.html", 404)
+
+
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
+    head = request.method == "HEAD"
+    if head:  # answer HEAD like GET without the body (uptime checks and link previews use it)
+        request.scope["method"] = "GET"
     response = await call_next(request)
+    if head:
+        headers = {k: v for k, v in response.headers.items() if k.lower() != "content-length"}
+        response = Response(status_code=response.status_code, headers=headers)
     response.headers.update(HEADERS)
     # Every GET page is public data, the same for everyone, so a CDN may keep it for five minutes.
     # The address-based ballot (POST) sets its own private header.
