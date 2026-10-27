@@ -289,7 +289,7 @@ async def candidate(client: httpx.AsyncClient, cache: Cache, cid: str) -> dict |
             "home_share": home_share,  # % of itemized individual money from donors in the candidate's own state
         }
 
-    return await cache.fetch(key, TTL, load)
+    return await cache.fetch(key, 12 * 3600, load)  # FEC data changes about daily; only the first visitor waits
 
 
 async def seats(client: httpx.AsyncClient) -> list[tuple[str, str, str]]:
