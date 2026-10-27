@@ -16,7 +16,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import background, census, civic, config, factcheck, fec, ocpf, openstates, statedata
+from . import background, census, civic, config, factcheck, fec, integrity, ocpf, openstates, statedata
 from .cache import Cache
 from .states import BY_CODE
 
@@ -206,14 +206,18 @@ async def candidate(request: Request, cid: str):
     c = await _safe(fec.candidate(http, cache, cid), None)
     if not c:
         return page(request, "missing.html", 404)
-    checks = await _safe(factcheck.search(http, cache, *_names(c["name"], c.get("committee_name", ""))), [])
+    firsts, last = _names(c["name"], c.get("committee_name", ""))
+    checks, ii = await asyncio.gather(
+        _safe(factcheck.search(http, cache, firsts, last), []),
+        _safe(integrity.profile(http, cache, firsts, last, BY_CODE.get(c["state"], "")), ""),
+    )
     if c["office"] == "S":
         race_title, race_path = f"U.S. Senate, {BY_CODE.get(c['state'], c['state'])}", f"/race/{c['state']}/senate"
     else:
         seat = "At-large" if c["district"] in ("", "00") else f"District {int(c['district'])}"
         race_title, race_path = f"U.S. House, {BY_CODE.get(c['state'], c['state'])} {seat}", f"/race/{c['state']}/house/{c['district'] or '00'}"
     raised_total = sum(v for _, v in c["sources"]) or 1
-    return page(request, "candidate.html", c=c, checks=checks, back=back_link(request), race_title=race_title, race_path=race_path,
+    return page(request, "candidate.html", c=c, checks=checks, back=back_link(request), integrity_url=ii, race_title=race_title, race_path=race_path,
                 raised_total=raised_total,
                 support=[o for o in c["outside"] if o["side"] == "S"], oppose=[o for o in c["outside"] if o["side"] == "O"])
 

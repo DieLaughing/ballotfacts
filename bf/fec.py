@@ -236,8 +236,13 @@ async def candidate(client: httpx.AsyncClient, cache: Cache, cid: str) -> dict |
                               per_page=100, sort="-total"))["results"]
         committees = (await _get(client, f"candidate/{cid}/committees/", designation="P", cycle=config.CYCLE))["results"]
         pcc = committees[0]["committee_id"] if committees else None
-        employers = []
+        employers, home_share = [], None
         if pcc:
+            by_state = (await _get(client, "schedules/schedule_a/by_state/", committee_id=pcc, cycle=config.CYCLE,
+                                   per_page=100))["results"]
+            itemized = sum(r["total"] or 0 for r in by_state)
+            if itemized:
+                home_share = round(100 * sum(r["total"] or 0 for r in by_state if r["state"] == c.get("state")) / itemized)
             rows = (await _get(client, "schedules/schedule_a/by_employer/", committee_id=pcc, cycle=config.CYCLE,
                                sort="-total", per_page=40))["results"]
             employers = [{"name": tidy(r["employer"]), "total": r["total"]}
@@ -271,6 +276,7 @@ async def candidate(client: httpx.AsyncClient, cache: Cache, cid: str) -> dict |
                          "total": r["total"] or 0, "about": groups.get(r["committee_id"])}
                         for r in outside if (r["total"] or 0) > 0],
             "employers": employers,
+            "home_share": home_share,  # % of itemized individual money from donors in the candidate's own state
         }
 
     return await cache.fetch(key, TTL, load)

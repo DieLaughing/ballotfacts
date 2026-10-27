@@ -21,4 +21,6 @@ GOOGLE_ELECTION_ID = os.environ.get("BF_GOOGLE_ELECTION_ID", "12000")
 # activity through this date. A report reaching it means the campaign is still on the ballot.
 PRE_GENERAL_THROUGH = "2026-10-14"
 
+WARM = os.environ.get("BF_WARM", "1") != "0"  # background pre-loading of federal races (bf/background.py)
+
 USER_AGENT = f"BallotFacts/{COMMIT} (+{REPO})"

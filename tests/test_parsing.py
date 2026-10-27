@@ -96,3 +96,8 @@ def test_ocpf_others_skips_major_parties_and_nominees():
     assert [o["name"] for o in gov] == ["James, Andrea"] and gov[0]["party"] == "No party listed"
     assert [o["name"] for o in others(rows, "State Representative", "2nd Franklin", [])] == ["Whipps, Susannah M."]
     assert others(rows, "Sheriff", "Barnstable County", []) == []
+
+
+def test_integrity_slug():
+    from bf.integrity import slugify
+    assert slugify("Jon", "Ossoff") == "jon-ossoff" and slugify("Ed", "Markey") == "ed-markey"

@@ -9,6 +9,7 @@
   <h1>{{ c.name }}</h1>
   <p class="sub">{{ c.party }}{% if c.incumbent %} · <span class="tag">Incumbent</span>{% endif %} {% if c.website %} · <a href="{{ c.website }}" target="_blank" rel="noopener nofollow">Campaign website</a>{% endif %} · <a href="https://www.fec.gov/data/candidate/{{ c.id }}/" target="_blank" rel="noopener">FEC record</a></p>
   {% if c.website %}<p class="source">Website as the campaign listed it on its FEC registration.</p>{% endif %}
+  {% if integrity_url %}<details class="why"><summary>More elsewhere: <a href="{{ integrity_url }}" target="_blank" rel="noopener">Integrity Index profile</a></summary><p>Integrity Index grades politicians on fundraising, PAC money and stock trading with its own formula. It's run by the Political Integrity PAC, a Super PAC. Ballot Facts doesn't grade candidates; we link it because it gathers stock and personal-finance disclosures we don't have yet.</p></details>{% endif %}
 </div>
 
 <nav aria-label="On this page" class="jumps">
@@ -32,6 +33,15 @@
     <li><span class="bar-label">{{ label }}</span><progress max="{{ raised_total }}" value="{{ amount }}" aria-hidden="true"></progress><span class="num">{{ amount | money }} <span class="muted">· {{ (100 * amount / raised_total) | round | int }}%</span></span></li>
     {% endfor %}
   </ul>
+
+  {% if c.home_share is not none %}
+  <h3>Where donors live</h3>
+  <ul class="bars">
+    <li><span class="bar-label">In {{ states.get(c.state, c.state) }}</span><progress max="100" value="{{ c.home_share }}" aria-hidden="true"></progress><span class="num">{{ c.home_share }}%</span></li>
+    <li><span class="bar-label">Other states</span><progress max="100" value="{{ 100 - c.home_share }}" aria-hidden="true"></progress><span class="num">{{ 100 - c.home_share }}%</span></li>
+  </ul>
+  <p class="source">Share of money from donors who gave over $200 (the FEC only records where those donors live).</p>
+  {% endif %}
 
   {% if c.employers %}
   <h3>Top employers of donors</h3>
