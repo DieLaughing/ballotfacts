@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% set active = 'results' %}
+{% block title %}Election results · Ballot Facts{% endblock %}
+{% block main %}
+<div class="page-head">
+  <p class="eyebrow">Election night · Tuesday, Nov 3</p>
+  <h1>Results</h1>
+  <p class="lede">Every state's official election office posts its own count. Here's where to find yours.</p>
+</div>
+
+<p class="callout plain">We don't call races. Counts on election night are unofficial and can shift for days as mail and provisional ballots are counted; results become official when each state certifies them, often weeks later.</p>
+
+{% if pick %}{% set o = offices[pick] %}
+<section class="race pick" aria-labelledby="h-pick">
+  <div class="race-head"><span class="eyebrow">Your state</span><h2 id="h-pick">{{ o.name }}</h2></div>
+  <div class="pad">
+    <p class="muted">{{ o.office }}</p>
+    {% if o.main %}<a class="btn" href="{{ o.main }}" target="_blank" rel="noopener">Official results and election information</a>{% endif %}
+  </div>
+</section>
+{% endif %}
+
+<h2 class="section">All states</h2>
+<ul class="states">
+  {% for code, o in offices.items() | sort(attribute='1.name') %}
+  <li>{% if o.main %}<a href="{{ o.main }}" target="_blank" rel="noopener"><strong>{{ o.name }}</strong><span class="muted">{{ o.office }}</span></a>{% else %}<span><strong>{{ o.name }}</strong><span class="muted">Link not available</span></span>{% endif %}</li>
+  {% endfor %}
+</ul>
+<p class="source">Links from the Voting Information Project via Google's Civic Information API. Live counts on this page are coming for states that publish machine-readable results.</p>
+{% endblock %}

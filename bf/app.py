@@ -255,6 +255,13 @@ def _names(c: dict) -> tuple[list[str], str]:
     return firsts or [words[0]], last
 
 
+@app.get("/results", response_class=HTMLResponse)
+async def results(request: Request):
+    offices = statedata.offices()
+    pick = request.query_params.get("state", "").upper()
+    return page(request, "results.html", offices=offices, pick=pick if pick in offices else "", back=back_link(request))
+
+
 @app.get("/about", response_class=HTMLResponse)
 async def about(request: Request):
     return page(request, "about.html")

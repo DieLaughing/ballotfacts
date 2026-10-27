@@ -15,6 +15,7 @@
   {% if info and (info.polling or info.early or info.dropoff) %}<a href="#vote">Where to vote</a>{% endif %}
   {% if info and info.offices %}<a href="#links">Official links</a>{% endif %}
   {% if legislators %}<a href="#legislators">State legislators</a>{% endif %}
+  <a href="/results?state={{ place.state }}">Results on Nov 3</a>
 </nav>
 
 {% set sample = info.sample_ballot if info else None %}

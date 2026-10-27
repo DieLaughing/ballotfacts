@@ -1,0 +1,1472 @@
+{
+ "AK": {
+  "name": "Alaska",
+  "office": "Alaska Division of Elections",
+  "links": [
+   [
+    "https://myvoterportal.alaska.gov/",
+    "Check your registration"
+   ],
+   [
+    "https://www.elections.alaska.gov/sample-ballots/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://www.elections.alaska.gov/election-polls/",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.elections.alaska.gov/voter-information/absentee-and-early-voting/",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://voterregistration.alaska.gov/",
+    "Register to vote"
+   ],
+   [
+    "https://www.elections.alaska.gov/",
+    "Election information"
+   ]
+  ]
+ },
+ "AL": {
+  "name": "Alabama",
+  "office": "Office of the Secretary of State",
+  "links": [
+   [
+    "https://myinfo.alabamavotes.gov/voterview",
+    "Check your registration"
+   ],
+   [
+    "https://myinfo.alabamavotes.gov/voterview",
+    "See your official sample ballot"
+   ],
+   [
+    "https://myinfo.alabamavotes.gov/voterview",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.alabamainteractive.org/sos/voter_registration/voterRegistrationWelcome.action",
+    "Register to vote"
+   ],
+   [
+    "https://sos.alabama.gov/alabama-votes",
+    "Election information"
+   ],
+   [
+    "https://www.sos.alabama.gov/alabama-votes/voter/absentee-voting",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "AR": {
+  "name": "Arkansas",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://www.voterview.ar-nova.org/voterview",
+    "Check your registration"
+   ],
+   [
+    "https://www.voterview.ar-nova.org/voterview",
+    "See your official sample ballot"
+   ],
+   [
+    "https://www.voterview.ar-nova.org/voterview",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.sos.arkansas.gov/elections",
+    "Election information"
+   ],
+   [
+    "https://www.sos.arkansas.gov/elections/voter-information/absentee-voting",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "AZ": {
+  "name": "Arizona",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://my.arizona.vote/WhereToVote.aspx?s=individual",
+    "Check your registration"
+   ],
+   [
+    "https://my.arizona.vote/PortalList.aspx",
+    "See your official sample ballot"
+   ],
+   [
+    "https://my.arizona.vote/WhereToVote.aspx?s=address",
+    "Official polling place finder"
+   ],
+   [
+    "https://my.arizona.vote/Early/ApplicationLogin.aspx",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://servicearizona.com/VoterRegistration/selectLanguage",
+    "Register to vote"
+   ],
+   [
+    "https://www.arizona.vote/",
+    "Election information"
+   ],
+   [
+    "https://www.azcleanelections.gov/how-to-vote/early-voting/vote-by-mail",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "CA": {
+  "name": "California",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://voterstatus.sos.ca.gov",
+    "Check your registration"
+   ],
+   [
+    "https://voterstatus.sos.ca.gov/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://www.sos.ca.gov/elections/polling-place",
+    "Official polling place finder"
+   ],
+   [
+    "https://registertovote.ca.gov/?t=s",
+    "Register to vote"
+   ],
+   [
+    "https://www.sos.ca.gov/elections/",
+    "Election information"
+   ],
+   [
+    "https://www.sos.ca.gov/elections/voter-registration/vote-mail",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "CO": {
+  "name": "Colorado",
+  "office": "Colorado election office",
+  "links": [
+   [
+    "https://www.govotecolorado.gov",
+    "Check your registration"
+   ],
+   [
+    "https://www.coloradosos.gov/voter/pages/pub/olvr/findVoterReg.xhtml",
+    "See your official sample ballot"
+   ],
+   [
+    "https://www.govotecolorado.gov",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.govotecolorado.gov",
+    "Register to vote"
+   ],
+   [
+    "https://coloradosos.gov/",
+    "Election information"
+   ],
+   [
+    "https://www.coloradosos.gov/pubs/elections/lawsRulesResources.html?menuheaders=5",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "CT": {
+  "name": "Connecticut",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://portaldir.ct.gov/sots/LookUp.aspx",
+    "Check your registration"
+   ],
+   [
+    "https://portal.ct.gov/SOTS/Election-Services/Town-Ballots/Ballots",
+    "See your official sample ballot"
+   ],
+   [
+    "https://portaldir.ct.gov/sots/LookUp.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://oabr-sots.ct.gov/OABR/absenteeBallotReqPortalHome.do",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://voterregistration.ct.gov/OLVR/welcome.do",
+    "Register to vote"
+   ],
+   [
+    "https://portal.ct.gov/SOTS/Common-Elements/V5-Template---Redesign/Elections--Voting--Home-Page",
+    "Election information"
+   ],
+   [
+    "https://portal.ct.gov/SOTS/Election-Services/Voter-Information/Absentee-Voting",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "DC": {
+  "name": "District of Columbia",
+  "office": "Board of Elections",
+  "links": [
+   [
+    "https://www.dcboe.org/Voters/Register-To-Vote/Check-Voter-Registration-Status",
+    "Check your registration"
+   ],
+   [
+    "https://dcboe.org/elections/2024-elections",
+    "See your official sample ballot"
+   ],
+   [
+    "https://dcboe.org/voters/find-out-where-to-vote/vote-center-locator-tool",
+    "Official polling place finder"
+   ],
+   [
+    "https://vr.dcboe.org/213115759199060",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://vr.dcboe.org/213324797239968?agency_code=12",
+    "Register to vote"
+   ],
+   [
+    "https://dcboe.org/",
+    "Election information"
+   ],
+   [
+    "https://www.dcboe.org/voters/casting-your-vote/mail-ballot-request",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "DE": {
+  "name": "Delaware",
+  "office": "Department of Elections",
+  "links": [
+   [
+    "https://ivote.de.gov/voterview",
+    "Check your registration"
+   ],
+   [
+    "https://ivote.de.gov/VoterView",
+    "See your official sample ballot"
+   ],
+   [
+    "https://gis.elections.delaware.gov/#lookup_tools",
+    "Official polling place finder"
+   ],
+   [
+    "https://ivote.de.gov/VoterView",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://ivote.de.gov/voterview/registrant/newregistrant",
+    "Register to vote"
+   ],
+   [
+    "https://elections.delaware.gov/index.shtml",
+    "Election information"
+   ],
+   [
+    "https://elections.delaware.gov/voter/absentee/pdfs/absentee_ballot_application.pdf",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "FL": {
+  "name": "Florida",
+  "office": "Division of Elections",
+  "links": [
+   [
+    "https://registration.elections.myflorida.com/CheckVoterStatus",
+    "Check your registration"
+   ],
+   [
+    "https://registration.elections.myflorida.com/CheckVoterStatus",
+    "See your official sample ballot"
+   ],
+   [
+    "https://dos.fl.gov/elections/for-voters/check-your-voter-status-and-polling-place/voter-precinct-lookup/",
+    "Official polling place finder"
+   ],
+   [
+    "https://registertovoteflorida.gov/home",
+    "Register to vote"
+   ],
+   [
+    "https://dos.fl.gov/elections/",
+    "Election information"
+   ],
+   [
+    "https://dos.fl.gov/elections/for-voters/voting/vote-by-mail/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "GA": {
+  "name": "Georgia",
+  "office": "Georgia election office",
+  "links": [
+   [
+    "https://mvp.sos.ga.gov/s/",
+    "Check your registration"
+   ],
+   [
+    "https://sos.ga.gov/how-to-guide/how-guide-voting",
+    "Official polling place finder"
+   ],
+   [
+    "https://sos.ga.gov/how-to-guide/how-guide-voting#Absentee%20Voting",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://sos.ga.gov/how-to-guide/how-guide-register-vote",
+    "Register to vote"
+   ],
+   [
+    "https://sos.ga.gov/elections-division-georgia-secretary-states-office",
+    "Election information"
+   ]
+  ]
+ },
+ "HI": {
+  "name": "Hawaii",
+  "office": "Hawaii election office",
+  "links": [
+   [
+    "https://olvr.hawaii.gov/",
+    "Check your registration"
+   ],
+   [
+    "https://elections.hawaii.gov/voter-service-centers-and-places-of-deposit/",
+    "Official polling place finder"
+   ],
+   [
+    "https://elections.hawaii.gov/voting/absentee-voting/",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://elections.hawaii.gov/",
+    "Election information"
+   ]
+  ]
+ },
+ "IA": {
+  "name": "Iowa",
+  "office": "Iowa election office",
+  "links": [
+   [
+    "https://sos.iowa.gov/auditors",
+    "Election information"
+   ]
+  ]
+ },
+ "ID": {
+  "name": "Idaho",
+  "office": "Administration and Elections Office",
+  "links": [
+   [
+    "https://elections.sos.idaho.gov/ElectionLink/ElectionLink/VoterSearch.aspx",
+    "Check your registration"
+   ],
+   [
+    "https://elections.sos.idaho.gov/ElectionLink/ElectionLink/VoterSearch.aspx",
+    "See your official sample ballot"
+   ],
+   [
+    "https://elections.sos.idaho.gov/ElectionLink/ElectionLink/ViewPollingLocation.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://elections.sos.idaho.gov/ElectionLink/ElectionLink/BeginAbsenteeRequest.aspx",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://elections.sos.idaho.gov/ElectionLink/ElectionLink/ApplicationInstructions.aspx",
+    "Register to vote"
+   ],
+   [
+    "https://voteidaho.gov",
+    "Election information"
+   ],
+   [
+    "https://voteidaho.gov/casting-your-ballot/#absentee-voting",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "IL": {
+  "name": "Illinois",
+  "office": "Illinois election office",
+  "links": [
+   [
+    "http://www.elections.il.gov/",
+    "Election information"
+   ]
+  ]
+ },
+ "IN": {
+  "name": "Indiana",
+  "office": "Election Division",
+  "links": [
+   [
+    "https://indianavoters.in.gov/",
+    "Check your registration"
+   ],
+   [
+    "https://indianavoters.in.gov/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://indianavoters.in.gov/",
+    "Official polling place finder"
+   ],
+   [
+    "https://indianavoters.in.gov/MVPHome/PrintDocuments",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://indianavoters.in.gov/",
+    "Register to vote"
+   ],
+   [
+    "https://www.in.gov/sos/elections/",
+    "Election information"
+   ],
+   [
+    "https://www.in.gov/sos/elections/voter-information/ways-to-vote/absentee-voting/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "KS": {
+  "name": "Kansas",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://myvoteinfo.voteks.org/VoterView",
+    "Check your registration"
+   ],
+   [
+    "https://myvoteinfo.voteks.org/VoterView",
+    "See your official sample ballot"
+   ],
+   [
+    "https://myvoteinfo.voteks.org/VoterView",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.kdor.ks.gov/Apps/VoterReg",
+    "Register to vote"
+   ],
+   [
+    "https://sos.ks.gov/elections/elections.html",
+    "Election information"
+   ],
+   [
+    "https://sos.ks.gov/elections/voter-information.html",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "KY": {
+  "name": "Kentucky",
+  "office": "State Board of Elections",
+  "links": [
+   [
+    "https://vrsws.sos.ky.gov/VIC/",
+    "Check your registration"
+   ],
+   [
+    "https://web.sos.ky.gov/electionballots/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://elect.ky.gov/Voters/Pages/Polling-Locations.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://vrsws.sos.ky.gov/abrweb/",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://vrsws.sos.ky.gov/ovrweb/",
+    "Register to vote"
+   ],
+   [
+    "https://elect.ky.gov/Pages/default.aspx",
+    "Election information"
+   ],
+   [
+    "https://elect.ky.gov/Voters/Pages/Absentee-Voting-By-Mail.aspx",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "LA": {
+  "name": "Louisiana",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://voterportal.sos.la.gov/",
+    "Check your registration"
+   ],
+   [
+    "https://voterportal.sos.la.gov/sampleballot",
+    "See your official sample ballot"
+   ],
+   [
+    "https://voterportal.sos.la.gov/Home/VoterLogin",
+    "Official polling place finder"
+   ],
+   [
+    "https://voterportal.sos.la.gov/Home/VoterLogin",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://www.sos.la.gov/ElectionsAndVoting/Pages/OnlineVoterRegistration.aspx",
+    "Register to vote"
+   ],
+   [
+    "https://www.sos.la.gov/ElectionsAndVoting/Pages/default.aspx",
+    "Election information"
+   ],
+   [
+    "https://www.sos.la.gov/ElectionsAndVoting/Vote/VoteByMail/Pages/default.aspx",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "MA": {
+  "name": "Massachusetts",
+  "office": "Secretary of the Commonwealth",
+  "links": [
+   [
+    "https://www.sec.state.ma.us/VoterRegistrationSearch/MyVoterRegStatus.aspx",
+    "Check your registration"
+   ],
+   [
+    "https://www.sec.state.ma.us/WhereDoIVoteMA/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://www.sec.state.ma.us/WhereDoIVoteMA/WhereDoIVote",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.sec.state.ma.us/MailInRequestWeb/MailInBallot.aspx",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://www.sec.state.ma.us/OVR/",
+    "Register to vote"
+   ],
+   [
+    "https://www.sec.state.ma.us/divisions/elections/elections-and-voting.htm",
+    "Election information"
+   ],
+   [
+    "https://www.sec.state.ma.us/divisions/elections/voting-information/vote-by-mail.htm",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "MD": {
+  "name": "Maryland",
+  "office": "State Board of Elections",
+  "links": [
+   [
+    "https://voterservices.elections.maryland.gov/votersearch",
+    "Check your registration"
+   ],
+   [
+    "https://voterservices.elections.maryland.gov/VoterSearch",
+    "See your official sample ballot"
+   ],
+   [
+    "https://voterservices.elections.maryland.gov/PollingPlaceSearch",
+    "Official polling place finder"
+   ],
+   [
+    "https://voterservices.elections.maryland.gov/OnlineMailinRequest/InstructionsStep1",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://voterservices.elections.maryland.gov/OnlineVoterRegistration/InstructionsStep1",
+    "Register to vote"
+   ],
+   [
+    "https://elections.maryland.gov/index_regular.html",
+    "Election information"
+   ],
+   [
+    "https://elections.maryland.gov/voting/absentee.html",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "ME": {
+  "name": "Maine",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://www.maine.gov/portal/government/edemocracy/voter_lookup.php",
+    "See your official sample ballot"
+   ],
+   [
+    "https://www.maine.gov/portal/government/edemocracy/voter_lookup.php",
+    "Official polling place finder"
+   ],
+   [
+    "https://apps.web.maine.gov/cgi-bin/online/AbsenteeBallot/index.pl",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://registertovote.sos.maine.gov/",
+    "Register to vote"
+   ],
+   [
+    "https://www.maine.gov/sos/cec/elec/index.html",
+    "Election information"
+   ],
+   [
+    "https://www.maine.gov/sos/cec/elec/voter-info/absenteeguide.html",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "MI": {
+  "name": "Michigan",
+  "office": "ALL",
+  "links": [
+   [
+    "https://mvic.sos.state.mi.us/Voter/Index",
+    "Check your registration"
+   ],
+   [
+    "https://mvic.sos.state.mi.us/PublicBallot/Index",
+    "See your official sample ballot"
+   ],
+   [
+    "https://mvic.sos.state.mi.us/Voter/Index",
+    "Official polling place finder"
+   ],
+   [
+    "https://mvic.sos.state.mi.us/AVApplication/Index",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://mvic.sos.state.mi.us/RegisterVoter/Index",
+    "Register to vote"
+   ],
+   [
+    "http://www.michigan.gov/sos/0,1607,7-127-1633---,00.html",
+    "Election information"
+   ]
+  ]
+ },
+ "MN": {
+  "name": "Minnesota",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://mnvotes.sos.mn.gov/voterstatuscheck/index",
+    "Check your registration"
+   ],
+   [
+    "https://myballotmn.sos.state.mn.us/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://pollfinder.sos.mn.gov/",
+    "Official polling place finder"
+   ],
+   [
+    "https://mnvotes.sos.mn.gov/abrequest/index",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://mnvotes.sos.mn.gov/VoterRegistration/index",
+    "Register to vote"
+   ],
+   [
+    "https://www.sos.state.mn.us/elections-voting/",
+    "Election information"
+   ],
+   [
+    "https://www.sos.state.mn.us/elections-voting/other-ways-to-vote/vote-early-by-mail/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "MO": {
+  "name": "Missouri",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://voteroutreach.sos.mo.gov/portal/",
+    "Check your registration"
+   ],
+   [
+    "https://voteroutreach.sos.mo.gov/portal/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://voteroutreach.sos.mo.gov/portal",
+    "Official polling place finder"
+   ],
+   [
+    "https://s1.sos.mo.gov/elections/voterregistration/",
+    "Register to vote"
+   ],
+   [
+    "https://www.sos.mo.gov/elections/",
+    "Election information"
+   ],
+   [
+    "https://www.sos.mo.gov/elections/goVoteMissouri/howtovote#absentee",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "MS": {
+  "name": "Mississippi",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://www.msegov.com/sos/voter_registration/AmIRegistered",
+    "Check your registration"
+   ],
+   [
+    "https://myelectionday.sos.state.ms.us/VoterOutreach/Pages/VOSearch.aspx",
+    "See your official sample ballot"
+   ],
+   [
+    "https://myelectionday.sos.state.ms.us/VoterOutreach/Pages/VOSearch.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.sos.ms.gov/elections-voting",
+    "Election information"
+   ],
+   [
+    "https://www.sos.ms.gov/absentee-voting-information#ar03",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "MT": {
+  "name": "Montana",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://prodvoterportal.mt.gov/WhereToVote.aspx",
+    "Check your registration"
+   ],
+   [
+    "https://prodvoterportal.mt.gov/WhereToVote.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://sosmt.gov/elections/",
+    "Election information"
+   ],
+   [
+    "https://sosmt.gov/elections/absentee/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "NC": {
+  "name": "North Carolina",
+  "office": "North Carolina election office",
+  "links": [
+   [
+    "https://vt.ncsbe.gov/RegLkup/",
+    "Check your registration"
+   ],
+   [
+    "https://vt.ncsbe.gov/RegLkup/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://www.ncsbe.gov/voting",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.ncsbe.gov/voting/vote-mail",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://www.ncsbe.gov/about-elections",
+    "Register to vote"
+   ],
+   [
+    "https://www.ncsbe.gov/about-elections",
+    "Election information"
+   ],
+   [
+    "http://www.ncsbe.gov",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "ND": {
+  "name": "North Dakota",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://vip.sos.nd.gov/WhereToVote.aspx?tab=SampleBallot&ptlPKID=7&ptlhPKID=50",
+    "See your official sample ballot"
+   ],
+   [
+    "https://vip.sos.nd.gov/WhereToVote.aspx?tab=AddressandVotingTimes",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.sos.nd.gov/elections",
+    "Election information"
+   ],
+   [
+    "https://www.sos.nd.gov/elections/voter/voting-north-dakota/how-do-i-vote/absentee-voting",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "NE": {
+  "name": "Nebraska",
+  "office": "Secretary of State, Elections Division",
+  "links": [
+   [
+    "https://www.votercheck.necvr.ne.gov/voterview",
+    "Check your registration"
+   ],
+   [
+    "https://www.votercheck.necvr.ne.gov/voterview/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://www.votercheck.necvr.ne.gov/voterview",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.nebraska.gov/apps-sos-voter-registration/",
+    "Register to vote"
+   ],
+   [
+    "https://sos.nebraska.gov/elections/elections-division",
+    "Election information"
+   ],
+   [
+    "https://sos.nebraska.gov/elections/early-voting",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "NH": {
+  "name": "New Hampshire",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://app.sos.nh.gov/voterinformation",
+    "Check your registration"
+   ],
+   [
+    "https://www.sos.nh.gov/elections/sample-ballots",
+    "See your official sample ballot"
+   ],
+   [
+    "https://app.sos.nh.gov/pollingplacesampleballot",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.sos.nh.gov/elections",
+    "Election information"
+   ],
+   [
+    "https://sos.nh.gov/elections/voters/absentee-ballots/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "NJ": {
+  "name": "New Jersey",
+  "office": "New Jersey election office",
+  "links": [
+   [
+    "https://voter.svrs.nj.gov/registration-check",
+    "Check your registration"
+   ],
+   [
+    "https://www.nj.gov/state/elections/vote-polling-location.shtml",
+    "Official polling place finder"
+   ],
+   [
+    "http://nj.gov/state/elections/voting-information-vote-by-mail.html",
+    "Mail and absentee voting"
+   ],
+   [
+    "http://nj.gov/state/elections/voting-information.html#1",
+    "Register to vote"
+   ],
+   [
+    "http://nj.gov/state/elections/index.html",
+    "Election information"
+   ],
+   [
+    "http://nj.gov/state/elections/election-information-title-19.html",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "NM": {
+  "name": "New Mexico",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://voterportal.servis.sos.state.nm.us/WhereToVote.aspx",
+    "Check your registration"
+   ],
+   [
+    "https://voterportal.servis.sos.state.nm.us/WhereToVote.aspx",
+    "See your official sample ballot"
+   ],
+   [
+    "https://voterportal.servis.sos.state.nm.us/WhereToVote.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://portal.sos.state.nm.us/OVR/WebPages/AbsenteeApplication.aspx",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://portal.sos.state.nm.us/OVR/WebPages/DomesticApplication.aspx",
+    "Register to vote"
+   ],
+   [
+    "https://www.sos.nm.gov/voting-and-elections/",
+    "Election information"
+   ],
+   [
+    "https://www.sos.nm.gov/voting-and-elections/voter-information-portal-nmvote-org/absentee-and-early-voting/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "NV": {
+  "name": "Nevada",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://nvsos.gov/votersearch/",
+    "Check your registration"
+   ],
+   [
+    "https://www.nvsos.gov/votersearch/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://nvsos.gov/votersearch/index.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://registertovote.nv.gov/",
+    "Register to vote"
+   ],
+   [
+    "https://www.nvsos.gov/sos/elections",
+    "Election information"
+   ],
+   [
+    "https://www.nvsos.gov/sos/elections/voters/mail-ballot-voting",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "NY": {
+  "name": "New York",
+  "office": "State Board of Elections",
+  "links": [
+   [
+    "https://voterlookup.elections.ny.gov/",
+    "Check your registration"
+   ],
+   [
+    "https://publicreporting.elections.ny.gov/WhoFiled/WhoFiled",
+    "See your official sample ballot"
+   ],
+   [
+    "https://voterlookup.elections.ny.gov/",
+    "Official polling place finder"
+   ],
+   [
+    "https://elections.ny.gov/request-ballot",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://elections.ny.gov/voter-registration-process#register-online",
+    "Register to vote"
+   ],
+   [
+    "https://www.elections.ny.gov/",
+    "Election information"
+   ],
+   [
+    "https://elections.ny.gov/request-ballot",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "OH": {
+  "name": "Ohio",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://voterlookup.ohiosos.gov/voterlookup.aspx",
+    "Check your registration"
+   ],
+   [
+    "https://www.ohiosos.gov/elections/voters/toolkit/sample-ballot/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://voterlookup.ohiosos.gov/voterlookup.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://olvr.ohiosos.gov/",
+    "Register to vote"
+   ],
+   [
+    "https://www.sos.state.oh.us/elections/",
+    "Election information"
+   ],
+   [
+    "https://www.ohiosos.gov/elections/voters/absentee-voting/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "OK": {
+  "name": "Oklahoma",
+  "office": "State Election Board",
+  "links": [
+   [
+    "https://oklahoma.gov/elections/ovp.html",
+    "Check your registration"
+   ],
+   [
+    "https://oklahoma.gov/elections/ovp.html",
+    "See your official sample ballot"
+   ],
+   [
+    "https://oklahoma.gov/elections/ovp.html",
+    "Official polling place finder"
+   ],
+   [
+    "https://oklahoma.gov/elections/ovp.html",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://okvoterportal.okelections.us/Home/RegWizard",
+    "Register to vote"
+   ],
+   [
+    "https://oklahoma.gov/elections.html",
+    "Election information"
+   ],
+   [
+    "https://oklahoma.gov/elections/voters/absentee-voting.html",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "OR": {
+  "name": "Oregon",
+  "office": "Oregon election office",
+  "links": [
+   [
+    "https://secure.sos.state.or.us/orestar/vr/showVoterSearch.do",
+    "See your official sample ballot"
+   ],
+   [
+    "https://sos.oregon.gov/voting/Pages/registration.aspx",
+    "Register to vote"
+   ],
+   [
+    "https://sos.oregon.gov/voting-elections/Pages/default.aspx",
+    "Election information"
+   ],
+   [
+    "https://sos.oregon.gov/elections/Pages/laws-rules-publications.aspx",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "PA": {
+  "name": "Pennsylvania",
+  "office": "Department of State",
+  "links": [
+   [
+    "https://www.pavoterservices.pa.gov/pages/voterregistrationstatus.aspx",
+    "Check your registration"
+   ],
+   [
+    "https://www.pavoterservices.pa.gov/Pages/PollingPlaceInfo.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.pavoterservices.pa.gov/OnlineAbsenteeApplication/#/OnlineMailInBegin",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://www.pavoterservices.pa.gov/Pages/VoterRegistrationApplication.aspx",
+    "Register to vote"
+   ],
+   [
+    "https://www.pa.gov/en/agencies/vote.html",
+    "Election information"
+   ],
+   [
+    "https://www.pa.gov/en/agencies/vote/voter-support/mail-in-and-absentee-ballot.html",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "RI": {
+  "name": "Rhode Island",
+  "office": "Department of State Elections Division",
+  "links": [
+   [
+    "https://vote.sos.ri.gov/Home/UpdateVoterRecord?ActiveFlag=0",
+    "Check your registration"
+   ],
+   [
+    "https://vote.sos.ri.gov/Home/PollingPlaces?ActiveFlag=2",
+    "See your official sample ballot"
+   ],
+   [
+    "https://vote.sos.ri.gov/Home/PollingPlaces?ActiveFlag=2",
+    "Official polling place finder"
+   ],
+   [
+    "https://mailballot.sos.ri.gov/",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://vote.sos.ri.gov/Home/RegistertoVote?ActiveFlag=1",
+    "Register to vote"
+   ],
+   [
+    "https://vote.sos.ri.gov/",
+    "Election information"
+   ],
+   [
+    "https://vote.sos.ri.gov/Voter/VotebyMail",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "SC": {
+  "name": "South Carolina",
+  "office": "State Election Commission",
+  "links": [
+   [
+    "https://vrems.scvotes.sc.gov/Voter/Login?PageMode=VoterInformation",
+    "Check your registration"
+   ],
+   [
+    "https://vrems.scvotes.sc.gov/Voter/Login?PageMode=Sampleballot",
+    "See your official sample ballot"
+   ],
+   [
+    "https://vrems.scvotes.sc.gov/Voter/Login?PageMode=PollingPlace",
+    "Official polling place finder"
+   ],
+   [
+    "https://vrems.scvotes.sc.gov/ovr/start",
+    "Register to vote"
+   ],
+   [
+    "https://scvotes.gov",
+    "Election information"
+   ],
+   [
+    "https://scvotes.gov/voters/absentee-voting/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "SD": {
+  "name": "South Dakota",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://vip.sdsos.gov/viplogin.aspx",
+    "Check your registration"
+   ],
+   [
+    "https://vip.sdsos.gov/VIPLogin.aspx",
+    "See your official sample ballot"
+   ],
+   [
+    "https://vip.sdsos.gov/viplogin.aspx",
+    "Official polling place finder"
+   ],
+   [
+    "https://sdsos.gov/elections-voting/default.aspx",
+    "Election information"
+   ],
+   [
+    "https://sdsos.gov/elections-voting/voting/absentee-voting.aspx",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "TN": {
+  "name": "Tennessee",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://tnmap.tn.gov/voterlookup/",
+    "Check your registration"
+   ],
+   [
+    "https://web.go-vote-tn.elections.tn.gov/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://web.go-vote-tn.elections.tn.gov/",
+    "Official polling place finder"
+   ],
+   [
+    "https://ovr.govote.tn.gov/",
+    "Register to vote"
+   ],
+   [
+    "https://sos.tn.gov/elections",
+    "Election information"
+   ],
+   [
+    "https://sos.tn.gov/elections/guides/guide-to-absentee-voting",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "TX": {
+  "name": "Texas",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://teamrv-mvp.sos.texas.gov/MVP/mvp.do",
+    "Check your registration"
+   ],
+   [
+    "https://www.sos.texas.gov/elections/laws/current-elections-information.shtml",
+    "See your official sample ballot"
+   ],
+   [
+    "https://teamrv-mvp.sos.texas.gov/MVP/mvp.do",
+    "Official polling place finder"
+   ],
+   [
+    "https://www.sos.state.tx.us/elections/",
+    "Election information"
+   ],
+   [
+    "https://www.sos.texas.gov/elections/voter/reqabbm.shtml",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "UT": {
+  "name": "Utah",
+  "office": "Office of the Lieutenant Governor",
+  "links": [
+   [
+    "https://votesearch.utah.gov/voter-search/search/search-by-voter/voter-info",
+    "Check your registration"
+   ],
+   [
+    "https://votesearch.utah.gov/voter-search/search/search-by-address/candidates-and-issues",
+    "See your official sample ballot"
+   ],
+   [
+    "https://votesearch.utah.gov/voter-search/search/search-by-address/how-and-where-can-i-vote",
+    "Official polling place finder"
+   ],
+   [
+    "https://secure.utah.gov/voterreg/index.html",
+    "Register to vote"
+   ],
+   [
+    "https://vote.utah.gov/",
+    "Election information"
+   ],
+   [
+    "https://vote.utah.gov/learn-about-voting-by-mail-and-absentee-voting/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "VA": {
+  "name": "Virginia",
+  "office": "Virginia Deparment of Elections",
+  "links": [
+   [
+    "https://vote.elections.virginia.gov/VoterInformation",
+    "Check your registration"
+   ],
+   [
+    "https://www.elections.virginia.gov/casting-a-ballot/absentee-voting/",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://www.elections.virginia.gov/registration/",
+    "Register to vote"
+   ],
+   [
+    "https://elections.virginia.gov/",
+    "Election information"
+   ],
+   [
+    "https://elections.virginia.gov/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "VT": {
+  "name": "Vermont",
+  "office": "Secretary of State",
+  "links": [
+   [
+    "https://mvp.vermont.gov/",
+    "Check your registration"
+   ],
+   [
+    "https://mvp.vermont.gov/",
+    "See your official sample ballot"
+   ],
+   [
+    "https://mvp.vermont.gov/",
+    "Official polling place finder"
+   ],
+   [
+    "https://mvp.vermont.gov/",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://olvr.vermont.gov/",
+    "Register to vote"
+   ],
+   [
+    "https://sos.vermont.gov/elections/",
+    "Election information"
+   ],
+   [
+    "https://sos.vermont.gov/elections/voters/early-absentee-voting/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "WA": {
+  "name": "Washington",
+  "office": "Washington election office",
+  "links": [
+   [
+    "https://voter.votewa.gov/",
+    "Check your registration"
+   ],
+   [
+    "https://voter.votewa.gov/",
+    "Official polling place finder"
+   ],
+   [
+    "https://voter.votewa.gov/",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://voter.votewa.gov/",
+    "Register to vote"
+   ],
+   [
+    "https://www.sos.wa.gov/elections/",
+    "Election information"
+   ],
+   [
+    "https://voter.votewa.gov/",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "WI": {
+  "name": "Wisconsin",
+  "office": "Elections Commission",
+  "links": [
+   [
+    "https://myvote.wi.gov/en-us/My-Voter-Info",
+    "Check your registration"
+   ],
+   [
+    "https://myvote.wi.gov/en-us/Whats-On-My-Ballot",
+    "See your official sample ballot"
+   ],
+   [
+    "https://myvote.wi.gov/en-us/Find-My-Polling-Place",
+    "Official polling place finder"
+   ],
+   [
+    "https://myvote.wi.gov/en-us/Vote-Absentee-By-Mail",
+    "Mail and absentee voting"
+   ],
+   [
+    "https://myvote.wi.gov/en-us/Register-To-Vote",
+    "Register to vote"
+   ],
+   [
+    "https://elections.wi.gov/",
+    "Election information"
+   ],
+   [
+    "https://myvote.wi.gov/en-us/Vote-Absentee-Guide",
+    "Voting rules and ID"
+   ]
+  ]
+ },
+ "WV": {
+  "name": "West Virginia",
+  "office": "West Virginia election office",
+  "links": [
+   [
+    "https://apps.sos.wv.gov/elections/Voter/AmIRegisteredToVote",
+    "Check your registration"
+   ],
+   [
+    "https://apps.sos.wv.gov/elections/Voter/FindMyPollingPlace",
+    "Official polling place finder"
+   ],
+   [
+    "https://sos.wv.gov/govotewv",
+    "Election information"
+   ]
+  ]
+ },
+ "WY": {
+  "name": "Wyoming",
+  "office": "Wyoming Secretary of State\u2019s Office",
+  "links": [
+   [
+    "https://sos.wyo.gov/Elections",
+    "Election information"
+   ]
+  ]
+ }
+}

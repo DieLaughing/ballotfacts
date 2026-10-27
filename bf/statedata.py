@@ -129,3 +129,14 @@ def candidate(state: str, contest_id: int, who: str) -> dict | None:
               for x in c["candidates"] if x["won"]]
     return {"state": state, "contest": contest, "me": me, "rivals": rivals,
             "source": data["source"], "fetched": data["fetched"]}
+
+
+@cache
+def offices() -> dict[str, dict]:
+    """Every state's official election office and its main link (tools/fetch_offices.py)."""
+    path = DATA / "state-offices.json"
+    data = json.loads(path.read_text()) if path.exists() else {}
+    for v in data.values():
+        links = dict((label, url) for url, label in v["links"])
+        v["main"] = links.get("Election information") or (v["links"][0][0] if v["links"] else "")
+    return data

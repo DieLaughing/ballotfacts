@@ -17,6 +17,7 @@
       Ballot Facts</a>
     <nav aria-label="Main" class="nav">
       <a href="/"{% if active == 'home' %} aria-current="page"{% endif %}>Your ballot</a>
+      <a href="/results"{% if active == 'results' %} aria-current="page"{% endif %}><span class="live-dot" aria-hidden="true"></span>Results</a>
       <a href="/about"{% if active == 'about' %} aria-current="page"{% endif %}>About &amp; sources</a>
     </nav>
   </div>
