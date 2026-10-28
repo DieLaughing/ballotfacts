@@ -216,6 +216,8 @@ async def state_page(request: Request, state: str):
         _safe(fec.seats(http, cache), []),
     )
     districts = sorted({d for office, st, d in seats if office == "house" and st == state})
+    if seats and ("senate", state, "") not in seats:
+        senate = []  # no seat up this year; anyone listed filed early for a later election
     house = []
     for d in districts:
         cands = fec.peek_race(cache, "house", state, d)
