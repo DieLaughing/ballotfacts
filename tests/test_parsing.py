@@ -162,3 +162,11 @@ def test_session_law_titles():
     assert malegislature.tidy_title("AN ACT AMENDING THE CHARTER OF THE CITY OF MALDEN") == "An Act Amending the Charter of the City of Malden"
     assert malegislature.tidy_title("An Act relative to Bourne") == "An Act relative to Bourne"
     assert malegislature.bill_name("SD4203") == "SD.4203" and malegislature.bill_name("H5640") == "H.5640"
+
+
+def test_state_overview_lists_every_seat():
+    from bf import statedata
+    races, source = statedata.overview("MA")
+    offices = {r["office"] for r in races}
+    assert {"Governor", "State Senate", "State Representative"} <= offices and source
+    assert len([r for r in races if r["office"] == "State Senate"]) == 40

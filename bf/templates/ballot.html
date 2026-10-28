@@ -13,6 +13,7 @@
   <p class="eyebrow">General election · Nov 3</p>
   <h1>Your ballot</h1>
   <p class="sub">{{ place.matched }}{% if place.precinct_name %} · {{ place.precinct_name }}{% endif %}{% if place.county %} · {{ place.county }}{% endif %} · Congressional {{ place.district_label }}{% if place.state_upper %} · {{ place.state_upper }}{% endif %}{% if place.state_lower %} · {{ place.state_lower }}{% endif %} · <a href="/">Change address</a></p>
+  <p class="saved-note">{% if by_link %}This link names only your districts and town, never a street address.{% else %}Your address wasn't saved, and it isn't in this page's web address. To come back or share: <a href="{{ place.key }}">a link to this ballot</a> that names only your districts.{% endif %}</p>
 </div>
 
 {% if zip_mismatch %}
@@ -25,6 +26,7 @@
   <a href="#vote">Where to vote</a>
   {% if info and info.offices %}<a href="#links">Official links</a>{% endif %}
   {% if legislators %}<a href="#legislators">State legislators</a>{% endif %}
+  <a href="/state/{{ place.state }}">All of {{ place.state_name }}</a>
   <a href="/results?state={{ place.state }}">Results on Nov 3</a>
 </nav>
 

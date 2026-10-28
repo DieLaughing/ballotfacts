@@ -122,10 +122,22 @@ async def race(client: httpx.AsyncClient, cache: Cache, office: str, state: str,
     except httpx.HTTPError as e:
         log.warning("outside spending unavailable: %s", type(e).__name__)  # str(e) would include the API key
         spend = {}
+    return _with_outside(cands, spend)
+
+
+def _with_outside(cands: list[dict], spend: dict) -> list[dict]:
     out = [dict(c, support=spend.get(c["id"], {}).get("S", 0), oppose=spend.get(c["id"], {}).get("O", 0),
                 groups=spend.get(c["id"], {}).get("groups", [])) for c in cands]
     out.sort(key=lambda c: (not c["running"], -c["raised"]))
     return out
+
+
+def peek_race(cache: Cache, office: str, state: str, district: str = "") -> list[dict] | None:
+    """A race only if it's already loaded (the background job loads them all), without asking the
+    FEC: a state page lists dozens of races and mustn't fire dozens of requests. None if not yet."""
+    seat = f"{config.CYCLE}:{office}:{state}:{district}"
+    cands = cache.get(f"fec:race:{seat}", stale=True)
+    return None if cands is None else _with_outside(cands, cache.get(f"fec:outside:{seat}", stale=True) or {})
 
 
 async def _outside_by_candidate(client: httpx.AsyncClient, office: str, state: str, district: str) -> dict:
@@ -292,8 +304,10 @@ async def candidate(client: httpx.AsyncClient, cache: Cache, cid: str) -> dict |
     return await cache.fetch(key, 12 * 3600, load)  # FEC data changes about daily; only the first visitor waits
 
 
-async def seats(client: httpx.AsyncClient) -> list[tuple[str, str, str]]:
+async def seats(client: httpx.AsyncClient, cache: Cache | None = None) -> list[tuple[str, str, str]]:
     """Every (office, state, district) with a federal race this cycle."""
+    if cache:
+        return [tuple(s) for s in await cache.fetch(f"fec:seats:{config.CYCLE}", 24 * 3600, lambda: seats(client))]
     out = []
     for office in ("senate", "house"):
         page = 1

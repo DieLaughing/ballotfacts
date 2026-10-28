@@ -184,18 +184,56 @@ async def _ballot(request: Request, place: census.Place, info, legislators, by_l
     races = [r for r in (_race("senate", place.state, "", senate), _race("house", place.state, place.district, house)) if r]
     state_races, state_source = statedata.races(place)
     if place.state == "MA" and state_races:
-        rows = await _safe(ocpf.candidates(http, cache), [])
-        for r in state_races:
-            for n in r["nominees"]:
-                m = ocpf.match(rows, n["name"], r["office"], n.get("district") or r["district"] or "Statewide")
-                n["raised"] = m["raised"] if m else None
-                n["incumbent"] = bool(m and m["incumbent"])
-                n["cpf"] = m["cpf"] if m else None
-            r["others"] = ocpf.others(rows, r["office"], r["district"], [n["name"] for n in r["nominees"]])
+        await _add_ocpf(http, cache, state_races)
     qmoney, qfetched = ocpf.questions(statedata.load("MA") or {}) if place.state == "MA" else ({}, "")
     return page(request, "ballot.html", place=place, info=info, races=races, legislators=legislators,
                 state_races=state_races, state_source=state_source, by_link=by_link, back=place.key,
                 qmoney=qmoney, qfetched=qfetched, official_lookup=official_lookup, zip_mismatch=zip_mismatch)
+
+
+async def _add_ocpf(http: httpx.AsyncClient, cache: Cache, state_races: list[dict]) -> None:
+    """Money raised, incumbency and photo for each Massachusetts nominee, plus who else filed."""
+    rows = await _safe(ocpf.candidates(http, cache), [])
+    for r in state_races:
+        for n in r["nominees"]:
+            m = ocpf.match(rows, n["name"], r["office"], n.get("district") or r["district"] or "Statewide")
+            n["raised"] = m["raised"] if m else None
+            n["incumbent"] = bool(m and m["incumbent"])
+            n["cpf"] = m["cpf"] if m else None
+        r["others"] = ocpf.others(rows, r["office"], r["district"], [n["name"] for n in r["nominees"]])
+
+
+@app.get("/state/{state}", response_class=HTMLResponse)
+async def state_page(request: Request, state: str):
+    """Everything on the ballot across a state, for people who'd rather not type an address. It
+    can't know which district is theirs or where they vote, and says so."""
+    state = state.upper()
+    if state not in BY_CODE:
+        return page(request, "missing.html", 404)
+    http, cache = request.app.state.http, request.app.state.cache
+    senate, seats = await asyncio.gather(
+        _safe(fec.race(http, cache, "senate", state), []),
+        _safe(fec.seats(http, cache), []),
+    )
+    districts = sorted({d for office, st, d in seats if office == "house" and st == state})
+    house = []
+    for d in districts:
+        cands = fec.peek_race(cache, "house", state, d)
+        r = _race("house", state, d, cands) if cands else None
+        house.append({"district": d, "label": "At-large" if d == "00" else f"District {int(d)}",
+                      "path": f"/race/{state}/house/{d}", "race": r, "loaded": cands is not None})
+    statewide, legislature, state_source = [], {}, None
+    if state == "MA":
+        all_races, state_source = statedata.overview(state)
+        statewide = [r for r in all_races if not r["district"]]
+        await _add_ocpf(http, cache, statewide)
+        for r in all_races:
+            if r["district"]:
+                legislature.setdefault(r["office"], []).append(r)
+    qmoney, qfetched = ocpf.questions(statedata.load("MA") or {}) if state == "MA" else ({}, "")
+    return page(request, "state.html", state=state, state_name=BY_CODE[state], senate=_race("senate", state, "", senate),
+                house=house, seats_known=bool(seats), statewide=statewide, legislature=legislature, state_source=state_source,
+                official=statedata.offices().get(state), qmoney=qmoney, qfetched=qfetched)
 
 
 def back_link(request: Request) -> str:

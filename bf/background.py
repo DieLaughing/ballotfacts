@@ -33,7 +33,7 @@ OUTSIDE_EVERY_HOURS = 20
 
 async def warm_races(client: httpx.AsyncClient, cache: Cache) -> None:
     started, failed = time.monotonic(), 0
-    races = [s for s in await fec.seats(client) if s[1] in BY_CODE]
+    races = [s for s in await fec.seats(client, cache) if s[1] in BY_CODE]
     for office, state, district in races:
         try:
             await fec.race(client, cache, office, state, district)

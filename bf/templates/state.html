@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% set active = 'home' %}{% from "_state_card.html" import state_card with context %}
+{% block title %}{{ state_name }} · Ballot Facts{% endblock %}
+{% block main %}
+<div class="page-head">
+  <p class="eyebrow">General election · Nov 3</p>
+  <h1>{{ state_name }}</h1>
+  <p class="lede">Every race we cover across {{ state_name }}, no address needed.{% if state != "MA" %} For {{ state_name }} that's Congress; state and local races are on your official sample ballot.{% endif %}</p>
+</div>
+
+<section class="callout cant" aria-labelledby="h-cant">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5v.5"/></svg>
+  <div>
+    <h2 id="h-cant">What this page can't tell you</h2>
+    <ul>
+      <li><strong>Which races are yours.</strong> This lists every district in the state; you'll only vote in one of each.</li>
+      <li><strong>Where you vote.</strong> Polling places are set by your street, not your state.</li>
+      <li><strong>{% if state == "MA" %}City, town and school races{% else %}State, county, city and school races{% endif %}.</strong> {% if official and official.main %}<a href="{{ official.main }}" target="_blank" rel="noopener">{{ official.office or "Your state's election office" }}</a> has the full ballot.{% else %}Your election office's sample ballot has the full ballot.{% endif %}</li>
+    </ul>
+    <form method="post" action="/ballot" class="lookup-again">
+      <label for="addr-s"><strong>Want just your ballot and polling place?</strong> Enter your address. It's used once to look up your districts, then thrown away: never saved, never logged.</label>
+      <div class="lookup-row"><input id="addr-s" name="address" type="text" autocomplete="street-address" required minlength="6" maxlength="200" placeholder="123 Main St, Your Town, {{ state }}"><button type="submit">Show my ballot</button></div>
+    </form>
+  </div>
+</section>
+
+<nav aria-label="On this page" class="jumps">
+  <a href="#senate">U.S. Senate</a>
+  <a href="#house">U.S. House · {{ house | length }}</a>
+  {% if statewide %}<a href="#statewide">Statewide</a>{% endif %}
+  {% if state_source and state_source.questions %}<a href="#questions">Ballot questions</a>{% endif %}
+  {% for office in legislature %}<a href="#o-{{ loop.index }}">{{ office }}</a>{% endfor %}
+</nav>
+
+<h2 class="section" id="senate">U.S. Senate</h2>
+{% if senate %}{% set race = senate %}{% include "_race.html" %}
+{% else %}<p class="muted">No U.S. Senate seat is on {{ state_name }}'s ballot this year{% if not seats_known %}, or we couldn't reach the FEC just now{% endif %}.</p>{% endif %}
+
+<h2 class="section" id="house">U.S. House</h2>
+{% if house %}
+<p class="sub">{{ state_name }} has {{ house | length }} {{ "seat" if house | length == 1 else "districts" }}. You vote in one; your address decides which. Campaigns still reporting to the FEC, most money raised first.</p>
+<div class="list-box">
+  {% for h in house %}
+  <a class="drow" href="{{ h.path }}">
+    <strong>{{ h.label }}</strong>
+    <span class="dnames">{% if h.race %}{% for c in h.race.running %}{{ c.name }} <span class="muted">({{ c.party }}, {{ c.raised | money }})</span>{{ " · " if not loop.last }}{% else %}<span class="muted">No campaigns still reporting</span>{% endfor %}{% elif h.loaded %}<span class="muted">No campaigns filed</span>{% else %}<span class="muted">Open to load the candidates</span>{% endif %}</span>
+  </a>
+  {% endfor %}
+</div>
+<p class="source">From FEC filings. A district shows "Open to load" until our server has fetched it; opening it fetches it then.</p>
+{% else %}
+<p class="muted">We couldn't load {{ state_name }}'s House districts from the FEC just now. Try again in a minute.</p>
+{% endif %}
+
+{% if statewide %}
+<h2 class="section" id="statewide">Statewide offices</h2>
+{% for r in statewide %}
+<section class="race" aria-labelledby="sw-{{ loop.index }}">
+  <div class="race-head"><span class="eyebrow">Statewide</span><h3 id="sw-{{ loop.index }}">{{ r.office }}</h3></div>
+  {% set about = office_about(state, r.office) %}{% if about %}<p class="office-about"><strong>What this office does:</strong> {{ about }}</p>{% endif %}
+  <ul class="swipe" aria-label="Nominees{% if r.nominees | length > 1 %}, swipe for more{% endif %}">
+    {% for n in r.nominees %}{{ state_card(n, "/" ~ (state | lower) ~ "/c/" ~ n.contest ~ "/" ~ n.slug) }}{% endfor %}
+  </ul>
+</section>
+{% endfor %}
+{% endif %}
+
+{% if state_source and state_source.questions %}
+<h2 class="section" id="questions">Statewide ballot questions</h2>
+<p class="sub">Everyone in {{ state_name }} votes on these. What a yes or no vote does, in the official words, and who's paying on each side. <a href="/ma/questions">Open just the questions</a>: handy on your phone in the booth.</p>
+{% include "_questions.html" %}
+{% endif %}
+
+{% for office, rows in legislature.items() %}
+<h2 class="section" id="o-{{ loop.index }}">{{ office }}</h2>
+{% set about = office_about(state, office) %}{% if about %}<p class="office-about flush"><strong>What this office does:</strong> {{ about }}</p>{% endif %}
+<details class="list-box browse">
+  <summary>{% if rows | length == 1 %}Show the nominees{% else %}Show all {{ rows | length }} seats with a nominee{% endif %}</summary>
+  {% for r in rows %}
+  <div class="drow">
+    <strong>{{ r.district }}</strong>
+    <span class="dnames">{% for n in r.nominees %}<a href="/{{ state | lower }}/c/{{ n.contest }}/{{ n.slug }}">{{ n.name | replace(" (Write-In)", " (write-in)") }}</a> <span class="muted">({{ n.party }})</span>{{ " · " if not loop.last }}{% endfor %}</span>
+  </div>
+  {% endfor %}
+</details>
+{% endfor %}
+{% if state_source %}
+<p class="source">State and county nominees from the official Sept 1 primary results ({{ state_source.about }}). Source: <a href="{{ state_source.source }}" target="_blank" rel="noopener">Massachusetts ElectionStats</a>, checked {{ state_source.fetched[:10] | date }}. Independent and third-party candidates skip the primary, so they aren't listed; your sample ballot has them.</p>
+{% endif %}
+{% endblock %}

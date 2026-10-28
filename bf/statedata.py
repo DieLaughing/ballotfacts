@@ -113,6 +113,30 @@ def races(place: Place) -> tuple[list[dict], dict | None]:
             continue  # a split city: this district covers other wards and precincts
         seats.setdefault((c["office"], c["district"]), []).append(c)
 
+    out = _group(seats)
+    out = _merge_split_towns(out)
+    return out, _source(data)
+
+
+def overview(state: str) -> tuple[list[dict], dict | None]:
+    """Every state and county race in the state, for browsing without an address."""
+    data = load(state)
+    if not data:
+        return [], None
+    seats: dict[tuple[str, str], list[dict]] = {}
+    for c in data["contests"]:
+        if c["office"] not in FEDERAL:
+            seats.setdefault((c["office"], c["district"]), []).append(c)
+    return _group(seats), _source(data)
+
+
+def _source(data: dict) -> dict:
+    return {"source": data["source"], "fetched": data["fetched"], "about": data["about"],
+            "questions": data.get("questions", []), "questions_source": data.get("questions_source", "")}
+
+
+def _group(seats: dict[tuple[str, str], list[dict]]) -> list[dict]:
+    """One row per seat with its party nominees, in ballot order."""
     out = []
     for (office, district), primaries in seats.items():
         nominees = [dict(x, party=p["party"], unopposed=len(p["candidates"]) == 1, contest=p["id"], slug=slug(x["name"]))
@@ -127,9 +151,7 @@ def races(place: Place) -> tuple[list[dict], dict | None]:
         })
     rank = {o: i for i, o in enumerate(ORDER)}
     out.sort(key=lambda r: (rank.get(r["office"], len(ORDER)), r["office"], r["district"]))
-    out = _merge_split_towns(out)
-    return out, {"source": data["source"], "fetched": data["fetched"], "about": data["about"],
-                 "questions": data.get("questions", []), "questions_source": data.get("questions_source", "")}
+    return out
 
 
 def candidate(state: str, contest_id: int, who: str) -> dict | None:

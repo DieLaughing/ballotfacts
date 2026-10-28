@@ -14,8 +14,28 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></button>
     </div>
     {% if error %}<p id="addr-error" class="error">{{ error }}</p>{% endif %}
-    <p class="hint">Why an address and not a ZIP code? One ZIP can sit in two or three districts. Your address is used once to look up your districts and polling places, then thrown away. It's never stored or logged.</p>
   </form>
+
+  <section class="privacy" aria-labelledby="h-addr">
+    <h2 id="h-addr">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      We don't keep your address</h2>
+    <ol>
+      <li>When you press the button, your address goes to the <strong>US Census Bureau</strong> (to find your districts) and <strong>Google's election data</strong> (to find polling places).</li>
+      <li>We build your page from the answers.</li>
+      <li>The address is thrown away. It isn't saved, it isn't in any log, and it isn't in the page's link; the link only names your districts.</li>
+    </ol>
+    <p class="muted small">Why not just a ZIP code? One ZIP can sit in two or three districts, and polling places depend on your street. You can check all of this: <a href="/about#verify">the site's code is public</a>.</p>
+  </section>
+</section>
+
+<section class="block" aria-labelledby="h-browse">
+  <h2 id="h-browse">Rather not type an address? Browse by state</h2>
+  <p class="sub">See every race in a state. You'll need to know your own districts, and you won't get your polling place.</p>
+  <ul class="state-links">
+    {% for code, name in states.items() | sort(attribute="1") %}<li><a href="/state/{{ code }}"{% if code == "MA" %} class="deep"{% endif %}>{{ name }}</a></li>{% endfor %}
+  </ul>
+  <p class="source">Massachusetts includes state and county races, ballot questions and campaign money. Other states have Congress only for now.</p>
 </section>
 
 <a class="feature" href="/ma/questions">
